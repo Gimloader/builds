@@ -2,10 +2,10 @@
  * @name AutoKicker
  * @description Automatically kicks players from your lobby with a customizable set of rules
  * @author TheLazySquid
- * @version 0.2.6
+ * @version 0.3.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/AutoKicker.js
  * @webpage https://gimloader.github.io/plugins/AutoKicker
- * @changelog Updated webpage url
+ * @changelog Added a setting to disable notifying
  */
 
 // plugins/AutoKicker/src/consts.ts
@@ -82,6 +82,14 @@ var characters = [
 var invisRegex = new RegExp(`[${characters.join("")}\\s]`, "g");
 
 // plugins/AutoKicker/src/autokicker.ts
+var settings = api.settings.create([
+  {
+    id: "notify",
+    type: "toggle",
+    title: "Notify when kicking",
+    default: true
+  }
+]);
 var AutoKicker = class {
   lastLeaderboard = null;
   kickDuplicateNames = false;
@@ -100,13 +108,13 @@ var AutoKicker = class {
     return api.stores.phaser.mainCharacter.id;
   }
   loadSettings() {
-    const settings = api.storage.getValue("Settings", {});
-    this.kickDuplicateNames = settings.kickDuplicateNames ?? false;
-    this.kickSkinless = settings.kickSkinless ?? false;
-    this.blacklist = settings.blacklist ?? [];
-    this.kickBlank = settings.kickBlank ?? false;
-    this.kickIdle = settings.kickIdle ?? false;
-    this.idleDelay = settings.idleDelay ?? 2e4;
+    const settings2 = api.storage.getValue("Settings", {});
+    this.kickDuplicateNames = settings2.kickDuplicateNames ?? false;
+    this.kickSkinless = settings2.kickSkinless ?? false;
+    this.blacklist = settings2.blacklist ?? [];
+    this.kickBlank = settings2.kickBlank ?? false;
+    this.kickIdle = settings2.kickIdle ?? false;
+    this.idleDelay = settings2.idleDelay ?? 2e4;
   }
   saveSettings() {
     api.storage.setValue("Settings", {
@@ -279,14 +287,14 @@ var AutoKicker = class {
     this.kicked.add(id);
     const char = api.net.room.state.characters.get(id);
     api.net.send("KICK_PLAYER", { characterId: id });
-    api.UI.notification.open({ message: `Kicked ${char.name} for ${reason}` });
+    if (settings.notify) api.UI.notification.open({ message: `Kicked ${char.name} for ${reason}` });
   }
   blueboatKick(id, reason) {
     if (this.kicked.has(id)) return;
     this.kicked.add(id);
     const playername = this.lastLeaderboard?.find((e) => e.id === id)?.name;
     api.net.send("KICK_PLAYER", id);
-    api.UI.notification.open({ message: `Kicked ${playername ?? "player"} for ${reason}` });
+    if (settings.notify) api.UI.notification.open({ message: `Kicked ${playername ?? "player"} for ${reason}` });
   }
 };
 
