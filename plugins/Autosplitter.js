@@ -1371,8 +1371,8 @@ var FishtopiaAutosplitter = class extends SplitsAutosplitter {
   usedChannels = /* @__PURE__ */ new Set();
   constructor() {
     super("Fishtopia");
-    const gameSession = api.net.room.state.session.gameSession;
-    api.net.room.state.session.listen("loadingPhase", (val) => {
+    const gameSession = api.net.state.session.gameSession;
+    api.net.state.session.listen("loadingPhase", (val) => {
       if (val) return;
       if (gameSession.phase === "game") {
         this.addAttempt();
@@ -1401,7 +1401,7 @@ var FishtopiaAutosplitter = class extends SplitsAutosplitter {
       });
     });
     const id = api.stores.phaser.mainCharacter.id;
-    api.net.room.state.characters.get(id).inventory.slots.onChange((_, key2) => {
+    api.net.state.characters.get(id).inventory.slots.onChange((_, key2) => {
       if (key2 === "gim-fish") {
         this.timer.split();
         this.timer.stop();
@@ -1440,7 +1440,7 @@ var OneWayOutAutosplitter = class extends SplitsAutosplitter {
   stage = 0;
   constructor() {
     super("OneWayOut");
-    const gameSession = api.net.room.state.session.gameSession;
+    const gameSession = api.net.state.session.gameSession;
     api.net.on("DEVICES_STATES_CHANGES", (msg) => {
       for (const change of msg.changes) {
         if (msg.values[change[1][0]] === "GLOBAL_healthPercent") {

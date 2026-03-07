@@ -227,7 +227,7 @@ var AutoKicker = class {
     }
   }
   scanPlayersColyseus() {
-    const characters2 = api.net.room.state.characters;
+    const characters2 = api.net.state.characters;
     const nameCount = /* @__PURE__ */ new Map();
     if (this.kickDuplicateNames) {
       for (const [_, player] of characters2.entries()) {
@@ -285,7 +285,7 @@ var AutoKicker = class {
   colyseusKick(id, reason) {
     if (this.kicked.has(id)) return;
     this.kicked.add(id);
-    const char = api.net.room.state.characters.get(id);
+    const char = api.net.state.characters.get(id);
     api.net.send("KICK_PLAYER", { characterId: id });
     if (settings.notify) api.UI.notification.open({ message: `Kicked ${char.name} for ${reason}` });
   }

@@ -167,7 +167,7 @@ api.net.onLoad(() => {
     UI.addMessage(`> ${message.message}`);
     editFn(null);
   });
-  const me = api.net.room.state.characters.get(myId);
+  const me = api.net.state.characters.get(myId);
   const Comms = api.lib("Communication");
   const comms = new Comms("Chat");
   UI.init(async (text) => {
@@ -196,7 +196,7 @@ api.net.onLoad(() => {
       }
     }
   });
-  api.onStop(api.net.room.state.characters.onRemove((char) => {
+  api.onStop(api.net.state.characters.onRemove((char) => {
     joinedPlayers.delete(char.id);
   }));
   if (Comms.enabled) {

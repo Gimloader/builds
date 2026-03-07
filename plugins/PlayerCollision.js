@@ -69,7 +69,7 @@ api.net.onLoad(async () => {
     }
   });
   api.onStop(
-    api.net.room.state.characters.onAdd((char) => {
+    api.net.state.characters.onAdd((char) => {
       if (char.id === myId) return;
       if (char.type === "player" && !settings.collidePlayers) return;
       if (char.type === "sentry" && !settings.collideSentries) return;
@@ -81,8 +81,8 @@ api.net.onLoad(async () => {
   );
   if (!api.net.isHost) {
     const { gameOwnerId } = api.stores.session;
-    api.net.room.state.session.listen("phase", (phase) => {
-      if (api.net.room.state.characters.get(gameOwnerId).teamId === "__SPECTATORS_TEAM" && phase === "game") {
+    api.net.state.session.listen("phase", (phase) => {
+      if (api.net.state.characters.get(gameOwnerId)?.teamId === "__SPECTATORS_TEAM" && phase === "game") {
         removeCollider(gameOwnerId);
       } else {
         createCollider(gameOwnerId);

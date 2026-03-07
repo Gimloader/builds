@@ -144,7 +144,7 @@ var floorHeight = 638.37;
 var lastCheckpointReached = 0;
 var canRespawn = false;
 api.net.onLoad(() => {
-  api.net.room.state.session.gameSession.listen("phase", (phase) => {
+  api.net.state.session.gameSession.listen("phase", (phase) => {
     if (phase !== "results") return;
     canRespawn = false;
     lastCheckpointReached = 0;
@@ -170,7 +170,7 @@ var enable = () => {
   let wasOnLastFrame = false;
   let startImmunityActive = false;
   api.patcher.after(physics, "physicsStep", () => {
-    if (api.net.room.state.session.gameSession.phase === "results") return;
+    if (api.net.state.session.gameSession.phase === "results") return;
     if (startImmunityActive) return;
     const devicesInView = api.stores.phaser.scene.worldManager.devices.devicesInView;
     const lasers = devicesInView.filter((d) => d.laser);
@@ -306,7 +306,7 @@ var settings = api.settings.create([
 api.net.onLoad(() => {
   let allowNext = false;
   let firstPhase = true;
-  api.onStop(api.net.room.state.session.listen("phase", () => {
+  api.onStop(api.net.state.session.listen("phase", () => {
     if (firstPhase) {
       firstPhase = false;
       return;

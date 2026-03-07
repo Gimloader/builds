@@ -78,7 +78,7 @@ api.net.onLoad(() => {
     });
   } else {
     const { session } = api.stores;
-    api.net.room.state.session.listen("phase", (phase) => {
+    api.net.state.session.listen("phase", (phase) => {
       if (phase !== "game") session.amIGameOwner = false;
     });
     if (Comms.enabled) comms.send(2 /* GuestJoined */);

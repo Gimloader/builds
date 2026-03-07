@@ -74,7 +74,7 @@ var Messenger = class _Messenger {
       this.pendingAngle = message.angle;
       if (this.angleQueue.length > 0) editFn(null);
     });
-    api.net.room.state.session.listen("phase", (phase) => {
+    api.net.state.session.listen("phase", (phase) => {
       if (phase === "game") return;
       this.angleQueue.forEach((pending) => pending.reject());
       this.angleQueue.length = 0;
@@ -276,7 +276,7 @@ var Messenger = class _Messenger {
 // libraries/Communication/src/index.ts
 api.net.onLoad(() => {
   Messenger.init();
-  api.onStop(api.net.room.state.characters.onAdd((char) => {
+  api.onStop(api.net.state.characters.onAdd((char) => {
     api.onStop(
       char.projectiles.listen("aimAngle", (angle) => {
         Messenger.handleAngle(char, angle);
@@ -303,7 +303,7 @@ var Communication = class _Communication {
     return api.net.room?.state.session.phase === "game";
   }
   onEnabledChanged(callback) {
-    const unsub = api.net.room.state.session.listen("phase", (phase) => {
+    const unsub = api.net.state.session.listen("phase", (phase) => {
       callback(phase === "game");
     }, false);
     this.#onDisabledCallbacks.push(unsub);
@@ -313,7 +313,7 @@ var Communication = class _Communication {
     if (!_Communication.enabled) {
       throw new Error("Communication can only be used after the game is started");
     }
-    const players = [...api.net.room.state.characters.values()].filter((char) => char.type === "player");
+    const players = [...api.net.state.characters.values()].filter((char) => char.type === "player");
     if (players.length <= 1) return;
     switch (typeof message) {
       case "number": {
