@@ -75,6 +75,7 @@ api.net.onLoad(async () => {
       if (char.type === "sentry" && !settings.collideSentries) return;
       createCollider(char.id);
       api.onStop(
+        // @ts-expect-error
         char.onRemove(() => removeCollider(char.id))
       );
     })

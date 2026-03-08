@@ -128,7 +128,7 @@ var AutoKicker = class {
   }
   start() {
     if (api.net.type === "Colyseus") {
-      const chars = api.net.room.serializer.state.characters;
+      const chars = api.net.state.characters;
       api.onStop(chars.onAdd((e) => {
         if (!e || e.id === this.myId) return;
         if (this.kickIdle) {
