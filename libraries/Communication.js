@@ -300,7 +300,7 @@ var Communication = class _Communication {
     return Messenger.callbacks.get(this.#identifierString);
   }
   static get enabled() {
-    return api.net.room?.state.session.phase === "game";
+    return api.net.state?.session.phase === "game";
   }
   onEnabledChanged(callback) {
     const unsub = api.net.state.session.listen("phase", (phase) => {
