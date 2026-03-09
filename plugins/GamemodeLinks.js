@@ -2,12 +2,12 @@
  * @name GamemodeLinks
  * @description Creates game rooms from links, particularly useful in bookmarks.
  * @author retrozy
- * @version 0.3.2
+ * @version 0.3.3
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/GamemodeLinks.js
  * @webpage https://gimloader.github.io/plugins/GamemodeLinks
  * @reloadRequired notingame
  * @hasSettings true
- * @changelog Updated webpage url
+ * @changelog Gave a message when creative map URLs are copied
  */
 
 // shared/rewritingUtils.ts
@@ -143,7 +143,7 @@ async function makeGame(id2, entries) {
 
 // plugins/GamemodeLinks/src/index.ts
 var copyUrlWrapper = api.rewriter.createShared("CopyURLWrapper", (id2) => {
-  navigator.clipboard.writeText(`${location.origin}/gamemode/${id2}`);
+  navigator.clipboard.writeText(`${location.origin}/gamemode/${id2}`).then(() => api.UI.message.success({ content: "Map link copied" })).catch(() => api.UI.message.error({ content: "Failed to copy map link" }));
 });
 api.rewriter.addParseHook("App", (code) => {
   if (!code.includes("Note that deleting a map will also remove it from Creative Discovery")) return code;
