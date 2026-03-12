@@ -2,12 +2,12 @@
  * @name Chat
  * @description Adds an in-game chat to 2d gamemodes
  * @author TheLazySquid
- * @version 0.3.0
+ * @version 0.4.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Chat.js
  * @webpage https://gimloader.github.io/plugins/Chat
  * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
- * @changelog Added typing indicator
+ * @changelog Added optional support for streaming messages
  */
 
 // external-svelte:svelte
@@ -21,10 +21,12 @@ var append_styles = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.append_styles
 var bind_this = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.bind_this)();
 var bind_value = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.bind_value)();
 var child = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.child)();
+var comment = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.comment)();
 var delegate = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.delegate)();
 var derived = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.derived)();
 var each = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.each)();
 var event = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.event)();
+var first_child = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.first_child)();
 var from_html = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.from_html)();
 var get = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.get)();
 var html = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.html)();
@@ -40,6 +42,8 @@ var set_text = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.set_text)();
 var sibling = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.sibling)();
 var state = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.state)();
 var template_effect = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.template_effect)();
+var text = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.text)();
+var if_export = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.if)();
 
 // plugins/Chat/src/chatter.svelte.ts
 var Comms = api.lib("Communication");
@@ -49,6 +53,13 @@ var settings = api.settings.create([
     type: "toggle",
     title: "Transmit Typing",
     description: "Show other players when you are typing",
+    default: true
+  },
+  {
+    id: "streamMessages",
+    type: "toggle",
+    title: "Stream Messages",
+    description: "Show messages being typed out instead of waiting for them to be fully recieved",
     default: true
   }
 ]);
@@ -80,13 +91,26 @@ var Chatter = class {
       );
     }
     const joinedPlayers = /* @__PURE__ */ new Set();
+    this.comms.onStringStream(async (chunks, char) => {
+      if (!settings.streamMessages) return;
+      this.playersTyping = this.playersTyping.filter((c) => c !== char);
+      this.messages.push({ text: `${char.name}: `, formatted: false });
+      const message = this.messages[this.messages.length - 1];
+      for await (const chunk of chunks) {
+        message.text += chunk;
+      }
+      message.text = format({ inputText: message.text });
+      message.formatted = true;
+    });
     this.comms.onMessage((message, char) => {
       const removePlayerTyping = () => {
         this.playersTyping = this.playersTyping.filter((c) => c !== char);
       };
       if (typeof message === "string") {
-        this.addMessage(`${char.name}: ${message}`);
-        removePlayerTyping();
+        if (!settings.streamMessages) {
+          this.addMessage(`${char.name}: ${message}`);
+          removePlayerTyping();
+        }
       } else {
         switch (message) {
           case 0:
@@ -175,10 +199,10 @@ var Chatter = class {
   set sending(value) {
     set(this.#sending, value, true);
   }
-  addMessage(text, forceScroll = false) {
-    text = format({ inputText: text });
-    if (this.messages.length === 100) this.messages.splice(0, 1);
-    this.messages.push(text);
+  addMessage(text2, forceScroll = false) {
+    text2 = format({ inputText: text2 });
+    if (this.messages.length === 500) this.messages.splice(0, 1);
+    this.messages.push({ text: text2, formatted: true });
     this.scroll(forceScroll);
   }
   sendLeave() {
@@ -188,10 +212,10 @@ var Chatter = class {
       /* Leave */
     );
   }
-  async send(text) {
+  async send(text2) {
     try {
-      await this.comms.send(text);
-      this.addMessage(`${this.me.name}: ${text}`, true);
+      await this.comms.send(text2);
+      this.addMessage(`${this.me.name}: ${text2}`, true);
     } catch {
       this.addMessage("Message failed to send", true);
     }
@@ -300,13 +324,29 @@ function UI($$anchor, $$props) {
   each(div_2, 21, () => chatter.messages, index, ($$anchor2, message) => {
     var div_3 = root_1();
     var node = child(div_3);
-    html(node, () => get(message));
+    {
+      var consequent = ($$anchor3) => {
+        var fragment = comment();
+        var node_1 = first_child(fragment);
+        html(node_1, () => get(message).text);
+        append($$anchor3, fragment);
+      };
+      var alternate = ($$anchor3) => {
+        var text2 = text();
+        template_effect(() => set_text(text2, get(message).text));
+        append($$anchor3, text2);
+      };
+      if_export(node, ($$render) => {
+        if (get(message).formatted) $$render(consequent);
+        else $$render(alternate, false);
+      });
+    }
     reset(div_3);
     append($$anchor2, div_3);
   });
   reset(div_2);
   var div_4 = sibling(div_2, 2);
-  var text = child(div_4, true);
+  var text_1 = child(div_4, true);
   reset(div_4);
   reset(div_1);
   bind_this(div_1, ($$value) => wrap = $$value, () => wrap);
@@ -317,7 +357,7 @@ function UI($$anchor, $$props) {
   bind_this(input_1, ($$value) => input = $$value, () => input);
   reset(div);
   template_effect(() => {
-    set_text(text, get(playersTypingText));
+    set_text(text_1, get(playersTypingText));
     set_attribute(input_1, "placeholder", get(inputPlaceholder));
     input_1.disabled = chatter.sending || !chatter.enabled;
   });
