@@ -2,12 +2,12 @@
  * @name InfoLines
  * @description Displays a configurable list of info on the screen
  * @author TheLazySquid
- * @version 1.2.0
+ * @version 1.3.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/InfoLines.js
  * @webpage https://gimloader.github.io/plugins/InfoLines
  * @hasSettings true
  * @gamemode 2d
- * @changelog Added one way out plant drop rate
+ * @changelog Added a setting for Fish Value to add your existing cash
  */
 
 // plugins/InfoLines/src/styles.scss
@@ -200,23 +200,50 @@ var Ping = class extends BaseLine {
 
 // plugins/InfoLines/src/lines/fishValue.ts
 var fishValues = {
-  "gray": 1,
-  "green": 2,
-  "red": 5,
-  "blue": 10,
-  "purple": 20,
-  "beach": 40,
-  "star": 65,
-  "galaxy": 100,
-  "berry": 150,
-  "gim": 5e3
+  gray: 1,
+  green: 2,
+  red: 5,
+  blue: 10,
+  purple: 20,
+  beach: 40,
+  star: 65,
+  galaxy: 100,
+  berry: 150,
+  gim: 5e3
 };
 var FishValue = class extends BaseLine {
   name = "Fishtopia Fish Value";
   gamemode = "fishtopia";
   enabledDefault = false;
+  settings = [
+    {
+      id: "addCash",
+      title: "Add Cash to Fish Value",
+      type: "toggle"
+    }
+  ];
+  allDevices;
+  updateValue() {
+    if (api.stores.session.phase !== "game") return;
+    let total = 0;
+    for (const [id, { amount }] of api.stores.me.inventory.slots) {
+      if (!id.endsWith("-fish")) continue;
+      const fishName = id.split("-")[0];
+      if (!fishValues[fishName]) continue;
+      total += fishValues[fishName] * amount;
+    }
+    const multiplierDevice = this.allDevices.find((d) => d.options.guiMessage === "Purchase Cash In ($70)");
+    if (multiplierDevice && !multiplierDevice.state.active) {
+      total = Math.round(total * 1.3);
+    }
+    if (api.settings.addCash) {
+      const slot = api.stores.me.inventory.slots.get("cash");
+      if (slot) total += slot.amount;
+    }
+    this.update(`fish value: $${total}`);
+  }
   async init() {
-    const allDevices = api.stores.phaser.scene.worldManager.devices.allDevices;
+    this.allDevices = api.stores.phaser.scene.worldManager.devices.allDevices;
     const autorunFn = await new Promise((res) => {
       api.rewriter.exposeVar(true, {
         find: /isMobxAction===!0}function (\S+)\(/,
@@ -225,17 +252,12 @@ var FishValue = class extends BaseLine {
     });
     this.onStop(
       autorunFn(() => {
-        let total = 0;
-        for (const [id, { amount }] of api.stores.me.inventory.slots) {
-          if (!id.endsWith("-fish")) continue;
-          const fishName = id.split("-")[0];
-          total += fishValues[fishName] * amount;
-        }
-        const multiplierDevice = allDevices.find((d) => d.options.guiMessage === "Purchase Cash In ($70)");
-        if (multiplierDevice && !multiplierDevice.state.active) {
-          total = Math.round(total * 1.3);
-        }
-        this.update(`fish value: $${total}`);
+        this.updateValue();
+      })
+    );
+    this.onStop(
+      api.settings.listen("addCash", () => {
+        this.updateValue();
       })
     );
   }
