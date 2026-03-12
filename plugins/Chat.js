@@ -2,12 +2,12 @@
  * @name Chat
  * @description Adds an in-game chat to 2d gamemodes
  * @author TheLazySquid
- * @version 0.4.0
+ * @version 0.4.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Chat.js
  * @webpage https://gimloader.github.io/plugins/Chat
  * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
- * @changelog Added optional support for streaming messages
+ * @changelog Fixed scrolling not working when a message is recieved
  */
 
 // external-svelte:svelte
@@ -94,9 +94,11 @@ var Chatter = class {
     this.comms.onStringStream(async (chunks, char) => {
       if (!settings.streamMessages) return;
       this.playersTyping = this.playersTyping.filter((c) => c !== char);
+      this.scroll(false);
       this.messages.push({ text: `${char.name}: `, formatted: false });
       const message = this.messages[this.messages.length - 1];
       for await (const chunk of chunks) {
+        this.scroll(false);
         message.text += chunk;
       }
       message.text = format({ inputText: message.text });
@@ -201,9 +203,9 @@ var Chatter = class {
   }
   addMessage(text2, forceScroll = false) {
     text2 = format({ inputText: text2 });
+    this.scroll(forceScroll);
     if (this.messages.length === 500) this.messages.splice(0, 1);
     this.messages.push({ text: text2, formatted: true });
-    this.scroll(forceScroll);
   }
   sendLeave() {
     if (!Comms.enabled) return;
@@ -213,12 +215,14 @@ var Chatter = class {
     );
   }
   async send(text2) {
+    this.sending = true;
     try {
       await this.comms.send(text2);
       this.addMessage(`${this.me.name}: ${text2}`, true);
     } catch {
       this.addMessage("Message failed to send", true);
     }
+    this.sending = false;
     this.typing = false;
     if (this.timeout) {
       clearTimeout(this.timeout);
@@ -270,8 +274,8 @@ function UI($$anchor, $$props) {
   let wrap;
   let input;
   async function scroll(force) {
-    await tick();
     const shouldScroll = wrap.scrollHeight - wrap.scrollTop - wrap.clientHeight < 1;
+    await tick();
     if (shouldScroll || force) wrap.scrollTop = wrap.scrollHeight;
   }
   const chatter = new Chatter(scroll);
@@ -301,9 +305,7 @@ function UI($$anchor, $$props) {
     if (e.key === "Enter") {
       if (get(inputText).length === 0) return;
       e.preventDefault();
-      chatter.sending = true;
       chatter.send(get(inputText)).then(async () => {
-        chatter.sending = false;
         await tick();
         input.focus();
       });
