@@ -2,18 +2,21 @@
  * @name Desynchronize
  * @description Disables the client being snapped back by the server, others cannot see you move. Breaks most gamemodes.
  * @author TheLazySquid
- * @version 0.2.2
+ * @version 0.3.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @webpage https://gimloader.github.io/plugins/Desynchronize
  * @optionalLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
- * @changelog Updated webpage url
+ * @changelog Added better popup for needing communication
  */
 var __defProp = Object.defineProperty;
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
+
+// shared/config.ts
+var baseDownloadUrl = "https://raw.githubusercontent.com/Gimloader/builds/main";
 
 // plugins/Desynchronize/src/sync.ts
 var offset = 2048;
@@ -331,25 +334,18 @@ function stopSync() {
   sync = null;
 }
 settings.listen("pluginSync", (enabled) => {
-  if (enabled) {
-    if (api.libs.isEnabled("Communication")) {
-      api.net.onLoad(() => {
-        sync ??= new Sync();
-      });
-    } else {
-      settings.pluginSync = false;
-      api.UI.showModal(
-        document.createElement("div"),
-        {
-          title: "The Communication library is required for plugin sync.",
-          closeOnBackgroundClick: true,
-          style: "color: red"
-        }
-      );
-    }
-  } else {
+  if (!enabled) {
     stopSync();
+    return;
   }
+  api.libs.require("Communication", `${baseDownloadUrl}/libraries/Communication.js`).then(() => {
+    api.net.onLoad(() => {
+      sync ??= new Sync();
+    });
+  }).catch(() => {
+    settings.pluginSync = false;
+    api.UI.message.error({ content: "Cannot enable sync setting without Communication library" });
+  });
 }, true);
 api.onStop(stopSync);
 export {
