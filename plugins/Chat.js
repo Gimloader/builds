@@ -2,12 +2,12 @@
  * @name Chat
  * @description Adds an in-game chat to 2d gamemodes
  * @author TheLazySquid
- * @version 0.4.1
+ * @version 0.5.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Chat.js
  * @webpage https://gimloader.github.io/plugins/Chat
  * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
- * @changelog Fixed scrolling not working when a message is recieved
+ * @changelog Added option to show player skins in chat
  */
 
 // external-svelte:svelte
@@ -61,6 +61,13 @@ var settings = api.settings.create([
     title: "Stream Messages",
     description: "Show messages being typed out instead of waiting for them to be fully recieved",
     default: true
+  },
+  {
+    id: "showSkins",
+    type: "toggle",
+    title: "Show Skins",
+    description: "Display player skins next to their messages in chat",
+    default: true
   }
 ]);
 var Op = ((Op2) => {
@@ -71,12 +78,20 @@ var Op = ((Op2) => {
   Op2[Op2["NotTyping"] = 4] = "NotTyping";
   return Op2;
 })(Op || {});
-var format;
+var format = null;
 api.rewriter.exposeVar("App", {
   check: ">%SPACE_HERE",
   find: /}\);const (\S+)=.=>.{0,175}>%SPACE_HERE%/,
   callback: (formatter) => format = formatter
 });
+function parseSkin(skin) {
+  if (!skin) return;
+  try {
+    const id = JSON.parse(skin).id;
+    return id.replace("character_", "");
+  } catch {
+  }
+}
 var Chatter = class {
   constructor(scroll) {
     this.scroll = scroll;
@@ -90,17 +105,23 @@ var Chatter = class {
         /* Greet */
       );
     }
+    settings.listen("showSkins", (value) => this.showSkins = value);
     const joinedPlayers = /* @__PURE__ */ new Set();
     this.comms.onStringStream(async (chunks, char) => {
       if (!settings.streamMessages) return;
       this.playersTyping = this.playersTyping.filter((c) => c !== char);
       this.scroll(false);
-      this.messages.push({ text: `${char.name}: `, formatted: false });
+      this.messages.push({
+        senderSkin: parseSkin(char.appearance.skin),
+        text: `${char.name}: `,
+        formatted: false
+      });
       const message = this.messages[this.messages.length - 1];
       for await (const chunk of chunks) {
         this.scroll(false);
         message.text += chunk;
       }
+      if (!format) return;
       message.text = format({ inputText: message.text });
       message.formatted = true;
     });
@@ -110,14 +131,14 @@ var Chatter = class {
       };
       if (typeof message === "string") {
         if (!settings.streamMessages) {
-          this.addMessage(`${char.name}: ${message}`);
+          this.addMessage(`${char.name}: ${message}`, false, char.appearance.skin);
           removePlayerTyping();
         }
       } else {
         switch (message) {
           case 0:
             if (joinedPlayers.has(char.id)) return;
-            this.addMessage(`${char.name} connected to the chat`);
+            this.addMessage(`${char.name} connected to the chat`, false, char.appearance.skin);
             joinedPlayers.add(char.id);
             break;
           case 1:
@@ -126,7 +147,7 @@ var Chatter = class {
             removePlayerTyping();
             break;
           case 2:
-            this.addMessage(`${char.name} connected to the chat`);
+            this.addMessage(`${char.name} connected to the chat`, false, char.appearance.skin);
             this.comms.send(
               0
               /* Join */
@@ -201,11 +222,22 @@ var Chatter = class {
   set sending(value) {
     set(this.#sending, value, true);
   }
-  addMessage(text2, forceScroll = false) {
-    text2 = format({ inputText: text2 });
+  #showSkins = state(proxy(settings.showSkins));
+  get showSkins() {
+    return get(this.#showSkins);
+  }
+  set showSkins(value) {
+    set(this.#showSkins, value, true);
+  }
+  addMessage(text2, forceScroll = false, skin) {
+    if (format) text2 = format({ inputText: text2 });
     this.scroll(forceScroll);
     if (this.messages.length === 500) this.messages.splice(0, 1);
-    this.messages.push({ text: text2, formatted: true });
+    this.messages.push({
+      senderSkin: parseSkin(skin),
+      text: text2,
+      formatted: format ? true : false
+    });
   }
   sendLeave() {
     if (!Comms.enabled) return;
@@ -218,7 +250,7 @@ var Chatter = class {
     this.sending = true;
     try {
       await this.comms.send(text2);
-      this.addMessage(`${this.me.name}: ${text2}`, true);
+      this.addMessage(`${this.me.name}: ${text2}`, true, this.me.appearance.skin);
     } catch {
       this.addMessage("Message failed to send", true);
     }
@@ -254,11 +286,12 @@ var Chatter = class {
 };
 
 // plugins/Chat/src/UI.svelte
-var root_1 = from_html(`<div><!></div>`);
+var root_2 = from_html(`<img/>`);
+var root_1 = from_html(`<div class="chat-message svelte-9jbcin"><!> <div><!></div></div>`);
 var root = from_html(`<div class="gl-chat svelte-9jbcin"><div class="chat-spacer svelte-9jbcin"></div> <div class="chat-messages-wrap svelte-9jbcin"><div class="chat-messages svelte-9jbcin"></div> <div class="typing-text svelte-9jbcin"> </div></div> <input class="svelte-9jbcin"/></div>`);
 var $$css = {
   hash: "svelte-9jbcin",
-  code: ".gl-chat.svelte-9jbcin {position:fixed;background-color:rgba(0, 0, 0, 0.3);transition:background 0.5s;bottom:15vh;left:15px;width:350px;z-index:50;min-height:300px;display:flex;flex-direction:column;}.chat-spacer.svelte-9jbcin {flex-grow:1;}.chat-messages-wrap.svelte-9jbcin {max-height:400px;overflow-y:auto;scrollbar-color:rgba(255, 255, 255, 0.5) transparent;}.chat-messages.svelte-9jbcin {display:flex;flex-direction:column;justify-content:flex-end;color:white;padding:0 5px;}.typing-text.svelte-9jbcin {padding-left:5px;height:18px;color:white;font-size:12px;margin-top:-6px;}.gl-chat.svelte-9jbcin input:where(.svelte-9jbcin) {width:100%;border:none;}"
+  code: ".gl-chat.svelte-9jbcin {position:fixed;background-color:rgba(0, 0, 0, 0.3);transition:background 0.5s;bottom:15vh;left:15px;width:350px;z-index:50;min-height:300px;display:flex;flex-direction:column;}.chat-spacer.svelte-9jbcin {flex-grow:1;}.chat-messages-wrap.svelte-9jbcin {max-height:400px;overflow-y:auto;scrollbar-color:rgba(255, 255, 255, 0.5) transparent;}.chat-messages.svelte-9jbcin {display:flex;flex-direction:column;justify-content:flex-end;color:white;padding:0 5px;}.chat-message.svelte-9jbcin {display:flex;align-items:flex-start;}.typing-text.svelte-9jbcin {padding-left:5px;height:18px;color:white;font-size:12px;margin-top:-6px;}.gl-chat.svelte-9jbcin input:where(.svelte-9jbcin) {width:100%;border:none;}"
 };
 function UI($$anchor, $$props) {
   push($$props, true);
@@ -328,9 +361,26 @@ function UI($$anchor, $$props) {
     var node = child(div_3);
     {
       var consequent = ($$anchor3) => {
+        var img = root_2();
+        set_attribute(img, "width", 24);
+        set_attribute(img, "height", 24);
+        template_effect(() => {
+          set_attribute(img, "src", `https://www.gimkit.com/assets/map/characters/spine/preview/${get(message).senderSkin ?? ""}.png`);
+          set_attribute(img, "alt", get(message).senderSkin);
+        });
+        append($$anchor3, img);
+      };
+      if_export(node, ($$render) => {
+        if (get(message).senderSkin && chatter.showSkins) $$render(consequent);
+      });
+    }
+    var div_4 = sibling(node, 2);
+    var node_1 = child(div_4);
+    {
+      var consequent_1 = ($$anchor3) => {
         var fragment = comment();
-        var node_1 = first_child(fragment);
-        html(node_1, () => get(message).text);
+        var node_2 = first_child(fragment);
+        html(node_2, () => get(message).text);
         append($$anchor3, fragment);
       };
       var alternate = ($$anchor3) => {
@@ -338,18 +388,19 @@ function UI($$anchor, $$props) {
         template_effect(() => set_text(text2, get(message).text));
         append($$anchor3, text2);
       };
-      if_export(node, ($$render) => {
-        if (get(message).formatted) $$render(consequent);
+      if_export(node_1, ($$render) => {
+        if (get(message).formatted) $$render(consequent_1);
         else $$render(alternate, false);
       });
     }
+    reset(div_4);
     reset(div_3);
     append($$anchor2, div_3);
   });
   reset(div_2);
-  var div_4 = sibling(div_2, 2);
-  var text_1 = child(div_4, true);
-  reset(div_4);
+  var div_5 = sibling(div_2, 2);
+  var text_1 = child(div_5, true);
+  reset(div_5);
   reset(div_1);
   bind_this(div_1, ($$value) => wrap = $$value, () => wrap);
   var input_1 = sibling(div_1, 2);
