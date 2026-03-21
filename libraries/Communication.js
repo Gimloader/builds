@@ -116,12 +116,10 @@ var Messenger = class _Messenger {
   async sendString(string) {
     await this.sendStringOfType(string, 5 /* String */);
   }
-  async sendSmallObject(obj) {
-    const string = JSON.stringify(obj);
+  async sendSmallObject(string) {
     await this.sendHeader(7 /* SmallObject */, ...encodeCharacters(string));
   }
-  async sendObject(obj) {
-    const string = JSON.stringify(obj);
+  async sendObject(string) {
     await this.sendStringOfType(string, 6 /* Object */);
   }
   async sendStringOfType(string, type) {
@@ -412,10 +410,11 @@ var Communication = class _Communication {
             return await this.#messenger.sendSeveralBytes(message);
           }
         } else {
-          if (JSON.stringify(message).length <= 3) {
-            return await this.#messenger.sendSmallObject(message);
+          const stringified = JSON.stringify(message);
+          if (stringified.length <= 3) {
+            return await this.#messenger.sendSmallObject(stringified);
           }
-          return await this.#messenger.sendObject(message);
+          return await this.#messenger.sendObject(stringified);
         }
       }
     }
