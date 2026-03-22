@@ -236,7 +236,7 @@ var Chatter = class {
     this.messages.push({
       senderSkin: parseSkin(skin),
       text: text2,
-      formatted: format ? true : false
+      formatted: Boolean(format)
     });
   }
   sendLeave() {
