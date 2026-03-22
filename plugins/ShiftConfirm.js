@@ -9,25 +9,17 @@
  */
 
 // plugins/ShiftConfirm/src/index.ts
-api.rewriter.exposeVar(true, {
-  find: /(\S+)\.useModal=\S+;\1\.info=function/,
-  callback(modal) {
-    const originalConfirm = modal.confirm;
-    modal.confirm = (props) => {
-      if (api.hotkeys.pressed.has("ShiftLeft")) {
-        props.onOk?.();
-        return {
-          destroy() {
-          },
-          update() {
-          }
-        };
-      } else {
-        return originalConfirm(props);
+var originalConfirm = api.UI.modal.confirm;
+api.patcher.swap(api.UI.modal, "confirm", (props) => {
+  if (api.hotkeys.pressed.has("ShiftLeft")) {
+    props.onOk?.();
+    return {
+      destroy() {
+      },
+      update() {
       }
     };
-    api.onStop(() => {
-      modal.confirm = originalConfirm;
-    });
+  } else {
+    return originalConfirm(props);
   }
 });
