@@ -2,12 +2,12 @@
  * @name GamemodeLinks
  * @description Creates game rooms from links, particularly useful in bookmarks.
  * @author retrozy
- * @version 0.3.3
+ * @version 0.3.4
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/GamemodeLinks.js
  * @webpage https://gimloader.github.io/plugins/GamemodeLinks
  * @reloadRequired notingame
  * @hasSettings true
- * @changelog Gave a message when creative map URLs are copied
+ * @changelog Fixed for gimloader v1.12.0
  */
 
 // shared/rewritingUtils.ts
@@ -244,7 +244,7 @@ api.rewriter.addParseHook("App", (code) => {
     return insert(code, ".readOnly]);@#", `${setHooksWrapper}?.(${name});`);
   } else if (code.includes("The more reliable, the easier it is for crewmates to win")) {
     const gameVarName = getSection(code, ".name,description:@.");
-    code = insert(code, ")=>{const[#=()=>{@#", `${closePopupWrapper}?.();`);
+    code = insert(code, ")=>{let[#=()=>{@#", `${closePopupWrapper}?.();`);
     return insert(code, '"EXPERIENCE_HOOKS"})@}', `;${setMapDataWrapper}?.(${gameVarName}?._id, ${gameVarName}?.name);`);
   }
   return code;
