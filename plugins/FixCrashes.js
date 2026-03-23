@@ -2,11 +2,11 @@
  * @name FixCrashes
  * @description Attempts to prevent natural game crashes
  * @author retrozy
- * @version 0.1.1
+ * @version 0.1.2
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/FixCrashes.js
  * @webpage https://gimloader.github.io/plugins/FixCrashes
  * @reloadRequired ingame
- * @changelog Updated webpage url
+ * @changelog Fixed an issue by a recent Gimloader update
  */
 
 // shared/rewritingUtils.ts
@@ -59,7 +59,7 @@ function insert(code, match, string) {
 // plugins/FixCrashes/src/index.ts
 api.rewriter.addParseHook("App", (code) => {
   if (!code.includes(".previewDepth).removeTileAt(this.previewingTile.x")) return code;
-  code = insert(code, "clearConsumeErrorMessage=()=>{const#.itemId)@.", "?");
+  code = insert(code, "clearConsumeErrorMessage=()=>{let#.itemId)@.", "?");
   return insert(code, ".isHoldingDown;this.wasDown#.itemId);if(#@.", "?");
 });
 api.rewriter.addParseHook("FixSpinePlugin", (code) => {
