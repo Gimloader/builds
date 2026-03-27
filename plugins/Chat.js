@@ -275,7 +275,6 @@ var Chatter = class {
     this.timeout = setTimeout(() => this.stopTyping(), 3e3);
   }
   stopTyping() {
-    if (!this.typing) return;
     if (!Comms.enabled || !this.typing) return;
     this.comms.send(
       4
