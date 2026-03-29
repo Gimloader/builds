@@ -47,6 +47,9 @@ function replaceSection(code, match, replacement) {
   const { startIndex, endIndex } = getRange(code, match);
   const start = code.slice(0, startIndex);
   const end = code.slice(endIndex);
+  if (typeof replacement === "function") {
+    replacement = replacement(code.slice(startIndex, endIndex));
+  }
   return start + replacement + end;
 }
 function insert(code, match, string) {
