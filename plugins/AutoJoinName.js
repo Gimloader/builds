@@ -7,6 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/AutoJoinName
  * @hasSettings true
  * @changelog Updated webpage url
+ * @signature V5/p7NSAV3hFee5IHtvHX7FgzShkr3HLAvwO5weV1Tjsj6E+7S/tOQZ599RXrHW0pLPRCpaeYr3OzdwdSKmICA==
  */
 
 // plugins/AutoJoinName/src/index.ts

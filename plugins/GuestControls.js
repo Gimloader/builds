@@ -8,6 +8,7 @@
  * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
  * @changelog Updated webpage url
+ * @signature 65srNfop+9xkUflS+sNIegkxfkcpW7Rdzb54RgeSGrNCcnxRuYNZToy1E7EIsKHz1K6H/tHnQ7QviMgVM8GuBA==
  */
 
 // plugins/GuestControls/src/index.ts

@@ -7,6 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/QuickReset
  * @gamemode 2d
  * @changelog Updated webpage url
+ * @signature 790laHlRwL2NUAtSTIe3XYnrIkbjdPoMmzog2rDlLJDTuLWaVglvKp9s0TUlAqxwELRP4xXDSO9tM6K7HyYHBw==
  */
 
 // plugins/QuickReset/src/index.ts

@@ -8,6 +8,7 @@
  * @reloadRequired ingame
  * @gamemode 2d
  * @changelog Updated webpage url
+ * @signature +UeyUkqumvpLk9V0SIQS1quBPlSWps3Bsj4U+yaGaWtkS30PDXzxH7hFjQP3BKoGpEX5SUa5o7ohx6zQGIy8Cg==
  */
 
 // plugins/IdleForXp/src/index.ts

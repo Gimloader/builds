@@ -9,6 +9,7 @@
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
  * @changelog Updated webpage url
+ * @signature 1D7UZ1IATKF83dPJOfuoW17YEVfjXbxrXKOAaegaJLD7B4nOSEBf7+Xj8WlXQ1SwVxJ0xYKcnJ+t3At7nR4uBw==
  */
 
 // plugins/InputRecorder/src/updateLasers.ts

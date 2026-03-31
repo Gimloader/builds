@@ -9,6 +9,7 @@
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
  * @changelog Updated webpage url
+ * @signature iFKKWeF1ryd9/g8Am1xI5koErr5o+08qEuntqW/5A+bPdC1iufsZjO4OYwWVcx9UfxfhyqrBE/jAC0IJdNgOBA==
  */
 
 // shared/consts.ts

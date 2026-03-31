@@ -8,6 +8,7 @@
  * @gamemode 2d
  * @changelog Added support for streaming strings and byte arrays
  * @isLibrary true
+ * @signature swq+wuJFbfeAyQx4idY5nseyXCaK2ZpqxD3O9TC4Q9KiBcZaqaap4gzhfSY0nu28mO1DnTQn7O15YsLiPC4iDQ==
  */
 
 // libraries/Communication/src/encoding.ts

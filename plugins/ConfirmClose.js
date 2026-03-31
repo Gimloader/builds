@@ -6,6 +6,7 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/ConfirmClose.js
  * @webpage https://gimloader.github.io/plugins/ConfirmClose
  * @changelog Updated webpage url
+ * @signature rcZcG9M850629exjYkYxkTGESZqGRyCVJ7F8H37sjSVt28pMq4w/BDXPUTUEsVY0/roVxTIaN+HloNGfGGH8BQ==
  */
 
 // plugins/ConfirmClose/src/index.ts

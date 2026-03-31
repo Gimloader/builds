@@ -8,6 +8,7 @@
  * @hasSettings true
  * @gamemode 2d
  * @changelog Updated webpage url
+ * @signature ksX0Gck7EQ80rTAb3Tfq46fLQnzWFSaX+jwOhpEaOI7q9munn+VqIDtNNfh3M+JsJJfFJN2i9sQBfYx/Ju0jAQ==
  */
 var __create = Object.create;
 var __defProp = Object.defineProperty;

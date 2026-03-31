@@ -10,6 +10,7 @@
  * @hasSettings true
  * @gamemode dontLookDown
  * @changelog Updated webpage url
+ * @signature tid25djVEE7WmQnHl2lMI1ZewuCKRR+ioSUu4ubjDIjzFfv0KPYWC3Bkht/cKoNr16mPdGgVXy2NuS+HAb9fDg==
  */
 
 // plugins/BringBackBoosts/src/index.ts

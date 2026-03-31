@@ -9,6 +9,7 @@
  * @gamemode ctf
  * @gamemode tag
  * @changelog Updated webpage url
+ * @signature HW6lmjWP3XclwBj5pNrcsGTavLjnwlomydUKBGAvL/LtpEGHrRu4V6DnqnOF2cyJNk9mGc9W2NbIqntgkgZZDQ==
  */
 
 // external-svelte:svelte

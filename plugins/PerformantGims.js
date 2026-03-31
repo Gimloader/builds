@@ -8,6 +8,7 @@
  * @reloadRequired ingame
  * @hasSettings true
  * @changelog Updated webpage url
+ * @signature EqPFFU69z9MHXZslLoxeS5JLhPdOIyJ1pq122ak//kLYJPYqb0R+4IKp4pIlUgY0eEJkuYj0eu+1PCpp1r1bAw==
  */
 
 // plugins/PerformantGims/src/index.ts

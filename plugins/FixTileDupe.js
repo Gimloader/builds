@@ -7,6 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/FixTileDupe
  * @gamemode 2d
  * @changelog Updated webpage url
+ * @signature xbezCBCx4vvt5Dl6ryoiUcss/6iGfw+cJ32fPNCq+6k3G1qmBXykfFgBfYvXNP/NHtnwrt2eGeanCHAhQ1N0Bg==
  */
 
 // plugins/FixTileDupe/src/index.ts

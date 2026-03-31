@@ -8,6 +8,7 @@
  * @optionalLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
  * @changelog Added better popup for needing communication
+ * @signature gIgzeAx0CWjzoQfqbB3f4QaKv27nNnIE7nmEzWoGIQ6oSFYPTCeCWtPoCP+3ysoNZCj2VdyU20fVAvLHNEWvDg==
  */
 var __defProp = Object.defineProperty;
 var __export = (target, all) => {

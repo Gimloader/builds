@@ -8,6 +8,7 @@
  * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
  * @changelog Added option to show player skins in chat
+ * @signature VoguXrfGmrVprvxvmGxoHRL6gmfWWZ9alvCNQk/w5K0cvTJ3lUrpPl6Wn4Q4Aybbfj4ueZfCyrbPRFu9XeMNBA==
  */
 
 // external-svelte:svelte

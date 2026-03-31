@@ -6,6 +6,7 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/UncappedSettings.js
  * @webpage https://gimloader.github.io/plugins/UncappedSettings
  * @changelog Updated webpage url
+ * @signature 1vtSZdkuUfHIBBs4VY7lro9lWx0QI7Xt8Vlhepf30cGa8fe/rXW5aQKNTtdr+Foz+npM7FyfVC/8dvR7MlR7AQ==
  */
 
 // plugins/UncappedSettings/src/index.ts

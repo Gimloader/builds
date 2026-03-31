@@ -7,6 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/Healthbars
  * @gamemode 2d
  * @changelog Updated webpage url
+ * @signature sxp71s3kMDA6GHog4iYqCZNIxEnLgltUAwB6PAuecxBDs6kNlvDIpj73ctq46L5xSrC0NkF2h4qG8usbBXfNAA==
  */
 
 // plugins/Healthbars/src/index.ts

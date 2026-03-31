@@ -9,6 +9,7 @@
  * @hasSettings true
  * @gamemode 2d
  * @changelog Updated webpage url
+ * @signature rWNuMKWYjIfTrDlCXjQU76TlI2eErhZEDDcqmIWKT+u5D6FFLRH5DkCu6e5l+AZ78u78wZxOp+o3pcsn9ML5Aw==
  */
 
 // plugins/CameraControl/src/index.ts

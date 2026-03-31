@@ -7,6 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/KitTimesPlayed
  * @reloadRequired notingame
  * @changelog Updated webpage url
+ * @signature N2+xd0gFWRk7RAuY+M/VLzIHHNMiAvzQYuKIU6sPXhQXHid/s7gLUpwwUIc6QYCE4hbeMj4HezBAO1RPWcjRCQ==
  */
 
 // shared/rewritingUtils.ts

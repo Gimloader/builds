@@ -6,6 +6,7 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/ShiftConfirm.js
  * @webpage https://gimloader.github.io/plugins/ShiftConfirm
  * @changelog Fixed plugin crashing
+ * @signature 3Fgo1IUtGoFODRS8SvdZYHpEENAVKbpD6DRcuVyzOH6bXam0YfY1ZBO/2j1KfnLHaI3ZtTgQTeMXPHiQFbbGBA==
  */
 
 // plugins/ShiftConfirm/src/index.ts

@@ -10,6 +10,7 @@
  * @gamemode fishtopia
  * @gamemode oneWayOut
  * @changelog Maybe fixed Fishtopia splits resetting
+ * @signature uyL4Goz56vow37mIVVXAf4rK9xclkgsT9qqAgDCfBCqW5xsS9qC0tH/ocNv62EUjWjoLPbUTYFv+5d36vKyXAQ==
  */
 
 // external-svelte:svelte/internal/client

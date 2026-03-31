@@ -7,6 +7,7 @@
  * @webpage https://gimloader.github.io/libraries/MobxUtils
  * @changelog Updated webpage url
  * @isLibrary true
+ * @signature DSo1VZw+me3bhs28JgzbVWKWd+vf5a7zcQ0Zhjcgdu/W1yfoGmXgatC2L4Xn/l1dGgyq0jh5ZKtCDmniQlR/DQ==
  */
 
 // libraries/MobxUtils/src/index.ts

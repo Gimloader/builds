@@ -6,6 +6,7 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/ToggleTerrainType.js
  * @webpage https://gimloader.github.io/plugins/ToggleTerrainType
  * @changelog Updated webpage url
+ * @signature xVtOk4uZXpfznOyd4BYAMwS3QfrecLGKs1eunw5Jex1xAJ12jP5PhKzp4Cs8sosvZHLfUi+os6DQXxNI7E7CBw==
  */
 
 // plugins/ToggleTerrainType/src/index.ts

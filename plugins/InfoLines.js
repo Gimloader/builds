@@ -8,6 +8,7 @@
  * @hasSettings true
  * @gamemode 2d
  * @changelog Added a setting for Fish Value to add your existing cash
+ * @signature NTRTcnpDxU2AFTqcX2+hgP6kwQRVoL6li5go+fFxfMQned79KuERrQxhb0tIwlWAx6S+UoJOJ77OR69E1pvqAw==
  */
 
 // plugins/InfoLines/src/styles.scss

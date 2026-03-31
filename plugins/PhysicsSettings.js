@@ -9,6 +9,7 @@
  * @hasSettings true
  * @gamemode 2d
  * @changelog Updated webpage url
+ * @signature splT4zbpCAVXj+gmEu/lairfgEsD0LaIMG4HhtNykmu74ivSdCHJ2y6KcwnLOmYvgemXtc42Z+LocXvvsQVPAA==
  */
 
 // shared/rewritingUtils.ts

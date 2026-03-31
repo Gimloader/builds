@@ -8,6 +8,7 @@
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode 2d
  * @changelog Updated webpage url
+ * @signature jBkSHt9Z5eqC/IO6NXXgvFGvhqfeAEHhBz/PYQpwBSMaVtqot/3c5kLURSRtQqucOfgaYc49+BXjIzxT1hthCA==
  */
 
 // plugins/PlayerCollision/src/index.ts

@@ -8,6 +8,7 @@
  * @reloadRequired ingame
  * @hasSettings true
  * @changelog Updated webpage url
+ * @signature sgndVXd/iyZgbptC6Jpa9MwJFcJjj32nW+dlWrqcG6ZaPs0/9bscJy/25EIUCN93Th1uBY323rxmIxVCTGuZDw==
  */
 
 // shared/rewritingUtils.ts

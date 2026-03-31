@@ -7,6 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/NoSchoolHours
  * @reloadRequired notingame
  * @changelog Updated webpage url
+ * @signature wXjUg1GKj7ouJ3aRXtmiG8D8Khc0+5Nm0NFsBEPNH/6C0uSUuhpstT+gmA0OVldlUwnILJLck2wVWdd7/b4ECg==
  */
 
 // shared/rewritingUtils.ts

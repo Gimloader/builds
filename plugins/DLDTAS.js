@@ -8,6 +8,7 @@
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
  * @changelog Added a command for jumping to any frame
+ * @signature +9+5ZwIJsgcIlLnu8GyZpTYhOeQc6e4qvqIvuWWdgjrEFmubI70Ce60+k4lSC8KHqBOc61ED2W0QquHfLNyFCw==
  */
 
 // plugins/DLDTAS/src/styles.scss

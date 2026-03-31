@@ -7,6 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/CrazyFlag
  * @hasSettings true
  * @changelog Updated webpage url
+ * @signature drfd1U7vgXGXHtSigspsVU30pHh1+nYrqgRQyUY6HOxqIwibaFCbSSSHhlX3cKXwwA3Pz1GLvuBFphD+cZPTCQ==
  */
 
 // plugins/CrazyFlag/src/index.ts

@@ -8,6 +8,7 @@
  * @reloadRequired notingame
  * @hasSettings true
  * @changelog Fixed for gimloader v1.12.0
+ * @signature glSVfChiWFl6ioRl4jMNSOUz+7Bs4tEgf6rCfJWY6i8uzovreLDVTkSY+Fzav0Vc3arRcuWUPz4mxKo9lMuaDA==
  */
 
 // shared/rewritingUtils.ts

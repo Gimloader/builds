@@ -5,6 +5,7 @@
  * @version 0.1.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/GameCodeHider.js
  * @webpage https://gimloader.github.io/plugins/GameCodeHider
+ * @signature 9++kQ6W6MNqkqiPQ7+mQSUfErJmg43ceBxRTZDIDYzus19aWC/yuuZ/5F/16b51yYaB4y6pdFvrVuK8c+CMiAA==
  */
 
 // plugins/GameCodeHider/src/styles.css

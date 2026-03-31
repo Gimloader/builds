@@ -7,6 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/CustomUI
  * @hasSettings true
  * @changelog Updated webpage url
+ * @signature CHBJES+Rnkd89SxxNxmptcdooVDBshcAqpuczm1Go+D2TpP+W4piPgzmTYNBeg09Q1NKUmSzm8kFos8Eu9uZDw==
  */
 
 // plugins/CustomUI/src/styles.scss
