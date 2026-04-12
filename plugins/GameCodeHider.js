@@ -5,7 +5,7 @@
  * @version 0.1.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/GameCodeHider.js
  * @webpage https://gimloader.github.io/plugins/GameCodeHider
- * @signature 9++kQ6W6MNqkqiPQ7+mQSUfErJmg43ceBxRTZDIDYzus19aWC/yuuZ/5F/16b51yYaB4y6pdFvrVuK8c+CMiAA==
+ * @signature XJdqpnaR1kKY//HANY/eGC1yYbxT879Bo+fA2N7hEb0FBxqYZCfZRaczoD/03cuEZFAX+AwU5ZVcQctUdC5LAg==
  */
 
 // plugins/GameCodeHider/src/styles.css
@@ -61,7 +61,7 @@ function CodeWrapper({ children, small }) {
   }
 }
 var createWrapper = api.rewriter.createShared("createWrapper", (small, Element) => {
-  return function(props) {
+  return (props) => {
     return /* @__PURE__ */ GL.React.createElement(CodeWrapper, { small }, /* @__PURE__ */ GL.React.createElement(Element, { ...props }));
   };
 });
