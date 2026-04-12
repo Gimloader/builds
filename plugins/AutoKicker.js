@@ -6,7 +6,7 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/AutoKicker.js
  * @webpage https://gimloader.github.io/plugins/AutoKicker
  * @changelog Added a setting to disable notifying
- * @signature JLo1Gm0JXYtnyTKSKgH52fZTWRQR/3Nqg8+fz2ydeWSnAaNRwQMegqRsqdqaoMdQQCIOQ5m0S7uSlLZULF3ICg==
+ * @signature KCdp/xLMd783uxjYd9M/wOeCWAlsyG5AiAiZeQgpjdpRIsaSOLFJ8HadzMoWADgZgyZeDPdJ+hHpEqe3lBV9Dw==
  */
 
 // plugins/AutoKicker/src/consts.ts
@@ -270,7 +270,6 @@ var AutoKicker = class {
           return true;
         }
       } else {
-        console.log(name, filter.name.toLowerCase(), name.includes(filter.name.toLowerCase()));
         if (name.includes(filter.name.toLowerCase())) {
           return true;
         }

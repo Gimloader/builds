@@ -8,7 +8,7 @@
  * @reloadRequired ingame
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature +UeyUkqumvpLk9V0SIQS1quBPlSWps3Bsj4U+yaGaWtkS30PDXzxH7hFjQP3BKoGpEX5SUa5o7ohx6zQGIy8Cg==
+ * @signature UzdqBHhqRq2Ea+tw4WXgOmbJJafj0HjKSIwKaN1GpemO9XOiKJYYN+icusybyZXDldYpbKJj/PEcUlDwi5AVBA==
  */
 
 // plugins/IdleForXp/src/index.ts
@@ -41,7 +41,6 @@ api.net.on("DEVICES_STATES_CHANGES", (event) => {
       const value = change[2][i];
       if (key === "GLOBAL_questions") {
         questions = JSON.parse(value);
-        console.log("Got questions", questions);
         answerDeviceId = id;
       }
       const playerId = api.stores.phaser.mainCharacter.id;

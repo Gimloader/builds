@@ -8,7 +8,7 @@
  * @hasSettings true
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature ksX0Gck7EQ80rTAb3Tfq46fLQnzWFSaX+jwOhpEaOI7q9munn+VqIDtNNfh3M+JsJJfFJN2i9sQBfYx/Ju0jAQ==
+ * @signature 7D2D/epNG9ZzOM1bsASjSqo09JyKCilxFavBeRNRvucsMFEC7ewbmVvD0Cs8FwWiiYY5rfL+iYMcR88cUP1VAA==
  */
 var __create = Object.create;
 var __defProp = Object.defineProperty;
@@ -801,7 +801,6 @@ var cosmeticChanger_default = new class CosmeticChanger {
   }
   patchSkin(skin) {
     if (this.skinType === "id") {
-      console.log({ id: this.skinId, editStyles: this.selectedStyles });
       skin.updateSkin({ id: this.skinId, editStyles: this.selectedStyles });
     }
     api.patcher.before(skin, "updateSkin", (_, args) => {

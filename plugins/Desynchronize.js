@@ -8,7 +8,7 @@
  * @optionalLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
  * @changelog Added better popup for needing communication
- * @signature gIgzeAx0CWjzoQfqbB3f4QaKv27nNnIE7nmEzWoGIQ6oSFYPTCeCWtPoCP+3ysoNZCj2VdyU20fVAvLHNEWvDg==
+ * @signature XzM6HJx2AO7ruWDJBqPvWGkbTlcMcYMtUVk0DqrPRzsSjQts0NocaaZNXgMsaB+dpulLWDSSxy2GDdMNrGUwCQ==
  */
 var __defProp = Object.defineProperty;
 var __export = (target, all) => {
@@ -231,7 +231,6 @@ var enable = () => {
         y: checkpoint.y * 100
       };
       if (boundingBoxOverlap(summitStart, summitEnd, topLeft, bottomRight)) {
-        console.log("Reached Checkpoint", i);
         lastCheckpointReached = i;
         break;
       }

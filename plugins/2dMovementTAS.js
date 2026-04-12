@@ -9,7 +9,7 @@
  * @gamemode ctf
  * @gamemode tag
  * @changelog Updated webpage url
- * @signature HW6lmjWP3XclwBj5pNrcsGTavLjnwlomydUKBGAvL/LtpEGHrRu4V6DnqnOF2cyJNk9mGc9W2NbIqntgkgZZDQ==
+ * @signature aunprlI9mM12gluTBpSIhv6qpRQiR1UGbaHL+U5UpAIuE+aHxoh1hLYfOy38h5P7nFktZuawa9oCwFPnfbTEAg==
  */
 
 // external-svelte:svelte
@@ -637,7 +637,6 @@ function UI($$anchor, $$props) {
     }
   }
   function keepActiveVisible() {
-    console.log("Keep active visilbe?");
     if (tools.currentFrame - 2 < get(offset)) set(offset, Math.max(0, tools.currentFrame - 2), true);
     if (tools.currentFrame + 3 > get(offset) + get(rows)) set(offset, tools.currentFrame - get(rows) + 3);
     addBlankFrames();
