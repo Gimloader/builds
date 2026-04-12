@@ -2,10 +2,11 @@
  * @name GameCodeHider
  * @description Allows hiding/revealing your game code everywhere
  * @author retrozy
- * @version 0.1.0
+ * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/GameCodeHider.js
  * @webpage https://gimloader.github.io/plugins/GameCodeHider
- * @signature XJdqpnaR1kKY//HANY/eGC1yYbxT879Bo+fA2N7hEb0FBxqYZCfZRaczoD/03cuEZFAX+AwU5ZVcQctUdC5LAg==
+ * @changelog Fixed QR code not being properly hidden
+ * @signature C10WJF185OOs19gGqahBz7gqmjjMJcSaEIau3n+iiEixMieQ2VG9vhD/g3BYFWST/dGSQwizCd7XpBPU7p75Aw==
  */
 
 // plugins/GameCodeHider/src/styles.css
@@ -35,6 +36,18 @@ var styles_default = `.gch-wrap {
 
 // plugins/GameCodeHider/src/index.tsx
 api.UI.addStyles(styles_default);
+var hiddenStyles = `.ant-popover .ant-qrcode {
+    display: none;
+}`;
+var removeStyles;
+updateHidden(api.storage.getValue("hidden", false));
+function updateHidden(value) {
+  if (value) {
+    removeStyles = api.UI.addStyles(hiddenStyles);
+  } else {
+    removeStyles?.();
+  }
+}
 function CodeWrapper({ children, small }) {
   const React = GL.React;
   const [hidden, setHidden] = React.useState(api.storage.getValue("hidden", false));
@@ -43,6 +56,7 @@ function CodeWrapper({ children, small }) {
     e.stopPropagation();
     setHidden((prev) => {
       api.storage.setValue("hidden", !prev);
+      updateHidden(!prev);
       return !prev;
     });
   };
