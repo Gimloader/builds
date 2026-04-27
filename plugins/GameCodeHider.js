@@ -2,11 +2,11 @@
  * @name GameCodeHider
  * @description Allows hiding/revealing your game code everywhere
  * @author retrozy
- * @version 0.1.1
+ * @version 0.1.2
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/GameCodeHider.js
  * @webpage https://gimloader.github.io/plugins/GameCodeHider
- * @changelog Fixed QR code not being properly hidden
- * @signature C10WJF185OOs19gGqahBz7gqmjjMJcSaEIau3n+iiEixMieQ2VG9vhD/g3BYFWST/dGSQwizCd7XpBPU7p75Aw==
+ * @changelog Fixed code not being hidden when building in Creative editor
+ * @signature V9ck+1f9ErsL3scNVLCT//BmFSrjgxcuLoKyzBh0LOPAX/ogH39osu4CVa1OUGGvCpMlTgvEShaV2C5KZkC3DA==
  */
 
 // plugins/GameCodeHider/src/styles.css
@@ -34,8 +34,7 @@ var styles_default = `.gch-wrap {
 }
 `;
 
-// plugins/GameCodeHider/src/index.tsx
-api.UI.addStyles(styles_default);
+// plugins/GameCodeHider/src/wrapper.tsx
 var hiddenStyles = `.ant-popover .ant-qrcode {
     display: none;
 }`;
@@ -48,7 +47,7 @@ function updateHidden(value) {
     removeStyles?.();
   }
 }
-function CodeWrapper({ children, small }) {
+function CodeWrapper({ children, small, prefix = "" }) {
   const React = GL.React;
   const [hidden, setHidden] = React.useState(api.storage.getValue("hidden", false));
   if (children.props?.showLargeCode) return children;
@@ -60,8 +59,15 @@ function CodeWrapper({ children, small }) {
       return !prev;
     });
   };
-  const text = hidden ? "######" : children.props.children;
+  const text = hidden ? `${prefix}######` : children.props.children;
   const eye = /* @__PURE__ */ GL.React.createElement("div", { className: `${small ? "gch-toggle-small" : "gch-toggle"} far ${hidden ? "fa-eye-slash" : "fa-eye"}`, onClick: toggleHidden });
+  const onClick = children.props?.onClick;
+  if (onClick) {
+    children.props.onClick = (e) => {
+      if (e.target.className.includes("gch-toggle")) return;
+      onClick(e);
+    };
+  }
   if (small) {
     return React.cloneElement(children, {
       children: /* @__PURE__ */ GL.React.createElement("div", { className: "gch-wrap-small" }, text, eye)
@@ -74,17 +80,18 @@ function CodeWrapper({ children, small }) {
     return /* @__PURE__ */ GL.React.createElement("div", { className: "gch-wrap" }, code, eye);
   }
 }
-var createWrapper = api.rewriter.createShared("createWrapper", (small, Element) => {
-  return (props) => {
-    return /* @__PURE__ */ GL.React.createElement(CodeWrapper, { small }, /* @__PURE__ */ GL.React.createElement(Element, { ...props }));
-  };
+var createWrapper = api.rewriter.createShared("createWrapper", (Element, small, prefix) => {
+  return (props) => /* @__PURE__ */ GL.React.createElement(CodeWrapper, { small, prefix }, /* @__PURE__ */ GL.React.createElement(Element, { ...props }));
 });
-var BigCode = api.rewriter.createShared("BigWrapper", null);
+
+// plugins/GameCodeHider/src/index.ts
+api.UI.addStyles(styles_default);
+var BigCode = api.rewriter.createShared("BigCode", null);
 api.rewriter.runInScope("SixteenByNineScaler", (code, run, initial) => {
   const nameStart = code.indexOf("font-size: 32px;") + 19;
   const nameEnd = code.indexOf("=", nameStart);
   const component = code.slice(nameStart, nameEnd);
-  run(`${BigCode}=${component};${component}=${createWrapper}(false,${component})`);
+  run(`${BigCode}=${component};${component}=${createWrapper}(${component},false)`);
   if (!initial) api.UI.forceReactUpdate();
   api.onStop(() => {
     run(`${component}=${BigCode}`);
@@ -99,10 +106,26 @@ api.rewriter.runInScope("App", (code, run, initial) => {
   const nameEnd = code.lastIndexOf("=", index);
   const nameStart = code.lastIndexOf(",", nameEnd) + 1;
   const component = code.slice(nameStart, nameEnd);
-  run(`${TwoDCode}=${component};${component}=${createWrapper}(true,${component})`);
+  run(`${TwoDCode}=${component};${component}=${createWrapper}(${component},true)`);
   if (!initial) api.UI.forceReactUpdate();
   api.onStop(() => {
     run(`${component}=${TwoDCode}`);
+    api.UI.forceReactUpdate();
+  });
+  return true;
+});
+var CreativeCode = api.rewriter.createShared("CreativeCode", null);
+api.rewriter.runInScope("App", (code, run, initial) => {
+  const index = code.indexOf("Join Code: ");
+  if (index === -1) return;
+  const afterIndex = code.indexOf("light-shadow", index);
+  const nameEnd = code.lastIndexOf("=", afterIndex);
+  const nameStart = code.lastIndexOf(",", nameEnd) + 1;
+  const component = code.slice(nameStart, nameEnd);
+  run(`${CreativeCode}=${component};${component}=${createWrapper}(${component},true,"Join Code: ")`);
+  if (!initial) api.UI.forceReactUpdate();
+  api.onStop(() => {
+    run(`${component}=${CreativeCode}`);
     api.UI.forceReactUpdate();
   });
   return true;
@@ -114,7 +137,7 @@ api.rewriter.runInScope("index", (code, run, initial) => {
   const nameStart = code.lastIndexOf(",", code.lastIndexOf(".div`", index)) + 1;
   const nameEnd = code.indexOf("=", nameStart);
   const component = code.slice(nameStart, nameEnd);
-  run(`${OneDCode}=${component};${component}=${createWrapper}(true,${component})`);
+  run(`${OneDCode}=${component};${component}=${createWrapper}(${component},true)`);
   if (!initial) api.UI.forceReactUpdate();
   api.onStop(() => {
     run(`${component}=${OneDCode}`);
