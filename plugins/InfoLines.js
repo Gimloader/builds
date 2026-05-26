@@ -8,29 +8,31 @@
  * @hasSettings true
  * @gamemode 2d
  * @changelog Added a setting for Fish Value to add your existing cash
- * @signature NTRTcnpDxU2AFTqcX2+hgP6kwQRVoL6li5go+fFxfMQned79KuERrQxhb0tIwlWAx6S+UoJOJ77OR69E1pvqAw==
+ * @signature T4NNgqTaY/DZSbjgvc/ZIaj1iA2urmG9cvFxJ+OW1ruNibWL1s03Vh8UV8CymycpTh2+3pTI8/JZR70IPJK/Cw==
  */
 
-// plugins/InfoLines/src/styles.scss
-var styles_default = `#infoLines {
-  position: absolute;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 4px;
-  z-index: 99999999;
-  border-radius: 5px;
+// inject-css-ns:/home/runner/work/client-plugins/client-plugins/plugins/InfoLines/src/styles.css
+api.UI.addStyles(`#infoLines {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 4px;
+    z-index: 99999999;
+    border-radius: 5px;
+
+    &.top {
+        top: 4px;
+    }
+    &.bottom {
+        bottom: 4px;
+    }
+    &.left {
+        left: 4px;
+    }
+    &.right {
+        right: 4px;
+    }
 }
-#infoLines.top {
-  top: 4px;
-}
-#infoLines.bottom {
-  bottom: 4px;
-}
-#infoLines.left {
-  left: 4px;
-}
-#infoLines.right {
-  right: 4px;
-}`;
+`);
 
 // plugins/InfoLines/src/baseLine.ts
 var BaseLine = class {
@@ -341,7 +343,6 @@ var PlantDrops = class extends BaseLine {
 };
 
 // plugins/InfoLines/src/index.ts
-api.UI.addStyles(styles_default);
 var InfoLines = class {
   lines = [
     new VisualCoordinates(),

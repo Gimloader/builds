@@ -8,86 +8,94 @@
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
  * @changelog Added a command for jumping to any frame
- * @signature +9+5ZwIJsgcIlLnu8GyZpTYhOeQc6e4qvqIvuWWdgjrEFmubI70Ce60+k4lSC8KHqBOc61ED2W0QquHfLNyFCw==
+ * @signature S+gmUVXM+qYovZfmqRH139L9vhPzhb3AVfWvberZqf+hLDQhoUxXw75IjPaeXG+jzEflmD3+xZDLdH1YsPh5DA==
  */
 
-// plugins/DLDTAS/src/styles.scss
-var styles_default = `#startTasBtn {
-  position: fixed;
-  top: 0;
-  left: 0;
-  margin: 5px;
-  padding: 5px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  cursor: pointer;
-  z-index: 101;
-  border-radius: 5px;
-  user-select: none;
+// inject-css-ns:/home/runner/work/client-plugins/client-plugins/plugins/DLDTAS/src/styles.css
+api.UI.addStyles(`#startTasBtn {
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 5px;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    cursor: pointer;
+    z-index: 101;
+    border-radius: 5px;
+    user-select: none;
 }
 
 #tasOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 49;
-  pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 49;
+    pointer-events: none;
 }
 
 #inputTable {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  z-index: 49;
-  background-color: rgba(255, 255, 255, 0.5);
-}
-#inputTable .btns {
-  display: flex;
-  gap: 5px;
-  align-items: center;
-  justify-content: center;
-}
-#inputTable .btns button {
-  height: 30px;
-  width: 30px;
-  text-align: center;
-}
-#inputTable table {
-  table-layout: fixed;
-  user-select: none;
-}
-#inputTable tr.active {
-  background-color: rgba(0, 138, 197, 0.892) !important;
-}
-#inputTable tr:nth-child(even) {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-#inputTable tr {
-  height: 22px;
-}
-#inputTable td, #inputTable th {
-  height: 22px;
-  width: 75px;
-  text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 49;
+    background-color: rgba(255, 255, 255, 0.5);
+
+    .btns {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        justify-content: center;
+
+        button {
+            height: 30px;
+            width: 30px;
+            text-align: center;
+        }
+    }
+
+    table {
+        table-layout: fixed;
+        user-select: none;
+    }
+
+    tr.active {
+        background-color: rgba(0, 138, 197, 0.892) !important;
+    }
+
+    tr:nth-child(even) {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    tr {
+        height: 22px;
+    }
+
+    td, th {
+        height: 22px;
+        width: 75px;
+        text-align: center;
+    }
 }
 
 #controlCountdown {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 99999999999;
-  pointer-events: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 50px;
-  color: black;
-}`;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99999999999;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    color: black;
+}
+`);
 
 // assets/controller.svg
 var controller_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.97,16L5,19C4.67,19.3 4.23,19.5 3.75,19.5A1.75,1.75 0 0,1 2,17.75V17.5L3,10.12C3.21,7.81 5.14,6 7.5,6H16.5C18.86,6 20.79,7.81 21,10.12L22,17.5V17.75A1.75,1.75 0 0,1 20.25,19.5C19.77,19.5 19.33,19.3 19,19L16.03,16H7.97M7,8V10H5V11H7V13H8V11H10V10H8V8H7M16.5,8A0.75,0.75 0 0,0 15.75,8.75A0.75,0.75 0 0,0 16.5,9.5A0.75,0.75 0 0,0 17.25,8.75A0.75,0.75 0 0,0 16.5,8M14.75,9.75A0.75,0.75 0 0,0 14,10.5A0.75,0.75 0 0,0 14.75,11.25A0.75,0.75 0 0,0 15.5,10.5A0.75,0.75 0 0,0 14.75,9.75M18.25,9.75A0.75,0.75 0 0,0 17.5,10.5A0.75,0.75 0 0,0 18.25,11.25A0.75,0.75 0 0,0 19,10.5A0.75,0.75 0 0,0 18.25,9.75M16.5,11.5A0.75,0.75 0 0,0 15.75,12.25A0.75,0.75 0 0,0 16.5,13A0.75,0.75 0 0,0 17.25,12.25A0.75,0.75 0 0,0 16.5,11.5Z" /></svg>';
@@ -699,7 +707,6 @@ function createUI() {
 }
 
 // plugins/DLDTAS/src/index.ts
-api.UI.addStyles(styles_default);
 var startTasBtn = document.createElement("button");
 startTasBtn.id = "startTasBtn";
 startTasBtn.innerText = "Start TAS";

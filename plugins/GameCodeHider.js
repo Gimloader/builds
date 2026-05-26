@@ -6,11 +6,11 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/GameCodeHider.js
  * @webpage https://gimloader.github.io/plugins/GameCodeHider
  * @changelog Fixed code not being hidden when building in Creative editor
- * @signature V9ck+1f9ErsL3scNVLCT//BmFSrjgxcuLoKyzBh0LOPAX/ogH39osu4CVa1OUGGvCpMlTgvEShaV2C5KZkC3DA==
+ * @signature f0NGXfZ4Vaxemhz+MhtoGI1sBMWSbSGvK+RGeGjVHuoArR/TBMmsvgffwGFznfAj6Ox/FGwkSMJmHTA/+noHBw==
  */
 
-// plugins/GameCodeHider/src/styles.css
-var styles_default = `.gch-wrap {
+// inject-css-ns:/home/runner/work/client-plugins/client-plugins/plugins/GameCodeHider/src/styles.css
+api.UI.addStyles(`.gch-wrap {
     display: flex;
     gap: 24px;
     align-items: center;
@@ -32,7 +32,7 @@ var styles_default = `.gch-wrap {
     cursor: pointer;
     font-size: 16px;
 }
-`;
+`);
 
 // plugins/GameCodeHider/src/wrapper.tsx
 var hiddenStyles = `.ant-popover .ant-qrcode {
@@ -85,7 +85,6 @@ var createWrapper = api.rewriter.createShared("createWrapper", (Element, small, 
 });
 
 // plugins/GameCodeHider/src/index.ts
-api.UI.addStyles(styles_default);
 var BigCode = api.rewriter.createShared("BigCode", null);
 api.rewriter.runInScope("SixteenByNineScaler", (code, run, initial) => {
   const nameStart = code.indexOf("font-size: 32px;") + 19;

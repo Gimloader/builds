@@ -7,174 +7,202 @@
  * @webpage https://gimloader.github.io/plugins/CustomUI
  * @hasSettings true
  * @changelog Updated webpage url
- * @signature CHBJES+Rnkd89SxxNxmptcdooVDBshcAqpuczm1Go+D2TpP+W4piPgzmTYNBeg09Q1NKUmSzm8kFos8Eu9uZDw==
+ * @signature Vb0Gy3POsR1z3x2TKm0GOQG9y/Xy9Xyqeyh9j669y1FJ5hCZ5BK9F9GQ21BHIV0wkehxS8dnz4Xe6+eYsvHzAw==
  */
 
-// plugins/CustomUI/src/styles.scss
-var styles_default = `.cui-settings {
-  overflow-x: hidden;
-  padding: 5px;
-}
-.cui-settings .row {
-  display: flex;
-  gap: 5px;
-  align-items: center;
-  margin-bottom: 5px;
-}
-.cui-settings .row input[type=range] {
-  flex-grow: 1;
-}
-.cui-settings input {
-  width: 25px;
-  height: 25px;
-  appearance: auto;
+// inject-css-ns:/home/runner/work/client-plugins/client-plugins/plugins/CustomUI/src/styles.css
+api.UI.addStyles(`.cui-settings {
+    overflow-x: hidden;
+    padding: 5px;
+
+    .row {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        margin-bottom: 5px;
+
+        input[type="range"] {
+            flex-grow: 1;
+        }
+    }
+
+    input {
+        width: 25px;
+        height: 25px;
+        appearance: auto;
+    }
 }
 
-.themePicker .previews {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-.themePicker .addCustomTheme {
-  padding: 3px;
-  border: 1px solid black;
-  width: 100%;
-  text-align: center;
+.themePicker {
+    .previews {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .addCustomTheme {
+        padding: 3px;
+        border: 1px solid black;
+        width: 100%;
+        text-align: center;
+    }
 }
 
 .customTheme {
-  display: flex;
-  gap: 5px;
-  align-items: center;
-}
-.customTheme .delete {
-  cursor: pointer;
-  font-size: 30px;
-  flex-shrink: 0;
-}
-.customTheme .customThemePreview {
-  flex-grow: 1;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+
+    .delete {
+        cursor: pointer;
+        font-size: 30px;
+        flex-shrink: 0;
+    }
+
+    .customThemePreview {
+        flex-grow: 1;
+    }
 }
 
 .themePreview {
-  text-align: center;
-  cursor: pointer;
-}
-.themePreview > div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.themePreview > div > div {
-  flex-grow: 1;
-  height: 30px;
+    text-align: center;
+    cursor: pointer;
+
+    & > div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        & > div {
+            flex-grow: 1;
+            height: 30px;
+        }
+    }
 }
 
 .themeCreator {
-  display: flex;
-  height: 100%;
-}
-.themeCreator .pickers {
-  width: 300px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-}
-.themeCreator .pickers .themeNameWrap {
-  width: 100%;
-  padding-right: 3px;
-}
-.themeCreator .pickers .themeName {
-  width: 100%;
-}
-.themeCreator .pickers > div {
-  display: flex;
-  padding-right: 3px;
-}
-.themeCreator .pickers > div > div {
-  flex-grow: 1;
+    display: flex;
+    height: 100%;
+
+    .pickers {
+        width: 300px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+
+        .themeNameWrap {
+            width: 100%;
+            padding-right: 3px;
+        }
+
+        .themeName {
+            width: 100%;
+        }
+
+        & > div {
+            display: flex;
+            padding-right: 3px;
+            & > div {
+                flex-grow: 1;
+            }
+        }
+    }
 }
 
 .fullPreview {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  flex-grow: 1;
-}
-.fullPreview .question {
-  width: 100%;
-  height: 30%;
-  font-family: "Product Sans", sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 50px;
-}
-.fullPreview .answers {
-  flex-grow: 1;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  width: 100%;
-}
-.fullPreview .answers > div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Product Sans", sans-serif;
-  font-size: 25px;
-  border: 6px solid rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    flex-grow: 1;
+
+    .question {
+        width: 100%;
+        height: 30%;
+        font-family: "Product Sans", sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 50px;
+    }
+
+    .answers {
+        flex-grow: 1;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        width: 100%;
+
+        & > div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Product Sans", sans-serif;
+            font-size: 25px;
+            border: 6px solid rgba(0, 0, 0, 0.3);
+        }
+    }
 }
 
 .light-shadow.flex.between.vc {
-  transition: margin-top 0.25s ease-in-out;
+    transition: margin-top 0.25s ease-in-out;
 }
 
 .slideOutTop .light-shadow.flex.between.vc {
-  margin-top: -79px;
+    margin-top: -79px;
 }
 
-.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(1), .useCustomTheme [style^="width: 100%"] > [style^=opacity] > div:nth-child(1) {
-  background: var(--question-bg) !important;
-  color: var(--question-text) !important;
-}
-.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(1) > div, .useCustomTheme [style^="width: 100%"] > [style^=opacity] > div:nth-child(2) > div:nth-child(1) > div {
-  background: var(--answer-bg-1) !important;
-}
-.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(1) > div > div, .useCustomTheme [style^="width: 100%"] > [style^=opacity] > div:nth-child(2) > div:nth-child(1) > div > div {
-  color: var(--answer-text-1) !important;
-}
-.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(2) > div, .useCustomTheme [style^="width: 100%"] > [style^=opacity] > div:nth-child(2) > div:nth-child(2) > div {
-  background: var(--answer-bg-2) !important;
-}
-.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(2) > div > div, .useCustomTheme [style^="width: 100%"] > [style^=opacity] > div:nth-child(2) > div:nth-child(2) > div > div {
-  color: var(--answer-text-2) !important;
-}
-.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(3) > div, .useCustomTheme [style^="width: 100%"] > [style^=opacity] > div:nth-child(2) > div:nth-child(3) > div {
-  background: var(--answer-bg-3) !important;
-}
-.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(3) > div > div, .useCustomTheme [style^="width: 100%"] > [style^=opacity] > div:nth-child(2) > div:nth-child(3) > div > div {
-  color: var(--answer-text-3) !important;
-}
-.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(4) > div, .useCustomTheme [style^="width: 100%"] > [style^=opacity] > div:nth-child(2) > div:nth-child(4) > div {
-  background: var(--answer-bg-4) !important;
-}
-.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div:nth-child(2) > div:nth-child(4) > div > div, .useCustomTheme [style^="width: 100%"] > [style^=opacity] > div:nth-child(2) > div:nth-child(4) > div > div {
-  color: var(--answer-text-4) !important;
+.useCustomTheme .flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div, .useCustomTheme [style^="width: 100%"] > [style^="opacity"] > div {
+    &:nth-child(1) {
+        background: var(--question-bg) !important;
+        color: var(--question-text) !important;
+    }
+
+    &:nth-child(2) > div {
+        &:nth-child(1) > div {
+            background: var(--answer-bg-1) !important;
+            & > div {
+                color: var(--answer-text-1) !important;
+            }
+        }
+
+        &:nth-child(2) > div {
+            background: var(--answer-bg-2) !important;
+            & > div {
+                color: var(--answer-text-2) !important;
+            }
+        }
+
+        &:nth-child(3) > div {
+            background: var(--answer-bg-3) !important;
+            & > div {
+                color: var(--answer-text-3) !important;
+            }
+        }
+
+        &:nth-child(4) > div {
+            background: var(--answer-bg-4) !important;
+            & > div {
+                color: var(--answer-text-4) !important;
+            }
+        }
+    }
 }
 
-.flex-column.maxAll > .maxWidth > span:nth-child(1) > div {
-  background-color: var(--answer-bg-1) !important;
-  color: var(--answer-text-1) !important;
-}
-.flex-column.maxAll > .maxWidth > span:nth-child(2) > div {
-  background-color: var(--answer-bg-2) !important;
-  color: var(--answer-text-2) !important;
+.flex-column.maxAll > .maxWidth > span {
+    &:nth-child(1) > div {
+        background-color: var(--answer-bg-1) !important;
+        color: var(--answer-text-1) !important;
+    }
+    &:nth-child(2) > div {
+        background-color: var(--answer-bg-2) !important;
+        color: var(--answer-text-2) !important;
+    }
 }
 
-.maxAll[style^=pointer-events]:has(.flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div) {
-  opacity: var(--question-opacity);
-}`;
+.maxAll[style^="pointer-events"]:has(.flex.maxWidth.between.vc + div:not(.ant-space-vertical) > div > div) {
+    opacity: var(--question-opacity);
+}
+`);
 
 // plugins/CustomUI/src/defaultThemes.json
 var defaultThemes_default = [
@@ -916,7 +944,6 @@ var UIChanger = class {
 
 // plugins/CustomUI/src/index.ts
 var uiChanger = new UIChanger();
-api.UI.addStyles(styles_default);
 api.openSettingsMenu(() => {
   let confirmFunc;
   const onConfirm = (callback) => {

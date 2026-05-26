@@ -10,7 +10,7 @@
  * @gamemode fishtopia
  * @gamemode oneWayOut
  * @changelog Maybe fixed Fishtopia splits resetting
- * @signature uyL4Goz56vow37mIVVXAf4rK9xclkgsT9qqAgDCfBCqW5xsS9qC0tH/ocNv62EUjWjoLPbUTYFv+5d36vKyXAQ==
+ * @signature D/NzfJ0d0xCXUOBMd0Mkt5esRTJ6COss7HWHdZHLat3jcRjIvFHyYlns6zofI+BbKIX6WBcCH3iXR9XugvdFBg==
  */
 
 // external-svelte:svelte/internal/client
@@ -1494,91 +1494,105 @@ var OneWayOutAutosplitter = class extends SplitsAutosplitter {
   }
 };
 
-// plugins/Autosplitter/src/styles.scss
-var styles_default = `#timer {
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.85);
-  color: white;
-  z-index: 99;
+// inject-css-ns:/home/runner/work/client-plugins/client-plugins/plugins/Autosplitter/src/styles.css
+api.UI.addStyles(`#timer {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+    z-index: 99;
+
+    &.top {
+        top: 0;
+    }
+    &.bottom {
+        bottom: 0;
+    }
+    &.left {
+        left: 0;
+    }
+    &.right {
+        right: 0;
+    }
+
+    .restart {
+        background-color: transparent;
+        border: none;
+        width: 20px;
+        height: 20px;
+        margin: 0;
+        padding: 0;
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    .bar {
+        display: flex;
+        align-items: center;
+        padding: 5px 10px;
+        gap: 10px;
+    }
+
+    select {
+        background: transparent;
+        appearance: auto;
+        padding: 0;
+    }
+
+    option {
+        background-color: black;
+    }
+
+    .runType {
+        padding-left: 10px;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.12);
+    }
+
+    tr.active {
+        background-color: rgba(28, 145, 235, 0.864);
+    }
+
+    td:first-child {
+        padding-left: 10px;
+    }
+
+    .attempts {
+        flex-grow: 1;
+        text-align: right;
+    }
+
+    .total {
+        font-size: xx-large;
+        width: 100%;
+        text-align: right;
+        padding-right: 10px;
+    }
+
+    .ahead {
+        color: green;
+    }
+    .behind {
+        color: red;
+    }
+    .best {
+        color: gold;
+    }
 }
-#timer.top {
-  top: 0;
-}
-#timer.bottom {
-  bottom: 0;
-}
-#timer.left {
-  left: 0;
-}
-#timer.right {
-  right: 0;
-}
-#timer .restart {
-  background-color: transparent;
-  border: none;
-  width: 20px;
-  height: 20px;
-  margin: 0;
-  padding: 0;
-}
-#timer .restart svg {
-  width: 20px;
-  height: 20px;
-}
-#timer .bar {
-  display: flex;
-  align-items: center;
-  padding: 5px 10px;
-  gap: 10px;
-}
-#timer select {
-  background: transparent;
-  appearance: auto;
-  padding: 0;
-}
-#timer option {
-  background-color: black;
-}
-#timer .runType {
-  padding-left: 10px;
-}
-#timer table {
-  width: 100%;
-}
-#timer tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.12);
-}
-#timer tr.active {
-  background-color: rgba(28, 145, 235, 0.864);
-}
-#timer td:first-child {
-  padding-left: 10px;
-}
-#timer .attempts {
-  flex-grow: 1;
-  text-align: right;
-}
-#timer .total {
-  font-size: xx-large;
-  width: 100%;
-  text-align: right;
-  padding-right: 10px;
-}
-#timer .ahead {
-  color: green;
-}
-#timer .behind {
-  color: red;
-}
-#timer .best {
-  color: gold;
-}`;
+`);
 
 // external-svelte:svelte
 var mount = /* @__PURE__ */ (() => GL.svelte_5_43_0.Index.mount)();
 
 // plugins/Autosplitter/src/index.ts
-api.UI.addStyles(styles_default);
 var autosplitter;
 api.net.onLoad((_, gamemode) => {
   if (gamemode === "dontlookdown") {

@@ -6,8 +6,105 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/AutoKicker.js
  * @webpage https://gimloader.github.io/plugins/AutoKicker
  * @changelog Added a setting to disable notifying
- * @signature KCdp/xLMd783uxjYd9M/wOeCWAlsyG5AiAiZeQgpjdpRIsaSOLFJ8HadzMoWADgZgyZeDPdJ+hHpEqe3lBV9Dw==
+ * @signature SUVCJPZoq/Ls8kVns3tQRmLXBcfSmufq/H9bgoCeyuMqXf7smwYp3WRJmpjmC5bPK/h8cTCm1RvP1yRQagpuAA==
  */
+
+// inject-css-ns:/home/runner/work/client-plugins/client-plugins/plugins/AutoKicker/src/styles.css
+api.UI.addStyles(`#AutoKick-UI {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+
+    .root {
+        display: flex;
+        flex-direction: column;
+        color: white;
+        padding: 10px;
+    }
+
+    .checkboxes {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr auto;
+        gap: 5px;
+    }
+
+    .idleDelaySlider {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        input {
+            flex-grow: 1;
+        }
+
+        label {
+            font-size: 12px;
+        }
+    }
+
+    h2 {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .blacklist {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        max-height: 500px;
+        overflow-y: auto;
+
+        .rule {
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            border: 1px solid white;
+            background-color: rgba(0, 0, 0, 0.5);
+
+            .name {
+                flex-grow: 1;
+            }
+
+            .exact {
+                padding: 3px;
+                transition: transform 0.2s;
+                background-color: rgba(0, 0, 0, 0.5);
+                text-decoration: underline;
+                border: none;
+
+                &:hover {
+                    transform: scale(1.05);
+                }
+            }
+
+            .delete {
+                font-size: 20px;
+                border: none;
+                background-color: transparent;
+                transition: transform 0.2s;
+
+                &:hover {
+                    transform: scale(1.05);
+                }
+            }
+        }
+
+        .add {
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            border: 1px solid white;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+    }
+}
+`);
 
 // plugins/AutoKicker/src/consts.ts
 var characters = [
@@ -298,88 +395,6 @@ var AutoKicker = class {
   }
 };
 
-// plugins/AutoKicker/src/styles.scss
-var styles_default = `#AutoKick-UI {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 9999;
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 5px;
-}
-#AutoKick-UI .root {
-  display: flex;
-  flex-direction: column;
-  color: white;
-  padding: 10px;
-}
-#AutoKick-UI .checkboxes {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr auto;
-  gap: 5px;
-}
-#AutoKick-UI .idleDelaySlider {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-#AutoKick-UI .idleDelaySlider input {
-  flex-grow: 1;
-}
-#AutoKick-UI .idleDelaySlider label {
-  font-size: 12px;
-}
-#AutoKick-UI h2 {
-  width: 100%;
-  text-align: center;
-  margin-bottom: 5px;
-}
-#AutoKick-UI .blacklist {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  max-height: 500px;
-  overflow-y: auto;
-}
-#AutoKick-UI .blacklist .rule {
-  display: flex;
-  align-items: center;
-  border-radius: 8px;
-  border: 1px solid white;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-#AutoKick-UI .blacklist .rule .name {
-  flex-grow: 1;
-}
-#AutoKick-UI .blacklist .rule .exact {
-  padding: 3px;
-  transition: transform 0.2s;
-  background-color: rgba(0, 0, 0, 0.5);
-  text-decoration: underline;
-  border: none;
-}
-#AutoKick-UI .blacklist .rule .exact:hover {
-  transform: scale(1.05);
-}
-#AutoKick-UI .blacklist .rule .delete {
-  font-size: 20px;
-  border: none;
-  background-color: transparent;
-  transition: transform 0.2s;
-}
-#AutoKick-UI .blacklist .rule .delete:hover {
-  transform: scale(1.05);
-}
-#AutoKick-UI .blacklist .add {
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  border: 1px solid white;
-  background-color: rgba(0, 0, 0, 0.5);
-}`;
-
 // plugins/AutoKicker/src/ui.tsx
 function UI({ autoKicker: autoKicker2 }) {
   const React = api.React;
@@ -539,4 +554,3 @@ api.hotkeys.addConfigurableHotkey({
   api.storage.setValue("uiShown", uiShown);
 });
 api.net.onLoad(checkStart);
-api.UI.addStyles(styles_default);
