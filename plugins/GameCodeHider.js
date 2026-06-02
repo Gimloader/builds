@@ -6,10 +6,10 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/GameCodeHider.js
  * @webpage https://gimloader.github.io/plugins/GameCodeHider
  * @changelog Fixed code not being hidden when building in Creative editor
- * @signature f0NGXfZ4Vaxemhz+MhtoGI1sBMWSbSGvK+RGeGjVHuoArR/TBMmsvgffwGFznfAj6Ox/FGwkSMJmHTA/+noHBw==
+ * @signature E3IJBd6P3gHj8S3Ue7l7ZMPLVkbhnB8cCZi+Hriq/xFCe8auuZ/bZFCPg49/UzgaT7AmoXgc29kNs1vep8WXDQ==
  */
 
-// inject-css-ns:/home/runner/work/client-plugins/client-plugins/plugins/GameCodeHider/src/styles.css
+// inject-css:plugins/GameCodeHider/src/styles.css
 api.UI.addStyles(`.gch-wrap {
     display: flex;
     gap: 24px;

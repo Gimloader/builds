@@ -8,10 +8,10 @@
  * @hasSettings true
  * @gamemode 2d
  * @changelog Added a setting for Fish Value to add your existing cash
- * @signature T4NNgqTaY/DZSbjgvc/ZIaj1iA2urmG9cvFxJ+OW1ruNibWL1s03Vh8UV8CymycpTh2+3pTI8/JZR70IPJK/Cw==
+ * @signature /yhz5NkHU+tvhtjRxc2FS9xmzooGKQe3sQ7keu6Bn9ejgXazDnMOrfCAXQy555n8rL9ymyPqeQhfQzTJ+AVRAw==
  */
 
-// inject-css-ns:/home/runner/work/client-plugins/client-plugins/plugins/InfoLines/src/styles.css
+// inject-css:plugins/InfoLines/src/styles.css
 api.UI.addStyles(`#infoLines {
     position: absolute;
     background-color: rgba(255, 255, 255, 0.8);

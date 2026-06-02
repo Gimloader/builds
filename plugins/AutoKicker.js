@@ -6,10 +6,10 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/AutoKicker.js
  * @webpage https://gimloader.github.io/plugins/AutoKicker
  * @changelog Added a setting to disable notifying
- * @signature SUVCJPZoq/Ls8kVns3tQRmLXBcfSmufq/H9bgoCeyuMqXf7smwYp3WRJmpjmC5bPK/h8cTCm1RvP1yRQagpuAA==
+ * @signature 8XHoM3ktxkgzLWJXBmHGZ11xs3arJvaGyBgGg6S/ATJFnc9P2kCFe4Zh14pXNjI1iIbLpoLyf7iNlUO16YG6Cw==
  */
 
-// inject-css-ns:/home/runner/work/client-plugins/client-plugins/plugins/AutoKicker/src/styles.css
+// inject-css:plugins/AutoKicker/src/styles.css
 api.UI.addStyles(`#AutoKick-UI {
     position: absolute;
     top: 20px;

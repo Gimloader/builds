@@ -10,7 +10,7 @@
  * @gamemode fishtopia
  * @gamemode oneWayOut
  * @changelog Maybe fixed Fishtopia splits resetting
- * @signature D/NzfJ0d0xCXUOBMd0Mkt5esRTJ6COss7HWHdZHLat3jcRjIvFHyYlns6zofI+BbKIX6WBcCH3iXR9XugvdFBg==
+ * @signature EIM39Y3/F6BUDggih2mFLu3hRpWVcLsk/Ksc9O051Rp1n4dT4oW7acSCBSvswrOHV6mfd5xTHxVVmZ75H0BXBw==
  */
 
 // external-svelte:svelte/internal/client
@@ -1494,7 +1494,7 @@ var OneWayOutAutosplitter = class extends SplitsAutosplitter {
   }
 };
 
-// inject-css-ns:/home/runner/work/client-plugins/client-plugins/plugins/Autosplitter/src/styles.css
+// inject-css:plugins/Autosplitter/src/styles.css
 api.UI.addStyles(`#timer {
     position: absolute;
     background-color: rgba(0, 0, 0, 0.85);

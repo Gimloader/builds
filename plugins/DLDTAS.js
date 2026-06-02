@@ -8,10 +8,10 @@
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
  * @changelog Added a command for jumping to any frame
- * @signature S+gmUVXM+qYovZfmqRH139L9vhPzhb3AVfWvberZqf+hLDQhoUxXw75IjPaeXG+jzEflmD3+xZDLdH1YsPh5DA==
+ * @signature cl0fjU/IZXBUVEkufB0SrWneHitONPersAplnQK8j7MGWEHiVkeqcVa+zk0E7GLkbccjwHpqLhqyctTUZIHCDg==
  */
 
-// inject-css-ns:/home/runner/work/client-plugins/client-plugins/plugins/DLDTAS/src/styles.css
+// inject-css:plugins/DLDTAS/src/styles.css
 api.UI.addStyles(`#startTasBtn {
     position: fixed;
     top: 0;

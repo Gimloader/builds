@@ -7,10 +7,10 @@
  * @webpage https://gimloader.github.io/plugins/CustomUI
  * @hasSettings true
  * @changelog Updated webpage url
- * @signature Vb0Gy3POsR1z3x2TKm0GOQG9y/Xy9Xyqeyh9j669y1FJ5hCZ5BK9F9GQ21BHIV0wkehxS8dnz4Xe6+eYsvHzAw==
+ * @signature c3zbVkwDq1YIs1E1fDF55qwU1qxVzKcGyJ4o0vVk7jLlnh0fd1UF8zHimNpn6jz21OUrbulNg7q4ItWve6f9Cg==
  */
 
-// inject-css-ns:/home/runner/work/client-plugins/client-plugins/plugins/CustomUI/src/styles.css
+// inject-css:plugins/CustomUI/src/styles.css
 api.UI.addStyles(`.cui-settings {
     overflow-x: hidden;
     padding: 5px;
