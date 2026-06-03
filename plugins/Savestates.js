@@ -1,7 +1,7 @@
 /**
  * @name Savestates
  * @description Allows you to save and load states/summits in Don't Look Down. Only client side, nobody else can see you move.
- * @author TheLazySquid
+ * @author Gimloader Official
  * @version 0.5.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Savestates.js
  * @webpage https://gimloader.github.io/plugins/Savestates
@@ -9,7 +9,7 @@
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
  * @changelog Updated webpage url
- * @signature iFKKWeF1ryd9/g8Am1xI5koErr5o+08qEuntqW/5A+bPdC1iufsZjO4OYwWVcx9UfxfhyqrBE/jAC0IJdNgOBA==
+ * @signature SBygiMLVe+wqNRQ40nXA2NBGW9ef6460LYMlO5m62avxO1htDQReo4Ac+qSIRwA2UI0HypODZ+8ZSdgV7ZbfCw==
  */
 
 // shared/consts.ts

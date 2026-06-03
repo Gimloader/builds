@@ -1,13 +1,13 @@
 /**
  * @name CrazyFlag
  * @description Make the flags in capture the flag or creative swing like crazy!
- * @author TheLazySquid
+ * @author Gimloader Official
  * @version 1.3.2
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CrazyFlag.js
  * @webpage https://gimloader.github.io/plugins/CrazyFlag
  * @hasSettings true
  * @changelog Updated webpage url
- * @signature drfd1U7vgXGXHtSigspsVU30pHh1+nYrqgRQyUY6HOxqIwibaFCbSSSHhlX3cKXwwA3Pz1GLvuBFphD+cZPTCQ==
+ * @signature Z+XCUWErAFlThuDwnt9r9zoMGFfGKEikinYfg6gnqsO26eJ3imdog0JMcrhkIdbUQILI+97bjYCVjiUwS9bKCQ==
  */
 
 // plugins/CrazyFlag/src/index.ts

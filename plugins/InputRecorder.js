@@ -1,7 +1,7 @@
 /**
  * @name InputRecorder
  * @description Records your inputs in Don't Look Down
- * @author TheLazySquid
+ * @author Gimloader Official
  * @version 0.4.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/InputRecorder.js
  * @webpage https://gimloader.github.io/plugins/InputRecorder
@@ -9,7 +9,7 @@
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
  * @changelog Updated webpage url
- * @signature 1D7UZ1IATKF83dPJOfuoW17YEVfjXbxrXKOAaegaJLD7B4nOSEBf7+Xj8WlXQ1SwVxJ0xYKcnJ+t3At7nR4uBw==
+ * @signature WK6wvWqmwi/4kuEJ1EOCdarmxQBKhVdoqzfTr/hs0DDaARFV/SQKHacUA1t5Kev4UxLF1G1zNITkj6Y4vrp+AA==
  */
 
 // plugins/InputRecorder/src/updateLasers.ts

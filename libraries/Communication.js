@@ -1,14 +1,14 @@
 /**
  * @name Communication
  * @description Communication between different clients in 2D gamemodes
- * @author retrozy
+ * @author Gimloader Official
  * @version 0.5.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @webpage https://gimloader.github.io/libraries/Communication
  * @gamemode 2d
  * @changelog Added support for streaming strings and byte arrays
  * @isLibrary true
- * @signature swq+wuJFbfeAyQx4idY5nseyXCaK2ZpqxD3O9TC4Q9KiBcZaqaap4gzhfSY0nu28mO1DnTQn7O15YsLiPC4iDQ==
+ * @signature Bel0DwI52fC21ZqC5s6wkfwBnHhvuI9qeWq4xTtyXGmreB3umM/bZstxd5XdXOjTAJRcIF1D1d8lybF25ztMCQ==
  */
 
 // libraries/Communication/src/encoding.ts

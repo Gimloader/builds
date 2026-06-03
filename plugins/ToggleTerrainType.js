@@ -1,12 +1,12 @@
 /**
  * @name ToggleTerrainType
  * @description Quickly toggle whether you are placing terrain as walls or as floor. Allows you to place tiles as floors in platformer mode.
- * @author TheLazySquid
+ * @author Gimloader Official
  * @version 0.2.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/ToggleTerrainType.js
  * @webpage https://gimloader.github.io/plugins/ToggleTerrainType
  * @changelog Updated webpage url
- * @signature xVtOk4uZXpfznOyd4BYAMwS3QfrecLGKs1eunw5Jex1xAJ12jP5PhKzp4Cs8sosvZHLfUi+os6DQXxNI7E7CBw==
+ * @signature qy3Wu6IwqlcemuHfoe49ufgoi8/7ZXUnrvS343nQUZqV00eIGZxVvZ5/L+YSjmNAwBH5p6OicwWFXEe/lbZFDw==
  */
 
 // plugins/ToggleTerrainType/src/index.ts

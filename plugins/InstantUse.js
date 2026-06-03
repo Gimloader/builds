@@ -1,12 +1,12 @@
 /**
  * @name InstantUse
  * @description Instantly use nearby devices without any wait
- * @author TheLazySquid
+ * @author Gimloader Official
  * @version 0.2.6
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/InstantUse.js
  * @webpage https://gimloader.github.io/plugins/InstantUse
  * @changelog Updated webpage url
- * @signature m7BwkE3Ubr7kQXgONiwi+1pV10w6alEixvHk/7To6jYTI8kj/fENlFGDjacxAvQLEnWs0JcgeKke2X5tx+iXCg==
+ * @signature 8BFqesNB6J7E3q7KytxQs/53FxAzSCp+zn5tCVEJd1p73ClPupgypizSge7Tsvz+hyAyB9phZN4D2LEboQBQCQ==
  */
 
 // plugins/InstantUse/src/index.ts

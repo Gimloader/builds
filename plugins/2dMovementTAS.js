@@ -1,7 +1,7 @@
 /**
  * @name 2dMovementTAS
  * @description Allows for making TASes of CTF and tag
- * @author TheLazySquid
+ * @author Gimloader Official
  * @version 0.4.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/2dMovementTAS.js
  * @webpage https://gimloader.github.io/plugins/2dMovementTAS
@@ -9,7 +9,7 @@
  * @gamemode ctf
  * @gamemode tag
  * @changelog Updated webpage url
- * @signature aunprlI9mM12gluTBpSIhv6qpRQiR1UGbaHL+U5UpAIuE+aHxoh1hLYfOy38h5P7nFktZuawa9oCwFPnfbTEAg==
+ * @signature IaQGcwT3+gq7LHDzXjmlqsn45s+n2+ocUgwm49Mpw7/csrmUdR7qNHSPWohDtCvSOgc9RCsx7STHbkv77qQuAg==
  */
 
 // external-svelte:svelte

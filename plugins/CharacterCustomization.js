@@ -1,14 +1,14 @@
 /**
  * @name CharacterCustomization
  * @description Allows you to use any gim or a custom gim client-side
- * @author TheLazySquid
+ * @author Gimloader Official
  * @version 0.7.2
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CharacterCustomization.js
  * @webpage https://gimloader.github.io/plugins/CharacterCustomization
  * @hasSettings true
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature 7D2D/epNG9ZzOM1bsASjSqo09JyKCilxFavBeRNRvucsMFEC7ewbmVvD0Cs8FwWiiYY5rfL+iYMcR88cUP1VAA==
+ * @signature NPtf+FuNh69SrN9MeopQhyfEP4goEvKWxjOIcx3Ny9/d54/Pc2xBQNN1dC1UoEUX5wlDMQhWYaEhLQpvJQ4tAw==
  */
 var __create = Object.create;
 var __defProp = Object.defineProperty;

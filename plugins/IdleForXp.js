@@ -1,14 +1,14 @@
 /**
  * @name IdleForXp
  * @description Automatically performs actions to let you gain XP while idle
- * @author TheLazySquid
+ * @author Gimloader Official
  * @version 0.3.3
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/IdleForXp.js
  * @webpage https://gimloader.github.io/plugins/IdleForXp
  * @reloadRequired ingame
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature UzdqBHhqRq2Ea+tw4WXgOmbJJafj0HjKSIwKaN1GpemO9XOiKJYYN+icusybyZXDldYpbKJj/PEcUlDwi5AVBA==
+ * @signature yHj9N6Xu6hjTfI/ehB4/4BYsiLDRhusWyfWaY5EVgYnYViOtyC+mb4Kf3TbYDzpHZMG3LcPgypyd5x/4jW9+DQ==
  */
 
 // plugins/IdleForXp/src/index.ts

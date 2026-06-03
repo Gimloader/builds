@@ -1,14 +1,14 @@
 /**
  * @name InfoLines
  * @description Displays a configurable list of info on the screen
- * @author TheLazySquid
+ * @author Gimloader Official
  * @version 1.3.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/InfoLines.js
  * @webpage https://gimloader.github.io/plugins/InfoLines
  * @hasSettings true
  * @gamemode 2d
  * @changelog Added a setting for Fish Value to add your existing cash
- * @signature /yhz5NkHU+tvhtjRxc2FS9xmzooGKQe3sQ7keu6Bn9ejgXazDnMOrfCAXQy555n8rL9ymyPqeQhfQzTJ+AVRAw==
+ * @signature DJbiw2JTSd0XL5w2zusRCt0CkQDxmg3tVqeingJGrVAhiSOe+VSA+dIIxle5DwBhjHVrc2n3bWZ0OvdiakH2CA==
  */
 
 // inject-css:plugins/InfoLines/src/styles.css

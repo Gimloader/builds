@@ -1,14 +1,14 @@
 /**
  * @name Teleport
  * @description Ctrl+Click to teleport anywhere and adds a command to teleport to a player client-side
- * @author TheLazySquid
+ * @author Gimloader Official
  * @version 1.0.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Teleport.js
  * @webpage https://gimloader.github.io/plugins/Teleport
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature gDm0MXT63Ll8f/6H+QRtlQ6ni9tlkloi3atj5mjjwUUlKZyy8epICmZ1pSxRxJCdcwe3shPdoJMh+4eVo40ODg==
+ * @signature NSXQ0QHLL8CEDbw2e1RKBj7EysWllKmDgd1y1taA5Lm+PX3hrzINjr4NWIA+nF2i++Jr8P9cw7qGs+Cob+oaAg==
  */
 
 // plugins/Teleport/src/index.ts

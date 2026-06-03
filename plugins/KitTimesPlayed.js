@@ -1,13 +1,13 @@
 /**
  * @name KitTimesPlayed
  * @description Shows the number of times that kits have been played on the kits screen
- * @author retrozy
+ * @author Gimloader Official
  * @version 0.1.2
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/KitTimesPlayed.js
  * @webpage https://gimloader.github.io/plugins/KitTimesPlayed
  * @reloadRequired notingame
  * @changelog Updated webpage url
- * @signature N2+xd0gFWRk7RAuY+M/VLzIHHNMiAvzQYuKIU6sPXhQXHid/s7gLUpwwUIc6QYCE4hbeMj4HezBAO1RPWcjRCQ==
+ * @signature mRbrisfZWiWCumfQmahyv9mofddXGC09lqRjzNXErUJw7h5SiCTP6ChjMKe+uKfJFjpeMZ8OqgUmHgg7elAjAw==
  */
 
 // shared/rewritingUtils.ts

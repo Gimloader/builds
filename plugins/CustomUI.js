@@ -1,13 +1,13 @@
 /**
  * @name CustomUI
  * @description Allows you to customize various things about the Gimkit UI
- * @author TheLazySquid
+ * @author Gimloader Official
  * @version 0.3.4
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CustomUI.js
  * @webpage https://gimloader.github.io/plugins/CustomUI
  * @hasSettings true
  * @changelog Updated webpage url
- * @signature c3zbVkwDq1YIs1E1fDF55qwU1qxVzKcGyJ4o0vVk7jLlnh0fd1UF8zHimNpn6jz21OUrbulNg7q4ItWve6f9Cg==
+ * @signature iEK7GjFigd57xKsy/8GN8D3M48GnyFPxnoTt4144Fx3TSAGUf+9f7AH8EaFG84oV7BVjDwM4FGifR1RKjx0DAg==
  */
 
 // inject-css:plugins/CustomUI/src/styles.css

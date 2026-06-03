@@ -1,14 +1,14 @@
 /**
  * @name GameTimeMS
  * @description Allows millisecond precision in the game timer
- * @author retrozy
+ * @author Gimloader Official
  * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/GameTimeMS.js
  * @webpage https://gimloader.github.io/plugins/GameTimeMS
  * @reloadRequired ingame
  * @hasSettings true
  * @changelog Updated webpage url
- * @signature sgndVXd/iyZgbptC6Jpa9MwJFcJjj32nW+dlWrqcG6ZaPs0/9bscJy/25EIUCN93Th1uBY323rxmIxVCTGuZDw==
+ * @signature 15dxvU7M6HDBhoafoAzu0Mm2nsdIhH2JsML78Bs9Rn+exgfAV0dlrxw0hZa5jYrQeH0lnl4TdPrhwLa2z8Y7BQ==
  */
 
 // shared/rewritingUtils.ts

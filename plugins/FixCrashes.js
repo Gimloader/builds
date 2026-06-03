@@ -1,13 +1,13 @@
 /**
  * @name FixCrashes
  * @description Attempts to prevent natural game crashes
- * @author retrozy
+ * @author Gimloader Official
  * @version 0.1.2
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/FixCrashes.js
  * @webpage https://gimloader.github.io/plugins/FixCrashes
  * @reloadRequired ingame
  * @changelog Fixed an issue by a recent Gimloader update
- * @signature qe3U4zB9PM6r5XKaK5b454eU9tl6gbu7gXrBRLKBTppOHBhorafrxc1Yq1Kq4BO74Jw8KeG4kVGYdnLN1tN2Cw==
+ * @signature qdnsZLO9uuZPFpW8QL6Qj6T+8N/nVxRc5QgeAyOyFFm9RTnT3xEr6Z80BK+oKh/FZEDLPcBlTSYQTGNqBdwVBQ==
  */
 
 // shared/rewritingUtils.ts

@@ -1,7 +1,7 @@
 /**
  * @name CameraControl
  * @description Lets you freely move and zoom your camera
- * @author TheLazySquid
+ * @author Gimloader Official
  * @version 0.7.2
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CameraControl.js
  * @webpage https://gimloader.github.io/plugins/CameraControl
@@ -9,7 +9,7 @@
  * @hasSettings true
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature rWNuMKWYjIfTrDlCXjQU76TlI2eErhZEDDcqmIWKT+u5D6FFLRH5DkCu6e5l+AZ78u78wZxOp+o3pcsn9ML5Aw==
+ * @signature 410nT4l6iYW6nbz7syFDU+28QlQmZ8bCfm+Gxzqy92LQXuGuUucPxHFIM4MONaC2oPkfDS4bZQg+nzEwOL8bAQ==
  */
 
 // plugins/CameraControl/src/index.ts

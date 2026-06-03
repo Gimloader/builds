@@ -1,13 +1,13 @@
 /**
  * @name FixTileDupe
  * @description Prevents you from placing a terrain twice on the same cell area, helpful in Dig It Up.
- * @author retrozy
+ * @author Gimloader Official
  * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/FixTileDupe.js
  * @webpage https://gimloader.github.io/plugins/FixTileDupe
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature xbezCBCx4vvt5Dl6ryoiUcss/6iGfw+cJ32fPNCq+6k3G1qmBXykfFgBfYvXNP/NHtnwrt2eGeanCHAhQ1N0Bg==
+ * @signature WGom1yEHNkEcThvtwE0ifEUVkuEkZg8fZ9mhfV4aCXovzHG1SG1ts1EmasDeSGPzfAbua2+O6c/JaG3pPXK+CQ==
  */
 
 // plugins/FixTileDupe/src/index.ts

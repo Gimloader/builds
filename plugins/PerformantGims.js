@@ -1,14 +1,14 @@
 /**
  * @name PerformantGims
  * @description Replaces configurable gims with images of them. Looks like crap, runs really fast.
- * @author TheLazySquid
+ * @author Gimloader Official
  * @version 0.5.2
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/PerformantGims.js
  * @webpage https://gimloader.github.io/plugins/PerformantGims
  * @reloadRequired ingame
  * @hasSettings true
  * @changelog Updated webpage url
- * @signature EqPFFU69z9MHXZslLoxeS5JLhPdOIyJ1pq122ak//kLYJPYqb0R+4IKp4pIlUgY0eEJkuYj0eu+1PCpp1r1bAw==
+ * @signature KND8nqYg/TZfbGK75Zn+ntnS66KCddw2Xhf03C8VZH9YhcNuEN3w42eP3dLAVn1m88/+xLHR+PKGTeeOd3T2Cw==
  */
 
 // plugins/PerformantGims/src/index.ts

@@ -1,13 +1,13 @@
 /**
  * @name Healthbars
  * @description Adds healthbars underneath players' names
- * @author TheLazySquid
+ * @author Gimloader Official
  * @version 0.1.6
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Healthbars.js
  * @webpage https://gimloader.github.io/plugins/Healthbars
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature sxp71s3kMDA6GHog4iYqCZNIxEnLgltUAwB6PAuecxBDs6kNlvDIpj73ctq46L5xSrC0NkF2h4qG8usbBXfNAA==
+ * @signature Tg/b5loeBzdHakUw5imLRRVPhUyEuP9gqR0E8RxpLQuxDSJFN4b4QBOInDn0pwEHxy0LXJDPW//4lZ7MioBuAw==
  */
 
 // plugins/Healthbars/src/index.ts

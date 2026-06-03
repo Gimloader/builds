@@ -1,13 +1,13 @@
 /**
  * @name NoSchoolHours
  * @description Bypasses the creative discovery page school hours
- * @author retrozy
+ * @author Gimloader Official
  * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/NoSchoolHours.js
  * @webpage https://gimloader.github.io/plugins/NoSchoolHours
  * @reloadRequired notingame
  * @changelog Updated webpage url
- * @signature wXjUg1GKj7ouJ3aRXtmiG8D8Khc0+5Nm0NFsBEPNH/6C0uSUuhpstT+gmA0OVldlUwnILJLck2wVWdd7/b4ECg==
+ * @signature 8cM11jEIg3XFNWrj6IW3z0VKHE8pCii8oaaWROYCiU+C/BTHWMKvgurO2eRjJghSdKeYJYXvNtMuy313aZHRAw==
  */
 
 // shared/rewritingUtils.ts

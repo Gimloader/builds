@@ -1,7 +1,7 @@
 /**
  * @name Autosplitter
  * @description Automatically times speedruns for various gamemodes
- * @author TheLazySquid
+ * @author Gimloader Official
  * @version 0.6.3
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Autosplitter.js
  * @webpage https://gimloader.github.io/plugins/Autosplitter
@@ -10,7 +10,7 @@
  * @gamemode fishtopia
  * @gamemode oneWayOut
  * @changelog Maybe fixed Fishtopia splits resetting
- * @signature EIM39Y3/F6BUDggih2mFLu3hRpWVcLsk/Ksc9O051Rp1n4dT4oW7acSCBSvswrOHV6mfd5xTHxVVmZ75H0BXBw==
+ * @signature SpUXQf5s3+KAefYGzaWwLFwa6F0XOJyBw2eRcO2AxqYa1ub+B+iAODwUk3QYLW9omL9F/4RhFCDYlmg/wGGiAg==
  */
 
 // external-svelte:svelte/internal/client

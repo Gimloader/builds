@@ -1,12 +1,12 @@
 /**
  * @name SingleTab
  * @description Opens gamemodes in the current tab instead of a new tab.
- * @author retrozy
+ * @author Gimloader Official
  * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/SingleTab.js
  * @webpage https://gimloader.github.io/plugins/SingleTab
  * @changelog Updated webpage url
- * @signature I8kuiHTokddsFkXyj5dpLfJ/azUdDSpeZ7qeqEZ6oHR8N5QvhKkGJA5jLlyyAGw1vJN1ynNfZijT4QmMBvPYBw==
+ * @signature vmNp9kcTkEybi80WJs/WxfSFVhPWPbUkZ4VoHI/LF25xMyrsySjEG6KwITNNuMPuNf3htngKqI9457UxTawbBQ==
  */
 
 // plugins/SingleTab/src/index.ts

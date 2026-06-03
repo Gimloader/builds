@@ -1,7 +1,7 @@
 /**
  * @name PhysicsSettings
  * @description Allows you to configure various things about the physics in platformer modes (client-side only)
- * @author TheLazySquid
+ * @author Gimloader Official
  * @version 0.3.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/PhysicsSettings.js
  * @webpage https://gimloader.github.io/plugins/PhysicsSettings
@@ -9,7 +9,7 @@
  * @hasSettings true
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature splT4zbpCAVXj+gmEu/lairfgEsD0LaIMG4HhtNykmu74ivSdCHJ2y6KcwnLOmYvgemXtc42Z+LocXvvsQVPAA==
+ * @signature WtUTEt3/9x32yH/Gsh1Jrra0krJlhy9QRgYBJYZl10ocEUCw2bDQUaupdMN4QpZX6eclwua+Hdx/WZLvde56CA==
  */
 
 // shared/rewritingUtils.ts
