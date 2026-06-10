@@ -10,41 +10,41 @@
  * @gamemode fishtopia
  * @gamemode oneWayOut
  * @changelog Maybe fixed Fishtopia splits resetting
- * @signature SpUXQf5s3+KAefYGzaWwLFwa6F0XOJyBw2eRcO2AxqYa1ub+B+iAODwUk3QYLW9omL9F/4RhFCDYlmg/wGGiAg==
+ * @signature JwXOLiQzWa5GUiEmJkNldiifoZNZd7J9GXOg21jlX7efli1KlIWOwpqz9WlgxJ2tAURhqT8GgGcvaEBzg9qWDA==
  */
 
 // external-svelte:svelte/internal/client
-var append = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.append)();
-var append_styles = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.append_styles)();
-var bind_checked = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.bind_checked)();
-var bind_select_value = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.bind_select_value)();
-var bind_value = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.bind_value)();
-var child = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.child)();
-var comment = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.comment)();
-var delegate = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.delegate)();
-var derived = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.derived)();
-var each = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.each)();
-var first_child = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.first_child)();
-var from_html = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.from_html)();
-var get = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.get)();
-var index = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.index)();
-var key = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.key)();
-var next = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.next)();
-var pop = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.pop)();
-var prop = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.prop)();
-var proxy = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.proxy)();
-var push = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.push)();
-var remove_input_defaults = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.remove_input_defaults)();
-var reset = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.reset)();
-var set = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.set)();
-var set_class = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.set_class)();
-var set_text = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.set_text)();
-var set_value = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.set_value)();
-var sibling = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.sibling)();
-var snapshot = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.snapshot)();
-var state = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.state)();
-var template_effect = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.template_effect)();
-var if_export = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.if)();
+var append = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.append)();
+var append_styles = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.append_styles)();
+var bind_checked = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.bind_checked)();
+var bind_select_value = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.bind_select_value)();
+var bind_value = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.bind_value)();
+var child = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.child)();
+var comment = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.comment)();
+var delegate = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.delegate)();
+var derived = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.derived)();
+var each = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.each)();
+var first_child = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.first_child)();
+var from_html = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.from_html)();
+var get = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.get)();
+var index = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.index)();
+var key = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.key)();
+var next = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.next)();
+var pop = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.pop)();
+var prop = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.prop)();
+var proxy = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.proxy)();
+var push = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.push)();
+var remove_input_defaults = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.remove_input_defaults)();
+var reset = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.reset)();
+var set = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.set)();
+var set_class = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.set_class)();
+var set_text = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.set_text)();
+var set_value = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.set_value)();
+var sibling = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.sibling)();
+var snapshot = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.snapshot)();
+var state = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.state)();
+var template_effect = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.template_effect)();
+var if_export = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.if)();
 
 // plugins/Autosplitter/src/constants.ts
 var gamemodes = ["DLD", "Fishtopia", "OneWayOut"];
@@ -1590,7 +1590,7 @@ api.UI.addStyles(`#timer {
 `);
 
 // external-svelte:svelte
-var mount = /* @__PURE__ */ (() => GL.svelte_5_43_0.Index.mount)();
+var mount = /* @__PURE__ */ (() => api.svelte_5_43_0.Index.mount)();
 
 // plugins/Autosplitter/src/index.ts
 var autosplitter;

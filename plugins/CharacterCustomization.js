@@ -8,7 +8,7 @@
  * @hasSettings true
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature NPtf+FuNh69SrN9MeopQhyfEP4goEvKWxjOIcx3Ny9/d54/Pc2xBQNN1dC1UoEUX5wlDMQhWYaEhLQpvJQ4tAw==
+ * @signature eg808F15TccNCLE9+E9yiEVg7QBEeVFtJm1Xhyrkgdxbl8pouNXAaynC9CF6uiGqfNKvNJsSMw5haajISaTDDQ==
  */
 var __create = Object.create;
 var __defProp = Object.defineProperty;
@@ -674,37 +674,37 @@ var require_dist = __commonJS({
 });
 
 // external-svelte:svelte/internal/client
-var append = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.append)();
-var append_styles = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.append_styles)();
-var bind_select_value = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.bind_select_value)();
-var bind_value = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.bind_value)();
-var child = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.child)();
-var comment = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.comment)();
-var delegate = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.delegate)();
-var each = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.each)();
-var first_child = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.first_child)();
-var from_html = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.from_html)();
-var get = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.get)();
-var index = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.index)();
-var pop = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.pop)();
-var proxy = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.proxy)();
-var push = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.push)();
-var remove_input_defaults = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.remove_input_defaults)();
-var reset = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.reset)();
-var set = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.set)();
-var set_attribute = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.set_attribute)();
-var set_class = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.set_class)();
-var set_style = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.set_style)();
-var set_text = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.set_text)();
-var sibling = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.sibling)();
-var state = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.state)();
-var template_effect = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.template_effect)();
-var if_export = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.if)();
+var append = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.append)();
+var append_styles = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.append_styles)();
+var bind_select_value = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.bind_select_value)();
+var bind_value = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.bind_value)();
+var child = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.child)();
+var comment = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.comment)();
+var delegate = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.delegate)();
+var each = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.each)();
+var first_child = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.first_child)();
+var from_html = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.from_html)();
+var get = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.get)();
+var index = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.index)();
+var pop = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.pop)();
+var proxy = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.proxy)();
+var push = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.push)();
+var remove_input_defaults = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.remove_input_defaults)();
+var reset = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.reset)();
+var set = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.set)();
+var set_attribute = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.set_attribute)();
+var set_class = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.set_class)();
+var set_style = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.set_style)();
+var set_text = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.set_text)();
+var sibling = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.sibling)();
+var state = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.state)();
+var template_effect = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.template_effect)();
+var if_export = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.if)();
 
 // external-svelte:svelte
-var mount = /* @__PURE__ */ (() => GL.svelte_5_43_0.Index.mount)();
-var onMount = /* @__PURE__ */ (() => GL.svelte_5_43_0.Index.onMount)();
-var unmount = /* @__PURE__ */ (() => GL.svelte_5_43_0.Index.unmount)();
+var mount = /* @__PURE__ */ (() => api.svelte_5_43_0.Index.mount)();
+var onMount = /* @__PURE__ */ (() => api.svelte_5_43_0.Index.onMount)();
+var unmount = /* @__PURE__ */ (() => api.svelte_5_43_0.Index.unmount)();
 
 // plugins/CharacterCustomization/assets/gim_atlas.txt
 var gim_atlas_default = "\nsize: 1024,832\nformat: RGBA8888\nfilter: Linear,Linear\nrepeat: none\neyes/eye1_KO\nbounds:265,32,30,35\nrotate:90\neyes/eye_KO\nbounds:265,32,30,35\nrotate:90\neyes/eye1_blink1\nbounds:374,26,17,29\nrotate:90\neyes/eye2_blink1\nbounds:374,26,17,29\nrotate:90\neyes/eye_blink1\nbounds:374,26,17,29\nrotate:90\neyes/eye1_blink2\nbounds:140,5,18,23\neyes/eye_blink2\nbounds:140,5,18,23\neyes/eye1_blink3\nbounds:160,5,23,17\nrotate:90\neyes/eye_blink3\nbounds:160,5,23,17\nrotate:90\neyes/eye1_closed\nbounds:336,45,41,17\neyes/eye_closed\nbounds:336,45,41,17\neyes/eye1_closed2\nbounds:302,32,30,32\nrotate:90\neyes/eye_closed2\nbounds:302,32,30,32\nrotate:90\neyes/eye1_cute\nbounds:464,45,17,36\nrotate:90\neyes/eye_cute\nbounds:464,45,17,36\nrotate:90\neyes/eye1_frown\nbounds:81,31,31,46\noffsets:0,0,31,47\nrotate:90\neyes/eye_frown\nbounds:81,31,31,46\noffsets:0,0,31,47\nrotate:90\neyes/eye1_happy\nbounds:129,30,42,32\neyes/eye_happy\nbounds:129,30,42,32\neyes/eye1_happy2\nbounds:81,2,37,27\neyes/eye_happy2\nbounds:81,2,37,27\neyes/eye1_kawaii\nbounds:173,37,25,44\nrotate:90\neyes/eye_kawaii\nbounds:173,37,25,44\nrotate:90\neyes/eye1_open\nbounds:336,26,17,36\nrotate:90\neyes/eye2_open\nbounds:336,26,17,36\nrotate:90\neyes/eye_open\nbounds:336,26,17,36\nrotate:90\neyes/eye1_shiny\nbounds:219,37,25,44\nrotate:90\neyes/eye_shiny\nbounds:219,37,25,44\nrotate:90\neyes/eye2_blink2\nbounds:179,12,18,23\neyes/eye2_blink3\nbounds:120,2,22,18\nrotate:90\neyes/eye2_closed\nbounds:379,45,41,17\neyes/eyeL_sad\nbounds:2,17,40,45\neyes/eyeR_sad\nbounds:44,18,35,44\neyes/eye_closedDown\nbounds:422,46,40,16\nfx/eyeGlow\nbounds:450,271,47,47\noffsets:10,7,63,59\nfx/fx_angry\nbounds:451,228,40,41\nfx/fx_blush\nbounds:210,183,41,38\noffsets:1,1,43,40\nfx/fx_gradientDownUp\nbounds:2,191,206,127\noffsets:0,0,206,130\nfx/fx_gradientUpDown\nbounds:2,92,196,97\noffsets:0,3,196,100\nfx/fx_line\nbounds:200,161,28,8\nrotate:90\nfx/fx_sparkle1\nbounds:31,66,20,24\nfx/fx_sparkle2\nbounds:2,66,24,27\nrotate:90\nfx/fx_sparkle3\nbounds:333,207,21,23\nfx/fx_star1\nbounds:253,183,38,37\nrotate:90\nfx/fx_star2\nbounds:356,211,19,16\nrotate:90\nfx/fx_starExpl1\nbounds:53,72,19,18\nfx/fx_starExpl2\nbounds:210,163,19,18\nfx/fx_sweatDrop\nbounds:292,202,39,28\nfx/fx_whiteDot\nbounds:292,188,12,12\nfx/leg_LongL_black\nbounds:210,223,80,95\nfx/leg_LongL_shadow1\nbounds:374,268,74,50\noffsets:6,45,80,95\nfx/leg_LongR_black\nbounds:292,232,80,86\noffsets:1,0,81,86\nfx/leg_LongR_shadow1\nbounds:374,219,75,47\noffsets:1,39,81,86\nskins/default_gray/body\nbounds:216,417,212,157\nskins/default_gray/legL\nbounds:216,322,80,93\nskins/default_gray/legR\nbounds:656,493,80,81\nskins/default_gray/legSittingL\nbounds:430,483,111,91\nskins/default_gray/legSittingR\nbounds:543,483,111,91\nskins/default_gray/template\nbounds:2,380,212,194\nskins/test/body\nbounds:2,673,212,157\nskins/test/legL\nbounds:2,578,80,93\nskins/test/legR\nbounds:329,749,80,81\nskins/test/legSittingL\nbounds:216,739,111,91\nskins/test/legSittingR\nbounds:84,580,111,91\n";

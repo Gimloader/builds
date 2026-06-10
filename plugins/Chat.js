@@ -8,43 +8,43 @@
  * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
  * @changelog Added option to show player skins in chat
- * @signature /1D/DlTZvSquDDdrUzrUVPkhW1tyHkkU8K+Dh3o4UB94QOceQjTneEwoXwuT8L4K+lsXX9sqtmuY6/Ew6S0CCQ==
+ * @signature axaN7VKuGB5knRRcnX4aKqg/uewUo52zteFyyjcFCC7XByG8Z9embQRjwyvV/OsxoGe1SBEYq8Ndogtg8YlhAQ==
  */
 
 // external-svelte:svelte
-var mount = /* @__PURE__ */ (() => GL.svelte_5_43_0.Index.mount)();
-var tick = /* @__PURE__ */ (() => GL.svelte_5_43_0.Index.tick)();
-var unmount = /* @__PURE__ */ (() => GL.svelte_5_43_0.Index.unmount)();
+var mount = /* @__PURE__ */ (() => api.svelte_5_43_0.Index.mount)();
+var tick = /* @__PURE__ */ (() => api.svelte_5_43_0.Index.tick)();
+var unmount = /* @__PURE__ */ (() => api.svelte_5_43_0.Index.unmount)();
 
 // external-svelte:svelte/internal/client
-var append = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.append)();
-var append_styles = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.append_styles)();
-var bind_this = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.bind_this)();
-var bind_value = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.bind_value)();
-var child = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.child)();
-var comment = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.comment)();
-var delegate = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.delegate)();
-var derived = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.derived)();
-var each = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.each)();
-var event = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.event)();
-var first_child = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.first_child)();
-var from_html = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.from_html)();
-var get = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.get)();
-var html = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.html)();
-var index = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.index)();
-var pop = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.pop)();
-var proxy = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.proxy)();
-var push = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.push)();
-var remove_input_defaults = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.remove_input_defaults)();
-var reset = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.reset)();
-var set = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.set)();
-var set_attribute = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.set_attribute)();
-var set_text = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.set_text)();
-var sibling = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.sibling)();
-var state = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.state)();
-var template_effect = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.template_effect)();
-var text = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.text)();
-var if_export = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.if)();
+var append = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.append)();
+var append_styles = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.append_styles)();
+var bind_this = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.bind_this)();
+var bind_value = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.bind_value)();
+var child = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.child)();
+var comment = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.comment)();
+var delegate = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.delegate)();
+var derived = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.derived)();
+var each = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.each)();
+var event = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.event)();
+var first_child = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.first_child)();
+var from_html = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.from_html)();
+var get = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.get)();
+var html = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.html)();
+var index = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.index)();
+var pop = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.pop)();
+var proxy = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.proxy)();
+var push = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.push)();
+var remove_input_defaults = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.remove_input_defaults)();
+var reset = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.reset)();
+var set = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.set)();
+var set_attribute = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.set_attribute)();
+var set_text = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.set_text)();
+var sibling = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.sibling)();
+var state = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.state)();
+var template_effect = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.template_effect)();
+var text = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.text)();
+var if_export = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.if)();
 
 // plugins/Chat/src/chatter.svelte.ts
 var Comms = api.lib("Communication");

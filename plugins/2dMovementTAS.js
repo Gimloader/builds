@@ -9,47 +9,47 @@
  * @gamemode ctf
  * @gamemode tag
  * @changelog Updated webpage url
- * @signature IaQGcwT3+gq7LHDzXjmlqsn45s+n2+ocUgwm49Mpw7/csrmUdR7qNHSPWohDtCvSOgc9RCsx7STHbkv77qQuAg==
+ * @signature XKwHyI9BFjalKW//hwQ2sC3yd46lpZY1Kb6IuBDjaR2cpOQvltl3kdvhoO7X1onwgMbK8oqwgQhPE/07XvccAg==
  */
 
 // external-svelte:svelte
-var mount = /* @__PURE__ */ (() => GL.svelte_5_43_0.Index.mount)();
-var unmount = /* @__PURE__ */ (() => GL.svelte_5_43_0.Index.unmount)();
-var untrack = /* @__PURE__ */ (() => GL.svelte_5_43_0.Index.untrack)();
+var mount = /* @__PURE__ */ (() => api.svelte_5_43_0.Index.mount)();
+var unmount = /* @__PURE__ */ (() => api.svelte_5_43_0.Index.unmount)();
+var untrack = /* @__PURE__ */ (() => api.svelte_5_43_0.Index.untrack)();
 
 // external-svelte:svelte/internal/client
-var append = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.append)();
-var append_styles = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.append_styles)();
-var bind_checked = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.bind_checked)();
-var bind_this = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.bind_this)();
-var bind_value = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.bind_value)();
-var child = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.child)();
-var comment = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.comment)();
-var delegate = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.delegate)();
-var derived = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.derived)();
-var each = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.each)();
-var event = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.event)();
-var first_child = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.first_child)();
-var from_html = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.from_html)();
-var get = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.get)();
-var index = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.index)();
-var next = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.next)();
-var pop = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.pop)();
-var prop = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.prop)();
-var proxy = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.proxy)();
-var push = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.push)();
-var remove_input_defaults = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.remove_input_defaults)();
-var reset = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.reset)();
-var set = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.set)();
-var set_class = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.set_class)();
-var set_style = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.set_style)();
-var set_text = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.set_text)();
-var sibling = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.sibling)();
-var state = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.state)();
-var template_effect = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.template_effect)();
-var user_effect = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.user_effect)();
-var window2 = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.window)();
-var if_export = /* @__PURE__ */ (() => GL.svelte_5_43_0.Client.if)();
+var append = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.append)();
+var append_styles = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.append_styles)();
+var bind_checked = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.bind_checked)();
+var bind_this = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.bind_this)();
+var bind_value = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.bind_value)();
+var child = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.child)();
+var comment = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.comment)();
+var delegate = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.delegate)();
+var derived = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.derived)();
+var each = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.each)();
+var event = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.event)();
+var first_child = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.first_child)();
+var from_html = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.from_html)();
+var get = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.get)();
+var index = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.index)();
+var next = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.next)();
+var pop = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.pop)();
+var prop = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.prop)();
+var proxy = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.proxy)();
+var push = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.push)();
+var remove_input_defaults = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.remove_input_defaults)();
+var reset = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.reset)();
+var set = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.set)();
+var set_class = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.set_class)();
+var set_style = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.set_style)();
+var set_text = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.set_text)();
+var sibling = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.sibling)();
+var state = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.state)();
+var template_effect = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.template_effect)();
+var user_effect = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.user_effect)();
+var window2 = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.window)();
+var if_export = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.if)();
 
 // plugins/2dMovementTAS/src/ui/AnglePicker.svelte
 var root = from_html(`<div><div class="circleWrap svelte-lcb12k"><div class="circle svelte-lcb12k"><div class="pointer svelte-lcb12k"></div></div></div> <div class="inputs svelte-lcb12k"><input type="range" min="0" max="360" step="0.01"/> <div><input class="numInput svelte-lcb12k" type="number" min="0" max="360"/> <span>\xB0</span></div></div></div>`);
@@ -545,7 +545,7 @@ var TASTools = class {
 };
 
 // external-svelte:svelte/reactivity/window
-var innerHeight = /* @__PURE__ */ (() => GL.svelte_5_43_0.WindowReactivity.innerHeight)();
+var innerHeight = /* @__PURE__ */ (() => api.svelte_5_43_0.WindowReactivity.innerHeight)();
 
 // plugins/2dMovementTAS/src/ui/UI.svelte
 var root_1 = from_html(`<tr><td class="frame svelte-me8h17"> </td><td class="svelte-me8h17"><input type="checkbox"/></td><td class="svelte-me8h17"><input type="checkbox"/></td><td class="svelte-me8h17"><input type="checkbox"/></td><td><div class="number svelte-me8h17"><div>&uArr;</div> </div> <div class="drag svelte-me8h17">&updownarrow;</div></td></tr>`);
