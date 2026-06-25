@@ -10,7 +10,7 @@
  * @gamemode fishtopia
  * @gamemode oneWayOut
  * @changelog Maybe fixed Fishtopia splits resetting
- * @signature JwXOLiQzWa5GUiEmJkNldiifoZNZd7J9GXOg21jlX7efli1KlIWOwpqz9WlgxJ2tAURhqT8GgGcvaEBzg9qWDA==
+ * @signature OSvGsMvdML9MSWTZY/YiYjFz6BaAwYsQewsz5FkvdvFJV7j226d70b03L+V8cFqI+WC+8ATTAOUboQtSo4piBg==
  */
 
 // external-svelte:svelte/internal/client
@@ -160,35 +160,6 @@ function getFishtopiaData() {
 function getOneWayOutData() {
   const data = api.storage.getValue("OneWayOutData", {});
   return Object.assign({}, splitsDefaults, data);
-}
-function downloadFile(data, filename) {
-  const blob = new Blob([data], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-function readFile() {
-  return new Promise((res, rej) => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".json";
-    input.addEventListener("change", () => {
-      const file = input.files?.[0];
-      if (!file) return rej("No file selected");
-      const reader = new FileReader();
-      reader.onload = () => {
-        const data = reader.result;
-        if (typeof data !== "string") return rej("Failed to read file");
-        const parsed = JSON.parse(data);
-        res(parsed);
-      };
-      reader.readAsText(file);
-    });
-    input.click();
-  });
 }
 function fmtMs(ms) {
   ms = Math.round(ms);
@@ -669,6 +640,38 @@ function OneWayOut($$anchor, $$props) {
   pop();
 }
 
+// shared/files.ts
+function downloadFile(contents, name, type) {
+  const blob = new Blob([contents], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function downloadJsonFile(obj, name) {
+  downloadFile(JSON.stringify(obj, null, 4), name, "application/json");
+}
+function readFile(accept) {
+  return new Promise((res, rej) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = accept;
+    input.addEventListener("change", async () => {
+      const file = input.files?.[0];
+      if (!file) return rej("No file selected");
+      res(file);
+    });
+    input.click();
+  });
+}
+async function readJsonFile() {
+  const file = await readFile(".json");
+  const text = await file.text();
+  return JSON.parse(text);
+}
+
 // plugins/Autosplitter/src/settings/Settings.svelte
 var root_14 = from_html(`<button> </button>`);
 var root8 = from_html(`<div class="wrap"><div class="tabs svelte-du1p18"><!> <div class="actions svelte-du1p18"><button class="svelte-du1p18">All &#11123;</button> <button class="svelte-du1p18">All &#11121;</button> <button class="svelte-du1p18">Mode &#11123;</button> <button class="svelte-du1p18">Mode &#11121;</button></div></div> <div class="settings-content svelte-du1p18"><!></div></div>`);
@@ -697,25 +700,27 @@ function Settings($$anchor, $$props) {
       if (!data2) continue;
       json[gamemode] = data2;
     }
-    downloadFile(JSON.stringify(json), "splits.json");
+    downloadJsonFile(json, "splits.json");
   }
   function importAll() {
-    readFile().then((newData) => {
+    readJsonFile().then((newData) => {
       for (let gamemode of gamemodes) {
         if (!newData[gamemode]) continue;
         data[gamemode] = newData[gamemode];
         api.storage.setValue(`${gamemode}Data`, newData[gamemode]);
       }
+    }).catch(() => {
     });
   }
   function exportMode() {
     let json = data[get(activeTab)];
-    downloadFile(JSON.stringify(json), `${get(activeTab)}.json`);
+    downloadJsonFile(json, `${get(activeTab)}.json`);
   }
   function importMode() {
-    readFile().then((newData) => {
+    readJsonFile().then((newData) => {
       data[get(activeTab)] = newData;
       api.storage.setValue(`${get(activeTab)}Data`, newData);
+    }).catch(() => {
     });
   }
   var $$exports = { save };

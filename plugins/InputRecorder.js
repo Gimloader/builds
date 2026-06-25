@@ -9,8 +9,40 @@
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
  * @changelog Updated webpage url
- * @signature WK6wvWqmwi/4kuEJ1EOCdarmxQBKhVdoqzfTr/hs0DDaARFV/SQKHacUA1t5Kev4UxLF1G1zNITkj6Y4vrp+AA==
+ * @signature +liF8Qz9AN6xKl/Wjq0xoU/MF3MPF2W4PMKiNtst/hXpTg8zN3rBp6xBi98pNfdYfrgD/5vvCBj4z4zZ0qR8AA==
  */
+
+// shared/files.ts
+function downloadFile(contents, name, type) {
+  const blob = new Blob([contents], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function downloadJsonFile(obj, name) {
+  downloadFile(JSON.stringify(obj, null, 4), name, "application/json");
+}
+function readFile(accept) {
+  return new Promise((res, rej) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = accept;
+    input.addEventListener("change", async () => {
+      const file = input.files?.[0];
+      if (!file) return rej("No file selected");
+      res(file);
+    });
+    input.click();
+  });
+}
+async function readJsonFile() {
+  const file = await readFile(".json");
+  const text = await file.text();
+  return JSON.parse(text);
+}
 
 // plugins/InputRecorder/src/updateLasers.ts
 var lasers = [];
@@ -105,13 +137,8 @@ var Recorder = class {
       platformerPhysics: this.platformerPhysics,
       frames: this.frames
     };
-    const blob = new Blob([JSON.stringify(json)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
     const name = api.stores.phaser.mainCharacter.nametag.name;
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = fileName ?? `recording-${name}.json`;
-    a.click();
+    downloadJsonFile(json, fileName ?? `recording-${name}.json`);
   }
   async playback(data) {
     const desync = api.plugin("Desynchronize");
@@ -171,19 +198,12 @@ function playBackRecording() {
     recorder.stopPlayback();
     api.UI.notification.open({ message: "Playback canceled" });
   } else {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".json";
-    input.onchange = async () => {
+    readJsonFile().then((data) => {
       api.hotkeys.releaseAll();
-      const file = input.files?.[0];
-      if (!file) return;
-      const json = await file.text();
-      const data = JSON.parse(json);
       api.UI.notification.open({ message: "Starting Playback" });
       recorder.playback(data);
-    };
-    input.click();
+    }).catch(() => {
+    });
   }
 }
 api.hotkeys.addConfigurableHotkey({

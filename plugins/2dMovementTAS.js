@@ -9,7 +9,7 @@
  * @gamemode ctf
  * @gamemode tag
  * @changelog Updated webpage url
- * @signature XKwHyI9BFjalKW//hwQ2sC3yd46lpZY1Kb6IuBDjaR2cpOQvltl3kdvhoO7X1onwgMbK8oqwgQhPE/07XvccAg==
+ * @signature 1HFDmM9UAhiPVgIlEeBoWqloPkxqk5H/TejKzdhaHHk1xXUJ4K93KeR+e9r232bNIJ6JmJCg3pmhbA0NGjmoBw==
  */
 
 // external-svelte:svelte
@@ -191,8 +191,10 @@ function updateDeviceState(device, key, value) {
   states.get(deviceId)?.properties.set(key, value);
   device.onStateUpdateFromServer(key, value);
 }
-function downloadFile(contents, name) {
-  const blob = new Blob([contents], { type: "text/plain" });
+
+// shared/files.ts
+function downloadFile(contents, name, type) {
+  const blob = new Blob([contents], { type });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -200,22 +202,26 @@ function downloadFile(contents, name) {
   a.click();
   URL.revokeObjectURL(url);
 }
-function uploadFile() {
+function downloadJsonFile(obj, name) {
+  downloadFile(JSON.stringify(obj, null, 4), name, "application/json");
+}
+function readFile(accept) {
   return new Promise((res, rej) => {
     const input = document.createElement("input");
     input.type = "file";
-    input.accept = ".json";
-    input.onchange = () => {
-      if (!input.files || !input.files[0]) return rej();
-      const file = input.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        res(reader.result);
-      };
-      reader.readAsText(file);
-    };
+    input.accept = accept;
+    input.addEventListener("change", async () => {
+      const file = input.files?.[0];
+      if (!file) return rej("No file selected");
+      res(file);
+    });
     input.click();
   });
+}
+async function readJsonFile() {
+  const file = await readFile(".json");
+  const text = await file.text();
+  return JSON.parse(text);
 }
 
 // plugins/2dMovementTAS/src/tools.svelte.ts
@@ -530,10 +536,10 @@ var TASTools = class {
     return val;
   }
   download() {
-    downloadFile(JSON.stringify(this.save()), "2D TAS.json");
+    downloadJsonFile(this.save(), "2D TAS.json");
   }
   load() {
-    uploadFile().then((file) => {
+    readJsonFile().then((file) => {
       const data = JSON.parse(file);
       this.goBackToFrame(0);
       this.startPos = data.startPos;
@@ -795,7 +801,7 @@ function Start($$anchor, $$props) {
       if (!conf) return;
     }
     try {
-      let data = await uploadFile();
+      let data = await readJsonFile();
       let json = JSON.parse(data);
       set(frames, json.frames, true);
       set(startPos, json.startPos, true);

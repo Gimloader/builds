@@ -8,7 +8,7 @@
  * @hasSettings true
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature eg808F15TccNCLE9+E9yiEVg7QBEeVFtJm1Xhyrkgdxbl8pouNXAaynC9CF6uiGqfNKvNJsSMw5haajISaTDDQ==
+ * @signature AUGPwpmMsD9v0utVQwyutG+r1oV8GdvCvDJEpgMxoLPHBmtnK1yaJ3FfjztB+TOJVBCAPjgIsk9KdTsvrx/6DA==
  */
 var __create = Object.create;
 var __defProp = Object.defineProperty;
@@ -910,6 +910,23 @@ var cosmeticChanger_default = new class CosmeticChanger {
 
 // plugins/CharacterCustomization/src/UI.svelte
 var import_compress_json = __toESM(require_dist());
+
+// shared/files.ts
+function readFile(accept) {
+  return new Promise((res, rej) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = accept;
+    input.addEventListener("change", async () => {
+      const file = input.files?.[0];
+      if (!file) return rej("No file selected");
+      res(file);
+    });
+    input.click();
+  });
+}
+
+// plugins/CharacterCustomization/src/UI.svelte
 var root_4 = from_html(`<input type="color"/>`);
 var root_6 = from_html(`<button></button>`);
 var root_5 = from_html(`<div class="colors svelte-1rz4ed"></div>`);
@@ -932,18 +949,11 @@ function UI($$anchor, $$props) {
   let customSkinFile = state(proxy(cosmeticChanger_default.customSkinFile));
   let selectedStyles = proxy(cosmeticChanger_default.selectedStyles);
   function uploadSkin() {
-    let input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".png";
-    input.onchange = () => {
-      let file = input.files?.[0];
-      if (!file) {
-        set(customSkinFile, null);
-      } else {
-        set(customSkinFile, file, true);
-      }
-    };
-    input.click();
+    readFile(".png").then((file) => {
+      set(customSkinFile, file, true);
+    }).catch(() => {
+      set(customSkinFile, null);
+    });
   }
   let styles = state(void 0);
   async function onSkinIdEntered() {
@@ -984,11 +994,11 @@ function UI($$anchor, $$props) {
   {
     var consequent_2 = ($$anchor2) => {
       var fragment_1 = root_1();
-      var input_1 = first_child(fragment_1);
-      remove_input_defaults(input_1);
-      input_1.__change = onSkinIdEntered;
-      input_1.__keydown = (e) => e.stopPropagation();
-      var node_1 = sibling(input_1, 2);
+      var input = first_child(fragment_1);
+      remove_input_defaults(input);
+      input.__change = onSkinIdEntered;
+      input.__keydown = (e) => e.stopPropagation();
+      var node_1 = sibling(input, 2);
       {
         var consequent_1 = ($$anchor3) => {
           var fragment_2 = comment();
@@ -1001,10 +1011,10 @@ function UI($$anchor, $$props) {
             var node_3 = sibling(h2, 2);
             {
               var consequent = ($$anchor5) => {
-                var input_2 = root_4();
-                remove_input_defaults(input_2);
-                bind_value(input_2, () => selectedStyles[get(category).name], ($$value) => selectedStyles[get(category).name] = $$value);
-                append($$anchor5, input_2);
+                var input_1 = root_4();
+                remove_input_defaults(input_1);
+                bind_value(input_1, () => selectedStyles[get(category).name], ($$value) => selectedStyles[get(category).name] = $$value);
+                append($$anchor5, input_1);
               };
               var alternate = ($$anchor5) => {
                 var div_1 = root_5();
@@ -1039,7 +1049,7 @@ function UI($$anchor, $$props) {
           if (get(styles)) $$render(consequent_1);
         });
       }
-      bind_value(input_1, () => get(skinId), ($$value) => set(skinId, $$value));
+      bind_value(input, () => get(skinId), ($$value) => set(skinId, $$value));
       append($$anchor2, fragment_1);
     };
     var alternate_1 = ($$anchor2) => {
@@ -1080,10 +1090,10 @@ function UI($$anchor, $$props) {
   var node_5 = sibling(select_1, 2);
   {
     var consequent_4 = ($$anchor2) => {
-      var input_3 = root_9();
-      remove_input_defaults(input_3);
-      bind_value(input_3, () => get(trailId), ($$value) => set(trailId, $$value));
-      append($$anchor2, input_3);
+      var input_2 = root_9();
+      remove_input_defaults(input_2);
+      bind_value(input_2, () => get(trailId), ($$value) => set(trailId, $$value));
+      append($$anchor2, input_2);
     };
     if_export(node_5, ($$render) => {
       if (get(trailType) === "id") $$render(consequent_4);
