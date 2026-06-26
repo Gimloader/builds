@@ -2,14 +2,14 @@
  * @name CameraControl
  * @description Lets you freely move and zoom your camera
  * @author Gimloader Official
- * @version 0.7.2
+ * @version 0.7.3
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CameraControl.js
  * @webpage https://gimloader.github.io/plugins/CameraControl
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
  * @hasSettings true
  * @gamemode 2d
- * @changelog Updated webpage url
- * @signature 410nT4l6iYW6nbz7syFDU+28QlQmZ8bCfm+Gxzqy92LQXuGuUucPxHFIM4MONaC2oPkfDS4bZQg+nzEwOL8bAQ==
+ * @changelog Fixed freecam in spectator mode
+ * @signature BExTlGh5wwScYJtIte34lKoggu+90Lhqmb/WoVM7k9Sp99IsRZxlHAqnWPIxJhM2aEFvveGVlszXu7tRXOHHDg==
  */
 
 // plugins/CameraControl/src/index.ts
@@ -64,16 +64,15 @@ for (const key of stopKeys) {
 }
 var updateFreecam = null;
 var updateScroll = (dt) => {
-  const camera2 = api.stores.phaser.scene.cameras?.cameras?.[0];
-  if (!camera2) return;
+  if (!camera) return;
   scrollMomentum *= 0.97 ** dt;
-  camera2.zoom += scrollMomentum * dt;
+  camera.zoom += scrollMomentum * dt;
   if (scrollMomentum > 0) changedZoom = true;
   if (settings.capZoomOut) {
-    if (camera2.zoom <= 0.1) {
+    if (camera.zoom <= 0.1) {
       scrollMomentum = 0;
     }
-    camera2.zoom = Math.max(0.1, camera2.zoom);
+    camera.zoom = Math.max(0.1, camera.zoom);
   }
 };
 api.net.onLoad(() => {
@@ -85,6 +84,7 @@ api.net.onLoad(() => {
 });
 var scene;
 var camera;
+var startFollowingObject;
 var getCanvasZoom = () => {
   const transform = api.stores.phaser.scene.game.canvas.style.transform;
   if (!transform) return 1;
@@ -92,8 +92,7 @@ var getCanvasZoom = () => {
 };
 var isPointerDown = false;
 var setPointerDown = (e) => {
-  if (!(e.target instanceof HTMLElement)) return;
-  if (e.target.nodeName !== "CANVAS") return;
+  if (!isTargetCanvas(e)) return;
   isPointerDown = true;
 };
 var setPointerUp = () => isPointerDown = false;
@@ -111,8 +110,7 @@ function onPointermove(e) {
   lastY = e.clientY / canvasZoom;
 }
 function onWheel(e) {
-  if (!(e.target instanceof HTMLElement)) return;
-  if (e.target.nodeName !== "CANVAS") return;
+  if (!isTargetCanvas(e)) return;
   if (!freecamming || !settings.mouseControls) {
     if (settings.shiftToZoom && !api.hotkeys.pressed.has("ShiftLeft")) return;
     scrollMomentum -= e.deltaY / 65e3;
@@ -136,6 +134,7 @@ function onWheel(e) {
 api.net.onLoad(() => {
   scene = api.stores?.phaser?.scene;
   camera = scene?.cameras?.cameras?.[0];
+  startFollowingObject = scene?.cameraHelper?.startFollowingObject;
   if (!scene) return;
   api.patcher.before(api.stores.phaser.scene.cameraHelper, "resize", () => {
     return changedZoom;
@@ -155,7 +154,7 @@ function stopFreecamming() {
   GL.patcher.unpatchAll("CameraControl-helper");
   camera.useBounds = true;
   const charObj = api.stores.phaser.mainCharacter.body;
-  scene.cameraHelper.startFollowingObject({ object: charObj });
+  startFollowingObject({ object: charObj });
   updateFreecam = null;
   stopDefaultArrows = false;
   window.removeEventListener("pointermove", onPointermove);
@@ -181,6 +180,8 @@ api.hotkeys.addConfigurableHotkey({
     stopDefaultArrows = true;
     GL.patcher.instead("CameraControl-helper", scene.cameraHelper, "setCameraSizeParams", () => {
     });
+    GL.patcher.instead("CameraControl-helper", scene.cameraHelper, "startFollowingObject", () => {
+    });
     updateFreecam = (dt) => {
       let moveAmount = 0.8 / camera.zoom * dt;
       const pressed = api.hotkeys.pressed;
@@ -200,27 +201,27 @@ if (commandLine) {
   commandLine.addCommand("setzoom", [
     { "amount": "number" }
   ], (zoom) => {
-    const scene2 = api.stores?.phaser?.scene;
-    const camera2 = scene2?.cameras?.cameras?.[0];
-    if (!scene2 || !camera2) return;
-    camera2.zoom = parseFloat(zoom);
+    if (!camera) return;
+    camera.zoom = parseFloat(zoom);
   });
 }
 var zoomToggled = false;
 var initialZoom = 1;
 var onDown = () => {
-  if (!settings.toggleZoomFactor) return;
-  const scene2 = api.stores?.phaser?.scene;
-  const camera2 = scene2?.cameras?.cameras?.[0];
-  if (!scene2 || !camera2) return;
+  if (!settings.toggleZoomFactor || !camera) return;
   if (zoomToggled) {
-    camera2.zoom = initialZoom;
+    camera.zoom = initialZoom;
   } else {
-    initialZoom = camera2.zoom;
-    camera2.zoom /= settings.toggleZoomFactor;
+    initialZoom = camera.zoom;
+    camera.zoom /= settings.toggleZoomFactor;
   }
   zoomToggled = !zoomToggled;
 };
+function isTargetCanvas(e) {
+  if (!(e.target instanceof HTMLElement)) return false;
+  if (e.target.nodeName === "CANVAS") return true;
+  return e.target.matches(".sc-fyfgSA, .sc-gdmatS, .sc-djcAKz, .sc-emMPjM");
+}
 api.hotkeys.addConfigurableHotkey({
   category: "Camera Control",
   title: "Quick Zoom Toggle",
