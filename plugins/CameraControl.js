@@ -2,17 +2,17 @@
  * @name CameraControl
  * @description Lets you freely move and zoom your camera
  * @author Gimloader Official
- * @version 0.7.3
+ * @version 1.0.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CameraControl.js
  * @webpage https://gimloader.github.io/plugins/CameraControl
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
  * @hasSettings true
  * @gamemode 2d
- * @changelog Fixed freecam in spectator mode
- * @signature re0t0qYO5rnqTf18PkIkGlEA9P9yNdsDN3fs4HupRDXZPEHC7l5ffk8f/+QkSrTWhh+F1hwilS9auyxxmBunCw==
+ * @changelog Cleaned up code significantly
+ * @signature 3xVf1CJt44gQVRcdslz1XZYwkBZ8fYdiQhbQL7GIA+T4EQPLmCtCfdA4fnCRVkMmVd/laWSZ3WXC63zx6mT6Bw==
  */
 
-// plugins/CameraControl/src/index.ts
+// plugins/CameraControl/src/settings.ts
 var settings = api.settings.create([
   {
     type: "toggle",
@@ -45,72 +45,114 @@ var settings = api.settings.create([
     default: true
   }
 ]);
-var freecamming = false;
+
+// plugins/CameraControl/src/util.ts
+function isTargetCanvas(e) {
+  if (!(e.target instanceof HTMLElement)) return false;
+  if (e.target.nodeName === "CANVAS") return true;
+  return e.target.matches(".sc-fyfgSA, .sc-gdmatS, .sc-djcAKz, .sc-emMPjM");
+}
+var getCamera = () => api.stores.phaser.scene.cameras.cameras[0];
+
+// plugins/CameraControl/src/freecam.ts
+var isFreecamming = false;
 var freecamPos = { x: 0, y: 0 };
-var scrollMomentum = 0;
-var changedZoom = false;
-var stopDefaultArrows = false;
+function updateFreecam(dt) {
+  if (!isFreecamming) return;
+  const scene = api.stores.phaser.scene;
+  const camera = scene.cameras.cameras[0];
+  let moveAmount = 0.8 / camera.zoom * dt;
+  const pressed = api.hotkeys.pressed;
+  if (pressed.has("ControlLeft")) moveAmount *= 5;
+  if (pressed.has("ArrowLeft")) freecamPos.x -= moveAmount;
+  if (pressed.has("ArrowRight")) freecamPos.x += moveAmount;
+  if (pressed.has("ArrowUp")) freecamPos.y -= moveAmount;
+  if (pressed.has("ArrowDown")) freecamPos.y += moveAmount;
+  scene.cameraHelper.goTo(freecamPos);
+}
+var preFreecamInteractiveSlot = 0;
+function stopFreecam() {
+  api.stores.me.inventory.activeInteractiveSlot = preFreecamInteractiveSlot;
+  GL.patcher.unpatchAll("CameraControl-helper");
+  getCamera().useBounds = true;
+  const charObj = api.stores.phaser.mainCharacter.body;
+  api.stores.phaser.scene.cameraHelper.startFollowingObject({ object: charObj });
+}
+function startFreecam() {
+  preFreecamInteractiveSlot = api.stores.me.inventory.activeInteractiveSlot;
+  api.stores.me.inventory.activeInteractiveSlot = 0;
+  const scene = api.stores.phaser.scene;
+  const camera = scene.cameras.cameras[0];
+  scene.cameraHelper.stopFollow();
+  camera.useBounds = false;
+  freecamPos = { x: camera.midPoint.x, y: camera.midPoint.y };
+  GL.patcher.instead("CameraControl-helper", scene.cameraHelper, "setCameraSizeParams", () => {
+  });
+  GL.patcher.instead("CameraControl-helper", scene.cameraHelper, "startFollowingObject", () => {
+  });
+  window.addEventListener("pointermove", onPointermove);
+}
+function toggleFreecam() {
+  isFreecamming = !isFreecamming;
+  if (isFreecamming) startFreecam();
+  else stopFreecam();
+}
 var stopKeys = ["ArrowLeft", "ArrowUp", "ArrowDown", "ArrowRight"];
 for (const key of stopKeys) {
   api.hotkeys.addHotkey({
     key,
     preventDefault: false
   }, (e) => {
-    if (stopDefaultArrows) {
-      e.stopImmediatePropagation();
-      e.preventDefault();
-    }
+    if (!isFreecamming) return;
+    e.stopImmediatePropagation();
+    e.preventDefault();
   });
 }
-var updateFreecam = null;
-var updateScroll = (dt) => {
-  if (!camera) return;
-  scrollMomentum *= 0.97 ** dt;
-  camera.zoom += scrollMomentum * dt;
-  if (scrollMomentum > 0) changedZoom = true;
-  if (settings.capZoomOut) {
-    if (camera.zoom <= 0.1) {
-      scrollMomentum = 0;
-    }
-    camera.zoom = Math.max(0.1, camera.zoom);
-  }
-};
-api.net.onLoad(() => {
-  const worldManager = api.stores.phaser.scene.worldManager;
-  api.patcher.after(worldManager, "update", (_, args) => {
-    updateFreecam?.(args[0]);
-    updateScroll(args[0]);
-  });
-});
-var scene;
-var camera;
-var startFollowingObject;
 var isPointerDown = false;
-var setPointerDown = (e) => {
+function onPointerDown(e) {
   if (!isTargetCanvas(e)) return;
   isPointerDown = true;
-};
-var setPointerUp = () => isPointerDown = false;
-window.addEventListener("pointerdown", setPointerDown);
-window.addEventListener("pointerup", setPointerUp);
-var lastX;
-var lastY;
+}
+function onPointerUp() {
+  isPointerDown = false;
+}
+var lastMouseX;
+var lastMouseY;
 function onPointermove(e) {
   const canvasZoom = api.stores.phaser.scene.resizeManager.usedDpi;
-  if (isPointerDown && lastX && lastY) {
-    freecamPos.x -= (e.clientX * canvasZoom - lastX) / camera.zoom;
-    freecamPos.y -= (e.clientY * canvasZoom - lastY) / camera.zoom;
+  if (isFreecamming && settings.mouseControls && isPointerDown && lastMouseX && lastMouseY) {
+    const camera = getCamera();
+    freecamPos.x -= (e.clientX * canvasZoom - lastMouseX) / camera.zoom;
+    freecamPos.y -= (e.clientY * canvasZoom - lastMouseY) / camera.zoom;
   }
-  lastX = e.clientX * canvasZoom;
-  lastY = e.clientY * canvasZoom;
+  lastMouseX = e.clientX * canvasZoom;
+  lastMouseY = e.clientY * canvasZoom;
 }
+api.net.onLoad(() => {
+  window.addEventListener("pointermove", onPointermove);
+  window.addEventListener("pointerdown", onPointerDown);
+  window.addEventListener("pointerup", onPointerUp);
+  api.onStop(() => {
+    window.removeEventListener("pointermove", onPointermove);
+    window.removeEventListener("pointerdown", onPointerDown);
+    window.removeEventListener("pointerup", onPointerUp);
+    if (isFreecamming) stopFreecam();
+  });
+});
+
+// plugins/CameraControl/src/zoom.ts
+function setZoom(zoom) {
+  getCamera().zoom = zoom;
+}
+var scrollMomentum = 0;
 function onWheel(e) {
   if (!isTargetCanvas(e)) return;
-  if (!freecamming || !settings.mouseControls) {
+  if (!isFreecamming || !settings.mouseControls) {
     if (settings.shiftToZoom && !api.hotkeys.pressed.has("ShiftLeft")) return;
     scrollMomentum -= e.deltaY / 65e3;
     return;
   }
+  const camera = getCamera();
   if (camera.zoom === 0.1 && e.deltaY > 0 && settings.capZoomOut) return;
   const oldzoom = camera.zoom;
   const newzoom = oldzoom * (e.deltaY < 0 ? 1.1 : 0.9);
@@ -124,36 +166,46 @@ function onWheel(e) {
   const side_ratio_h = (mouse_y - camera.height / 2) / camera.height;
   freecamPos.y += pixels_difference_h * side_ratio_h;
   camera.setZoom(newzoom);
-  changedZoom = true;
 }
+function updateZoom(dt) {
+  const camera = getCamera();
+  scrollMomentum *= 0.97 ** dt;
+  camera.zoom += scrollMomentum * dt;
+  if (!settings.capZoomOut) return;
+  if (camera.zoom <= 0.1) scrollMomentum = 0;
+  camera.zoom = Math.max(0.1, camera.zoom);
+}
+var zoomToggled = false;
+var preToggleZoom = 1;
+function toggleZoom() {
+  if (!settings.toggleZoomFactor) return;
+  const camera = getCamera();
+  if (zoomToggled) {
+    camera.zoom = preToggleZoom;
+  } else {
+    preToggleZoom = camera.zoom;
+    camera.zoom /= settings.toggleZoomFactor;
+  }
+  zoomToggled = !zoomToggled;
+}
+var initialZoom = 1;
 api.net.onLoad(() => {
-  scene = api.stores?.phaser?.scene;
-  camera = scene?.cameras?.cameras?.[0];
-  startFollowingObject = scene?.cameraHelper?.startFollowingObject;
-  if (!scene) return;
-  api.patcher.before(api.stores.phaser.scene.cameraHelper, "resize", () => {
-    return changedZoom;
-  });
+  const camera = getCamera();
+  initialZoom = camera.zoom;
+  api.onStop(() => camera.zoom = initialZoom);
+  api.patcher.before(api.stores.phaser.scene.cameraHelper, "resize", () => true);
   window.addEventListener("wheel", onWheel);
-  api.commands.addCommand({
-    text: "CameraControl: Set Zoom",
-    keywords: ["camera", "zoom"]
-  }, async (context) => {
-    camera.zoom = await context.number({ title: "Zoom" });
+  api.onStop(() => window.removeEventListener("wheel", onWheel));
+});
+
+// plugins/CameraControl/src/index.ts
+api.net.onLoad(() => {
+  const worldManager = api.stores.phaser.scene.worldManager;
+  api.patcher.after(worldManager, "update", (_, args) => {
+    updateFreecam(args[0]);
+    updateZoom(args[0]);
   });
 });
-var lastInteractiveSlot = 0;
-function stopFreecamming() {
-  if (!scene || !camera) return;
-  api.stores.me.inventory.activeInteractiveSlot = lastInteractiveSlot;
-  GL.patcher.unpatchAll("CameraControl-helper");
-  camera.useBounds = true;
-  const charObj = api.stores.phaser.mainCharacter.body;
-  startFollowingObject({ object: charObj });
-  updateFreecam = null;
-  stopDefaultArrows = false;
-  window.removeEventListener("pointermove", onPointermove);
-}
 api.hotkeys.addConfigurableHotkey({
   category: "Camera Control",
   title: "Enable Freecam",
@@ -162,76 +214,26 @@ api.hotkeys.addConfigurableHotkey({
     key: "KeyF",
     shift: true
   }
-}, () => {
-  if (!scene || !camera) return;
-  if (freecamming) {
-    stopFreecamming();
-  } else {
-    lastInteractiveSlot = api.stores.me.inventory.activeInteractiveSlot;
-    api.stores.me.inventory.activeInteractiveSlot = 0;
-    scene.cameraHelper.stopFollow();
-    camera.useBounds = false;
-    freecamPos = { x: camera.midPoint.x, y: camera.midPoint.y };
-    stopDefaultArrows = true;
-    GL.patcher.instead("CameraControl-helper", scene.cameraHelper, "setCameraSizeParams", () => {
-    });
-    GL.patcher.instead("CameraControl-helper", scene.cameraHelper, "startFollowingObject", () => {
-    });
-    updateFreecam = (dt) => {
-      let moveAmount = 0.8 / camera.zoom * dt;
-      const pressed = api.hotkeys.pressed;
-      if (pressed.has("ControlLeft")) moveAmount *= 5;
-      if (pressed.has("ArrowLeft")) freecamPos.x -= moveAmount;
-      if (pressed.has("ArrowRight")) freecamPos.x += moveAmount;
-      if (pressed.has("ArrowUp")) freecamPos.y -= moveAmount;
-      if (pressed.has("ArrowDown")) freecamPos.y += moveAmount;
-      scene.cameraHelper.goTo(freecamPos);
-    };
-    window.addEventListener("pointermove", onPointermove);
-  }
-  freecamming = !freecamming;
-});
-var commandLine = api.lib("CommandLine");
-if (commandLine) {
-  commandLine.addCommand("setzoom", [
-    { "amount": "number" }
-  ], (zoom) => {
-    if (!camera) return;
-    camera.zoom = parseFloat(zoom);
-  });
-}
-var zoomToggled = false;
-var initialZoom = 1;
-var onDown = () => {
-  if (!settings.toggleZoomFactor || !camera) return;
-  if (zoomToggled) {
-    camera.zoom = initialZoom;
-  } else {
-    initialZoom = camera.zoom;
-    camera.zoom /= settings.toggleZoomFactor;
-  }
-  zoomToggled = !zoomToggled;
-};
-function isTargetCanvas(e) {
-  if (!(e.target instanceof HTMLElement)) return false;
-  if (e.target.nodeName === "CANVAS") return true;
-  return e.target.matches(".sc-fyfgSA, .sc-gdmatS, .sc-djcAKz, .sc-emMPjM");
-}
+}, toggleFreecam);
 api.hotkeys.addConfigurableHotkey({
   category: "Camera Control",
   title: "Quick Zoom Toggle",
   preventDefault: false
-}, onDown);
-api.onStop(() => {
-  if (commandLine) {
-    commandLine.removeCommand("setzoom");
-  }
-  window.removeEventListener("wheel", onWheel);
-  window.removeEventListener("mousedown", setPointerDown);
-  window.removeEventListener("mouseup", setPointerUp);
-  const cam = api.stores?.phaser.scene.cameras.main;
-  if (cam) cam.zoom = 1;
-  if (freecamming) {
-    stopFreecamming();
-  }
+}, toggleZoom);
+api.net.onLoad(() => {
+  api.commands.addCommand({
+    text: "CameraControl: Set Zoom",
+    keywords: ["camera", "zoom"]
+  }, async (context) => {
+    const zoom = await context.number({ title: "Zoom" });
+    setZoom(zoom);
+  });
+  const commandLine = api.lib("CommandLine");
+  if (!commandLine) return;
+  commandLine.addCommand("setzoom", [
+    { "amount": "number" }
+  ], (zoom) => {
+    setZoom(parseFloat(zoom));
+  });
+  api.onStop(() => commandLine.removeCommand("setzoom"));
 });
