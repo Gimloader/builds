@@ -9,7 +9,7 @@
  * @hasSettings true
  * @gamemode 2d
  * @changelog Fixed freecam in spectator mode
- * @signature BExTlGh5wwScYJtIte34lKoggu+90Lhqmb/WoVM7k9Sp99IsRZxlHAqnWPIxJhM2aEFvveGVlszXu7tRXOHHDg==
+ * @signature re0t0qYO5rnqTf18PkIkGlEA9P9yNdsDN3fs4HupRDXZPEHC7l5ffk8f/+QkSrTWhh+F1hwilS9auyxxmBunCw==
  */
 
 // plugins/CameraControl/src/index.ts
@@ -85,11 +85,6 @@ api.net.onLoad(() => {
 var scene;
 var camera;
 var startFollowingObject;
-var getCanvasZoom = () => {
-  const transform = api.stores.phaser.scene.game.canvas.style.transform;
-  if (!transform) return 1;
-  return parseFloat(transform.split("(")[1].replace(")", ""));
-};
 var isPointerDown = false;
 var setPointerDown = (e) => {
   if (!isTargetCanvas(e)) return;
@@ -101,13 +96,13 @@ window.addEventListener("pointerup", setPointerUp);
 var lastX;
 var lastY;
 function onPointermove(e) {
-  const canvasZoom = getCanvasZoom();
+  const canvasZoom = api.stores.phaser.scene.resizeManager.usedDpi;
   if (isPointerDown && lastX && lastY) {
-    freecamPos.x -= (e.clientX / canvasZoom - lastX) / camera.zoom;
-    freecamPos.y -= (e.clientY / canvasZoom - lastY) / camera.zoom;
+    freecamPos.x -= (e.clientX * canvasZoom - lastX) / camera.zoom;
+    freecamPos.y -= (e.clientY * canvasZoom - lastY) / camera.zoom;
   }
-  lastX = e.clientX / canvasZoom;
-  lastY = e.clientY / canvasZoom;
+  lastX = e.clientX * canvasZoom;
+  lastY = e.clientY * canvasZoom;
 }
 function onWheel(e) {
   if (!isTargetCanvas(e)) return;
@@ -119,9 +114,9 @@ function onWheel(e) {
   if (camera.zoom === 0.1 && e.deltaY > 0 && settings.capZoomOut) return;
   const oldzoom = camera.zoom;
   const newzoom = oldzoom * (e.deltaY < 0 ? 1.1 : 0.9);
-  const canvasZoom = getCanvasZoom();
-  const mouse_x = e.clientX / canvasZoom;
-  const mouse_y = e.clientY / canvasZoom;
+  const canvasZoom = api.stores.phaser.scene.resizeManager.usedDpi;
+  const mouse_x = e.clientX * canvasZoom;
+  const mouse_y = e.clientY * canvasZoom;
   const pixels_difference_w = camera.width / oldzoom - camera.width / newzoom;
   const side_ratio_x = (mouse_x - camera.width / 2) / camera.width;
   freecamPos.x += pixels_difference_w * side_ratio_x;
