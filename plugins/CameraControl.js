@@ -2,14 +2,14 @@
  * @name CameraControl
  * @description Lets you freely move and zoom your camera
  * @author Gimloader Official
- * @version 1.0.0
+ * @version 1.1.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CameraControl.js
  * @webpage https://gimloader.github.io/plugins/CameraControl
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
  * @hasSettings true
  * @gamemode 2d
- * @changelog Cleaned up code significantly
- * @signature 3xVf1CJt44gQVRcdslz1XZYwkBZ8fYdiQhbQL7GIA+T4EQPLmCtCfdA4fnCRVkMmVd/laWSZ3WXC63zx6mT6Bw==
+ * @changelog Exposed freecam functions for other scripts to use
+ * @signature VPNLCDSbUYvfPOUHBW2/B8Z/ExWOlgE6jCkRvNrNWZyvQO9ghfIH9JPvrf53z/QuGOWEEsd4ityVdQnpmi1iBg==
  */
 
 // plugins/CameraControl/src/settings.ts
@@ -72,6 +72,8 @@ function updateFreecam(dt) {
 }
 var preFreecamInteractiveSlot = 0;
 function stopFreecam() {
+  if (!isFreecamming) return;
+  isFreecamming = false;
   api.stores.me.inventory.activeInteractiveSlot = preFreecamInteractiveSlot;
   GL.patcher.unpatchAll("CameraControl-helper");
   getCamera().useBounds = true;
@@ -79,6 +81,8 @@ function stopFreecam() {
   api.stores.phaser.scene.cameraHelper.startFollowingObject({ object: charObj });
 }
 function startFreecam() {
+  if (isFreecamming) return;
+  isFreecamming = true;
   preFreecamInteractiveSlot = api.stores.me.inventory.activeInteractiveSlot;
   api.stores.me.inventory.activeInteractiveSlot = 0;
   const scene = api.stores.phaser.scene;
@@ -93,9 +97,12 @@ function startFreecam() {
   window.addEventListener("pointermove", onPointermove);
 }
 function toggleFreecam() {
-  isFreecamming = !isFreecamming;
-  if (isFreecamming) startFreecam();
-  else stopFreecam();
+  if (isFreecamming) stopFreecam();
+  else startFreecam();
+}
+function moveFreecam(x, y) {
+  freecamPos.x = x;
+  freecamPos.y = y;
 }
 var stopKeys = ["ArrowLeft", "ArrowUp", "ArrowDown", "ArrowRight"];
 for (const key of stopKeys) {
@@ -237,3 +244,10 @@ api.net.onLoad(() => {
   });
   api.onStop(() => commandLine.removeCommand("setzoom"));
 });
+export {
+  isFreecamming,
+  moveFreecam,
+  startFreecam,
+  stopFreecam,
+  toggleFreecam
+};
