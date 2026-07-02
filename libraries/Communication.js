@@ -2,13 +2,13 @@
  * @name Communication
  * @description Communication between different clients in 2D gamemodes
  * @author Gimloader Official
- * @version 0.5.0
+ * @version 0.5.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @webpage https://gimloader.github.io/libraries/Communication
  * @gamemode 2d
- * @changelog Added support for streaming strings and byte arrays
+ * @changelog Ignored communication angles visually
  * @isLibrary true
- * @signature Bel0DwI52fC21ZqC5s6wkfwBnHhvuI9qeWq4xTtyXGmreB3umM/bZstxd5XdXOjTAJRcIF1D1d8lybF25ztMCQ==
+ * @signature 6bSw7GMm95dIXbJZvVheMUsT7ZDmsZcFC3QQdr6Mw6IVeSdU/xDliohU+rzk1i/vTcwuQT2TJoTl+QBzmDvKBg==
  */
 
 // libraries/Communication/src/encoding.ts
@@ -218,10 +218,15 @@ var Messenger = class _Messenger {
     this.updateResolvers.set(char, resolve);
     return promise;
   }
-  static async handleAngle(char, angle) {
-    if (!angle) return;
-    if (char.id === api.stores.network.authId) return this.angleChangeRes?.();
+  static getBytes(char, angle) {
+    if (!angle) return null;
     const bytes = floatToBytes(angle);
+    if (this.updateResolvers.has(char) || this.callbacks.has(bytes.slice(0, 4).join(","))) {
+      return bytes;
+    }
+    return null;
+  }
+  static async handleBytes(char, bytes) {
     const resolve = this.updateResolvers.get(char);
     if (resolve) {
       const payload2 = bytes.slice(0, 7);
@@ -334,15 +339,29 @@ var Messenger = class _Messenger {
 };
 
 // libraries/Communication/src/index.ts
+function listenToCharacter(character) {
+  if (character.id === api.stores.network.authId) return;
+  api.patcher.before(character.aimingAndLookingAround, "setTargetAngle", (_, [angle]) => {
+    const netChar = api.net.state.characters.get(character.id);
+    const bytes = Messenger.getBytes(netChar, angle);
+    if (!bytes) return;
+    Messenger.handleBytes(netChar, bytes);
+    return true;
+  });
+}
 api.net.onLoad(() => {
   Messenger.init();
-  api.onStop(api.net.state.characters.onAdd((char) => {
-    api.onStop(
-      char.projectiles.listen("aimAngle", (angle) => {
-        Messenger.handleAngle(char, angle);
-      })
-    );
-  }));
+  const scene = api.stores.phaser.scene;
+  api.patcher.after(scene.characterManager, "addCharacter", (_, __, character) => {
+    listenToCharacter(character);
+  });
+  for (const character of scene.characterManager.characters.values()) {
+    listenToCharacter(character);
+  }
+  api.net.state.characters.get(api.stores.network.authId).projectiles.listen("aimAngle", (angle) => {
+    if (!angle) return;
+    Messenger.angleChangeRes?.();
+  }, false);
 });
 var Communication = class _Communication {
   #identifierString;
