@@ -2,13 +2,13 @@
  * @name Communication
  * @description Communication between different clients in 2D gamemodes
  * @author Gimloader Official
- * @version 0.5.1
+ * @version 0.5.2
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @webpage https://gimloader.github.io/libraries/Communication
  * @gamemode 2d
- * @changelog Ignored communication angles visually
+ * @changelog Fixed messages being dropped when sent while aiming
  * @isLibrary true
- * @signature 6bSw7GMm95dIXbJZvVheMUsT7ZDmsZcFC3QQdr6Mw6IVeSdU/xDliohU+rzk1i/vTcwuQT2TJoTl+QBzmDvKBg==
+ * @signature tLC4ir2MkWMXxzvSNnopaWcuNfLeQQ4NCEdV8Ub4utRFz59WTfnB9q/sVtjB7m456TgV2tTZIi7AsdpfJqXJBA==
  */
 
 // libraries/Communication/src/encoding.ts
@@ -58,7 +58,7 @@ var Messenger = class _Messenger {
   constructor(identifier) {
     this.identifier = identifier;
   }
-  static pendingAngle = 0;
+  static realAngle = 0;
   static angleChangeRes = null;
   static angleChangeRej = null;
   static angleQueue = [];
@@ -71,7 +71,7 @@ var Messenger = class _Messenger {
         this.ignoreNextAngle = false;
         return;
       }
-      this.pendingAngle = message.angle;
+      this.realAngle = message.angle;
       if (this.angleQueue.length > 0) editFn(null);
     });
     api.net.state.session.listen("phase", (phase) => {
@@ -82,6 +82,9 @@ var Messenger = class _Messenger {
       this.updatePromises.clear();
       this.updateResolvers.clear();
     }, false);
+  }
+  static get pendingAngle() {
+    return this.angleQueue[0]?.angle;
   }
   async sendBoolean(value) {
     await this.sendHeader(0 /* Boolean */, value ? 1 : 0);
@@ -185,8 +188,8 @@ var Messenger = class _Messenger {
       queuedAngle.resolve();
       this.angleQueue.shift();
     }
-    if (!this.pendingAngle) return;
-    api.net.send("AIMING", { angle: this.pendingAngle });
+    if (!this.realAngle) return;
+    api.net.send("AIMING", { angle: this.realAngle });
   }
   static async awaitAngleChange() {
     return new Promise((res, rej) => {
@@ -359,7 +362,7 @@ api.net.onLoad(() => {
     listenToCharacter(character);
   }
   api.net.state.characters.get(api.stores.network.authId).projectiles.listen("aimAngle", (angle) => {
-    if (!angle) return;
+    if (!angle || angle !== Messenger.pendingAngle) return;
     Messenger.angleChangeRes?.();
   }, false);
 });
