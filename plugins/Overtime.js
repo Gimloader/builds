@@ -7,7 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/Overtime
  * @hasSettings true
  * @gamemode 2d
- * @signature W59XHmIvpY46TeWO12R2+Gq5cCUJwDqV/hiw95w67aYCS74U+0HYHVav50ySi/lnB5geZlZy1DtJUkyM5bP4AA==
+ * @signature ZQ96cEJUFLZMXq3jB77otVmTP4LSxZbujFeqM+t8dfTm+gXGVDxZmYvEEb0Rdb6sJ1qM71tpmefNOSk0IOmiCQ==
  */
 
 // plugins/Overtime/src/index.ts
@@ -116,7 +116,7 @@ api.net.onLoad(async () => {
     }, false)
   );
   api.onStop(
-    api.net.state.session.listen("loadingPhase", (loading) => {
+    session.listen("loadingPhase", (loading) => {
       if (loading || session.gameSession.phase !== "game") return;
       const mapOptions2 = getMapOptions();
       if (!mapOptions2) return;
