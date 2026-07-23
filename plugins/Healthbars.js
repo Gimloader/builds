@@ -2,12 +2,13 @@
  * @name Healthbars
  * @description Adds healthbars underneath players' names
  * @author Gimloader Official
- * @version 0.1.6
+ * @version 1.0.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Healthbars.js
  * @webpage https://gimloader.github.io/plugins/Healthbars
+ * @needsLib CharacterLabels | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/CharacterLabels.js
  * @gamemode 2d
- * @changelog Updated webpage url
- * @signature Tg/b5loeBzdHakUw5imLRRVPhUyEuP9gqR0E8RxpLQuxDSJFN4b4QBOInDn0pwEHxy0LXJDPW//4lZ7MioBuAw==
+ * @changelog Used the CharacterLabels library
+ * @signature vBvYfnKUsQkB39hBCdya6l76bG0zkYyoN8MZEIz0AOgM4MX147s8st60mh/Pswsi5ApnEobyAYYHYfRnawSCBA==
  */
 
 // plugins/Healthbars/src/index.ts
@@ -23,45 +24,23 @@ api.net.onLoad(() => {
   const blue = 6853868;
   const red = 16711680;
   const gray = 5592405;
-  const addHealthbar = (character) => {
+  const addLabel = api.lib("CharacterLabels");
+  const destroy = addLabel((character) => {
+    const stateChar = api.net.state.characters.get(character.id);
+    if (!stateChar) return;
     const bg = scene.add.rectangle(0, 0, width, 10, gray);
     const health = scene.add.rectangle(0, 0, width, 10, red);
     const shield = scene.add.rectangle(0, 0, width, 10, blue);
     shield.setStrokeStyle(2, 16777215);
-    const stateChar = api.net.state.characters.get(character.id);
-    if (!stateChar) return;
-    const hp = stateChar.health;
-    const stopUpdate = api.patcher.after(character.nametag, "update", () => {
-      if (!character.nametag.tag) return;
-      let { x, y, depth } = character.nametag.tag;
-      y += 22;
-      bg.visible = health.visible = shield.visible = visible && !stateChar.isRespawning;
-      health.width = hp.health / hp.maxHealth * width;
-      shield.width = hp.shield / hp.maxShield * width;
-      bg.setDepth(depth);
-      bg.x = x;
-      bg.y = y;
-      health.setDepth(depth);
-      health.x = x;
-      health.y = y;
-      shield.setDepth(depth);
-      shield.x = x;
-      shield.y = y;
-    });
-    const stopDestroy = api.patcher.after(character, "destroy", destroy);
-    api.onStop(destroy);
-    function destroy() {
-      bg.destroy();
-      health.destroy();
-      shield.destroy();
-      stopUpdate();
-      stopDestroy();
-    }
-  };
-  api.patcher.after(scene.characterManager, "addCharacter", (_, __, character) => {
-    addHealthbar(character);
+    return {
+      gameObjects: [bg, health, shield],
+      update() {
+        const hp = stateChar.health;
+        health.width = hp.health / hp.maxHealth * width;
+        shield.width = hp.shield / hp.maxShield * width;
+        bg.visible = health.visible = shield.visible = visible;
+      }
+    };
   });
-  for (const character of scene.characterManager.characters.values()) {
-    addHealthbar(character);
-  }
+  api.onStop(destroy);
 });
