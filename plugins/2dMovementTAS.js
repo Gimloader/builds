@@ -2,14 +2,15 @@
  * @name 2dMovementTAS
  * @description Allows for making TASes of CTF and tag
  * @author Gimloader Official
- * @version 0.4.1
+ * @version 0.4.2
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/2dMovementTAS.js
  * @webpage https://gimloader.github.io/plugins/2dMovementTAS
  * @reloadRequired ingame
  * @gamemode ctf
  * @gamemode tag
- * @changelog Updated webpage url
- * @signature 1HFDmM9UAhiPVgIlEeBoWqloPkxqk5H/TejKzdhaHHk1xXUJ4K93KeR+e9r232bNIJ6JmJCg3pmhbA0NGjmoBw==
+ * @changelog Deprecated plugin
+ * @deprecated This plugin has been broken by changes to Gimkit and there are not currently any plans to fix it.
+ * @signature h9qIKhUz6ojeR0rT6keD3cXMvgwEfjSh6Z1KyjuNngmaQGDfe2D8S8lA78GFyjKoW5SQ/WYomv4OeLjKLsT9Ag==
  */
 
 // external-svelte:svelte
