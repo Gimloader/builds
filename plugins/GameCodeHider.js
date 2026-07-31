@@ -6,7 +6,7 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/GameCodeHider.js
  * @webpage https://gimloader.github.io/plugins/GameCodeHider
  * @changelog Fixed code not being hidden when building in Creative editor
- * @signature G4Uulee2gpoMzsLhv3Og1beeMzErNjfH4I8zkE4ByE7V0TDCkj2eb0AT4AtFIi+FtzDQ28HWpa2RqV75CdI3DQ==
+ * @signature tgUiCLdQl9ThLxFqsvG07itDtY6T78quq1BR71z93zK3ESbDVCxkVEA+TmI/2PovC3aLLY+bBeGD+UY18qymCQ==
  */
 
 // inject-css:plugins/GameCodeHider/src/styles.css
@@ -48,7 +48,7 @@ function updateHidden(value) {
   }
 }
 function CodeWrapper({ children, small, prefix = "" }) {
-  const React = GL.React;
+  const React = api.React;
   const [hidden, setHidden] = React.useState(api.storage.getValue("hidden", false));
   if (children.props?.showLargeCode) return children;
   const toggleHidden = (e) => {

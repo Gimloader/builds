@@ -9,7 +9,7 @@
  * @hasSettings true
  * @gamemode 2d
  * @changelog Exposed freecam functions for other scripts to use
- * @signature VPNLCDSbUYvfPOUHBW2/B8Z/ExWOlgE6jCkRvNrNWZyvQO9ghfIH9JPvrf53z/QuGOWEEsd4ityVdQnpmi1iBg==
+ * @signature iF5/416VgUOUW+vcvYDLyhT8trzvrJhUv2JMFuW+4LN/sN5wsmDdLDvB7kUj2o0+KMmmDN+L73QzgJz3GXM9CQ==
  */
 
 // plugins/CameraControl/src/settings.ts
@@ -71,11 +71,14 @@ function updateFreecam(dt) {
   scene.cameraHelper.goTo(freecamPos);
 }
 var preFreecamInteractiveSlot = 0;
+var unpatchCameraSize;
+var unpatchCameraFollowing;
 function stopFreecam() {
   if (!isFreecamming) return;
   isFreecamming = false;
   api.stores.me.inventory.activeInteractiveSlot = preFreecamInteractiveSlot;
-  GL.patcher.unpatchAll("CameraControl-helper");
+  unpatchCameraSize?.();
+  unpatchCameraFollowing?.();
   getCamera().useBounds = true;
   const charObj = api.stores.phaser.mainCharacter.body;
   api.stores.phaser.scene.cameraHelper.startFollowingObject({ object: charObj });
@@ -90,9 +93,9 @@ function startFreecam() {
   scene.cameraHelper.stopFollow();
   camera.useBounds = false;
   freecamPos = { x: camera.midPoint.x, y: camera.midPoint.y };
-  GL.patcher.instead("CameraControl-helper", scene.cameraHelper, "setCameraSizeParams", () => {
+  unpatchCameraSize = api.patcher.instead(scene.cameraHelper, "setCameraSizeParams", () => {
   });
-  GL.patcher.instead("CameraControl-helper", scene.cameraHelper, "startFollowingObject", () => {
+  unpatchCameraFollowing = api.patcher.instead(scene.cameraHelper, "startFollowingObject", () => {
   });
   window.addEventListener("pointermove", onPointermove);
 }

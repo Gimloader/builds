@@ -10,7 +10,7 @@
  * @gamemode fishtopia
  * @gamemode oneWayOut
  * @changelog Maybe fixed Fishtopia splits resetting
- * @signature OSvGsMvdML9MSWTZY/YiYjFz6BaAwYsQewsz5FkvdvFJV7j226d70b03L+V8cFqI+WC+8ATTAOUboQtSo4piBg==
+ * @signature UZs8Eks26c5fh/xmtdULrOhLHcAo+pvpVHa1USrsYEcgBKBZ6Wu6zAyVH25sbXJAXDVRQOoKoYXxqroz96HGBQ==
  */
 
 // external-svelte:svelte/internal/client
@@ -1167,17 +1167,7 @@ var DLDAutosplitter = class extends SplitsAutosplitter {
   constructor() {
     super("DLD");
     this.category = "Current Patch";
-    if (api.plugins.isEnabled("BringBackBoosts")) {
-      const bbbSettings = GL.storage.getValue("BringBackBoosts", "QS-Settings", {});
-      if (bbbSettings.useOriginalPhysics) {
-        this.category = "Original Physics";
-      } else {
-        this.category = "Creative Platforming Patch";
-      }
-    }
-    if (this.category === "Current Patch") {
-      this.data.ilPreboosts = false;
-    }
+    this.data.ilPreboosts = false;
     this.updateTimerAndUI();
     onPhysicsStep(() => {
       const input = api.stores.phaser.scene.inputManager.getPhysicsInput();

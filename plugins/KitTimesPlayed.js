@@ -7,7 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/KitTimesPlayed
  * @reloadRequired notingame
  * @changelog Updated webpage url
- * @signature mRbrisfZWiWCumfQmahyv9mofddXGC09lqRjzNXErUJw7h5SiCTP6ChjMKe+uKfJFjpeMZ8OqgUmHgg7elAjAw==
+ * @signature bgfj6TOTqa2uGi2/ocm4ays0OqiJhrwHrKB8UKmSk50pXhDcfBUBR1aGgfHV0/MWM6wj4xeHDSoZRG0qrV7eAg==
  */
 
 // shared/rewritingUtils.ts
@@ -52,13 +52,13 @@ function insert(code, match, string) {
 }
 
 // plugins/KitTimesPlayed/src/index.ts
+var isEnabled = api.rewriter.createShared("Enabled", true);
 api.rewriter.addParseHook("Container", (code) => {
   if (!code.includes("There are no kits in this folder.")) return code;
   const name = getSection(code, ".createdAt?`Created ${#(@.");
   const playCountString = `${name}.playCount`;
   const playCountInfo = `, \${${playCountString} ? \`played \${${playCountString}} \${${playCountString} === 1 ? "time" : "times"}\` : "never played"}`;
-  const isEnabledString = `GL.plugins.isEnabled("KitTimesPlayed")`;
-  return insert(code, ".createdAt).fromNow()}@`", `\${${isEnabledString} ? \`${playCountInfo}\` : ""}`);
+  return insert(code, ".createdAt).fromNow()}@`", `\${${isEnabled} ? \`${playCountInfo}\` : ""}`);
 });
 api.onStop(() => {
   if (location.pathname !== "/kits" && location.pathname !== "/gamemode") return;
