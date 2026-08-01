@@ -8,7 +8,7 @@
  * @gamemode 2d
  * @changelog Fixed messages being dropped when sent while aiming
  * @isLibrary true
- * @signature tLC4ir2MkWMXxzvSNnopaWcuNfLeQQ4NCEdV8Ub4utRFz59WTfnB9q/sVtjB7m456TgV2tTZIi7AsdpfJqXJBA==
+ * @signature PoH0SsHnVWA93CQMS4/sXqyXZfYM64Vbrk0l4FUlqFxPTQ2Xxe8CT1yBc82UZVt3TFF/fP35OuCKPVErbg+GDg==
  */
 
 // libraries/Communication/src/encoding.ts
@@ -314,7 +314,7 @@ var Messenger = class _Messenger {
         try {
           gotValue(JSON.parse(string));
         } catch (e) {
-          console.error("Failed to parse object message:", e);
+          api.logger.error("Failed to parse object message:", e);
         }
         return;
       }

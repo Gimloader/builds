@@ -8,7 +8,7 @@
  * @reloadRequired notingame
  * @hasSettings true
  * @changelog Fixed for gimloader v1.12.0
- * @signature rCZdqBwApatD4akLUqfZTzuc18HEU6r+T45v86Tx0eW3nNRlhp0H4YLwREvgcd4XkkZq7wRkLbOd0oqPuaGGCQ==
+ * @signature APOiDgVOevCl6uUhrN04iT/CGjOF7yTlY6XFkPfu2v120b6fylNfQBqwmLgMRsCE47VxeKK4RpUMDv/u06IdCw==
  */
 
 // shared/rewritingUtils.ts
@@ -206,7 +206,7 @@ if (root === "gamemode") {
         }
       }
     ]);
-  }, console.error);
+  }, api.logger.error);
   api.net.modifyFetchResponse("**/create", cleanup);
   api.onStop(() => {
     if (location.pathname.startsWith("/gamemode")) cleanup();

@@ -9,7 +9,7 @@
  * @hasSettings true
  * @gamemode dontLookDown
  * @changelog Allowed enabling mid-game
- * @signature Zb8vS0t65LIUkhTvkqf9+1SGtxjLWLT/f/KUT3XJBKeNASdIhwGGutotTZNF1jnAA4WT8ThGApvQ5OPVTJD4Cg==
+ * @signature j7RPnTlZWyKGGv14+Oibep49CdXuDAbUtCHpTOqLtWVonUQ1IAIVnEoG/XqPoq80PzSGGWVAHKlS67VZbNCZBQ==
  */
 
 // shared/rewritingUtils.ts
@@ -69,8 +69,8 @@ var originalAirMovement = {
 };
 api.net.onLoad(() => {
   settings.listen("useOriginalPhysics", (usingOriginalPhysics) => {
-    if (!GL.platformerPhysics) return;
-    GL.platformerPhysics.movement.air = usingOriginalPhysics ? originalAirMovement : defaultAirMovement;
+    if (!api.platformerPhysics) return;
+    api.platformerPhysics.movement.air = usingOriginalPhysics ? originalAirMovement : defaultAirMovement;
   }, true);
 });
 var calcGravity = null;
@@ -84,9 +84,9 @@ var calcMovementVelocity = api.rewriter.createShared("CalcMovmentVel", (A, t) =>
   };
   let e = 0, i = 0;
   const s = null == t ? void 0 : t.angle, g = null !== s && (s < 90 || s > 270) ? "right" : null !== s && s > 90 && s < 270 ? "left" : "none", C = n.default.me.movementSpeed / a.default.normal;
-  let h = GL.platformerPhysics.platformerGroundSpeed * C;
+  let h = api.platformerPhysics.platformerGroundSpeed * C;
   if (A.physics.state.jump.isJumping) {
-    const t2 = Math.min(GL.platformerPhysics.jump.airSpeedMinimum.maxSpeed, h * GL.platformerPhysics.jump.airSpeedMinimum.multiplier);
+    const t2 = Math.min(api.platformerPhysics.jump.airSpeedMinimum.maxSpeed, h * api.platformerPhysics.jump.airSpeedMinimum.multiplier);
     h = Math.max(t2, A.physics.state.jump.xVelocityAtJumpStart);
   }
   let l = 0;
@@ -95,11 +95,11 @@ var calcMovementVelocity = api.rewriter.createShared("CalcMovmentVel", (A, t) =>
   if (g !== A.physics.state.movement.direction && (B && 0 !== A.physics.state.movement.xVelocity && (A.physics.state.movement.xVelocity = 0), A.physics.state.movement.accelerationTicks = 0, A.physics.state.movement.direction = g), A.physics.state.movement.xVelocity !== l) {
     A.physics.state.movement.accelerationTicks += 1;
     let t2 = 0, i2 = 0;
-    A.physics.state.grounded ? B ? (t2 = GL.platformerPhysics.movement.ground.accelerationSpeed, i2 = GL.platformerPhysics.movement.ground.maxAccelerationSpeed) : t2 = GL.platformerPhysics.movement.ground.decelerationSpeed : B ? (t2 = GL.platformerPhysics.movement.air.accelerationSpeed, i2 = GL.platformerPhysics.movement.air.maxAccelerationSpeed) : t2 = GL.platformerPhysics.movement.air.decelerationSpeed;
+    A.physics.state.grounded ? B ? (t2 = api.platformerPhysics.movement.ground.accelerationSpeed, i2 = api.platformerPhysics.movement.ground.maxAccelerationSpeed) : t2 = api.platformerPhysics.movement.ground.decelerationSpeed : B ? (t2 = api.platformerPhysics.movement.air.accelerationSpeed, i2 = api.platformerPhysics.movement.air.maxAccelerationSpeed) : t2 = api.platformerPhysics.movement.air.decelerationSpeed;
     const s2 = 20 / I.PhysicsConstants.tickRate;
     t2 *= A.physics.state.movement.accelerationTicks * s2, i2 && (t2 = Math.min(i2, t2)), e = l > A.physics.state.movement.xVelocity ? Phaser.Math.Clamp(A.physics.state.movement.xVelocity + t2, A.physics.state.movement.xVelocity, l) : Phaser.Math.Clamp(A.physics.state.movement.xVelocity - t2, l, A.physics.state.movement.xVelocity);
   } else e = l;
-  return A.physics.state.grounded && A.physics.state.velocity.y > GL.platformerPhysics.platformerGroundSpeed * C && Math.sign(e) === Math.sign(A.physics.state.velocity.x) && (e = A.physics.state.velocity.x), A.physics.state.movement.xVelocity = e, A.physics.state.gravity = calcGravity?.(A.id), i += A.physics.state.gravity, A.physics.state.forces.forEach((A2, _t) => {
+  return A.physics.state.grounded && A.physics.state.velocity.y > api.platformerPhysics.platformerGroundSpeed * C && Math.sign(e) === Math.sign(A.physics.state.velocity.x) && (e = A.physics.state.velocity.x), A.physics.state.movement.xVelocity = e, A.physics.state.gravity = calcGravity?.(A.id), i += A.physics.state.gravity, A.physics.state.forces.forEach((A2, _t) => {
     const s2 = A2.ticks[0];
     s2 && (e += s2.x, i += s2.y), A2.ticks.shift();
   }), {
