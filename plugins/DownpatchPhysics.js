@@ -9,10 +9,10 @@
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @hasSettings true
  * @gamemode 2d
- * @signature 7OsbV+WyecIhyxaI7cTo7ZaUetLDU5Rm4ddjTzNa2gDqbVnlOcoMuIFIZoIf8JgV8VyHfhm/gAdPfH2QRe9gBg==
+ * @signature aeBcLsIebHngu7xmEnUHR7AIMqp2jEnR1OX7ZOMmI06Ssi8B8FOUbnKbtNga7EFqNy+9o57N9XwVNn4s5cJ0DQ==
  */
 
-// node_modules/@dimforge/rapier2d-compat/rapier.es.js
+// node_modules/@dimforge/rapier2d-compat-old/rapier.es.js
 var A;
 var I = new Array(32).fill(void 0);
 function g(A2) {
@@ -4251,8 +4251,9 @@ api.net.onLoad(() => {
   function sK(g2) {
     var r2;
     let t2 = WA2(g2.characterId);
-    if (!t2)
+    if (!t2) {
       return;
+    }
     let e2 = Fe() && !wr(), I2 = t2.physics.state.grounded;
     g2.reconciliation || (i9({
       characterId: t2.id
@@ -4281,8 +4282,9 @@ api.net.onLoad(() => {
         let B2 = b5({
           characterId: t2.id
         });
-        if (!B2)
+        if (!B2) {
           return;
+        }
         let { headCollisions: E2, groundCollisions: n2, slidingCollisions: Q2, numOfAllCollisions: l2 } = B2, c2 = U5({
           characterId: t2.id,
           groundCollisions: n2,
@@ -4310,70 +4312,66 @@ api.net.onLoad(() => {
   }
   function i9(g2) {
     let { characterId: t2 } = g2;
-    if (t2 !== ee())
+    if (t2 !== ee()) {
       return;
+    }
     let e2 = WA2(t2);
     e2 && e2.physics.lastClassDeviceActivationId !== k2.me.classDesigner.lastClassDeviceActivationId && (e2.physics.lastClassDeviceActivationId = k2.me.classDesigner.lastClassDeviceActivationId, k2.me.classDesigner.activeClassDeviceId = k2.me.classDesigner.lastActivatedClassDeviceId);
   }
   function X5(g2) {
     let { characterId: t2 } = g2, e2 = WA2(t2);
-    if (!e2 || e2.physics.lastTerrainUpdateId === k2.world.terrain.currentTerrainUpdateId)
+    if (!e2 || e2.physics.lastTerrainUpdateId === k2.world.terrain.currentTerrainUpdateId) {
       return;
+    }
     let I2 = e2.physics.getBody();
     for (let o2 = e2.physics.lastTerrainUpdateId + 1; o2 <= k2.world.terrain.currentTerrainUpdateId; o2++) {
       let s2 = k2.world.terrain.queuedTiles.get(o2);
-      s2 && s2.removedBodyIds.forEach(
-        (r2) => {
-          I2.character.ignoredTileBodies.add(r2);
-        }
-      );
+      s2 && s2.removedBodyIds.forEach((r2) => {
+        I2.character.ignoredTileBodies.add(r2);
+      });
     }
     e2.physics.lastTerrainUpdateId = k2.world.terrain.currentTerrainUpdateId;
   }
   function V5(g2) {
-    g2.physics.state.forces = g2.physics.state.forces.filter(
-      (t2) => {
-        var e2, I2;
-        return !(!((e2 = t2.ticks) != null && e2.length) || (I2 = t2 == null ? void 0 : t2.disableFlags) != null && I2.length && t2.disableFlags.includes("grounded") && g2.physics.state.grounded);
-      }
-    );
+    g2.physics.state.forces = g2.physics.state.forces.filter((t2) => {
+      var e2, I2;
+      return !(!((e2 = t2.ticks) != null && e2.length) || (I2 = t2 == null ? void 0 : t2.disableFlags) != null && I2.length && t2.disableFlags.includes("grounded") && g2.physics.state.grounded);
+    });
   }
   function t9(g2) {
     let { characterId: t2 } = g2, e2 = WA2(t2);
-    if (!e2)
+    if (!e2) {
       return;
+    }
     let I2 = /* @__PURE__ */ new Set(), o2 = Date.now();
-    e2.physics.projectileHitForcesHistory.forEach(
-      (s2, r2) => {
-        s2 + 1e3 > o2 || I2.add(r2);
-      }
-    ), I2.forEach(
-      (s2) => {
-        e2.physics.projectileHitForcesHistory.delete(s2);
-      }
-    );
+    e2.physics.projectileHitForcesHistory.forEach((s2, r2) => {
+      s2 + 1e3 > o2 || I2.add(r2);
+    }), I2.forEach((s2) => {
+      e2.physics.projectileHitForcesHistory.delete(s2);
+    });
   }
   function A9(g2) {
     let { characterId: t2 } = g2;
-    if (t2 !== ee())
+    if (t2 !== ee()) {
       return;
+    }
     let e2 = WA2(t2);
-    e2 && (e2.physics.projectileHitForcesQueue.forEach(
-      (I2) => {
-        e2.physics.projectileHitForcesHistory.has(I2) || z5({
-          characterId: t2,
-          projectileId: I2
-        });
-      }
-    ), e2.physics.projectileHitForcesQueue.clear());
+    e2 && (e2.physics.projectileHitForcesQueue.forEach((I2) => {
+      e2.physics.projectileHitForcesHistory.has(I2) || z5({
+        characterId: t2,
+        projectileId: I2
+      });
+    }), e2.physics.projectileHitForcesQueue.clear());
   }
   function z5(g2) {
     let t2 = scene.worldManager.projectiles.projectileJSON.get(g2.projectileId);
-    if (!t2)
+    if (!t2) {
       return;
+    }
     let e2 = WA2(g2.characterId);
-    if (!e2 || e2.physics.projectileHitForcesHistory.has(t2.id))
+    if (!e2 || e2.physics.projectileHitForcesHistory.has(t2.id)) {
       return;
+    }
     e2.physics.projectileHitForcesHistory.set(t2.id, Date.now()), e2.physics.justAppliedProjectileHitForces.add(t2.id);
     let I2 = Z5({
       projectile: t2,
@@ -4398,11 +4396,12 @@ api.net.onLoad(() => {
     e2.physics.state.grounded && Fe() && (lo.platformerGrounded.notWhenWithin.some(([E2, n2]) => o2 > E2 && o2 < n2) || (o2 > PI / 2 && o2 < 3 * PI / 2 ? o2 = lo.platformerGrounded.leftAngle : o2 = lo.platformerGrounded.rightAngle));
     let s2 = Math.min(lo.maximumForce, lo.initialForceFactor * (t2.damage + k2.me.health.fragility));
     let r2 = [];
-    for (; s2 > lo.minimumForce; )
+    for (; s2 > lo.minimumForce; ) {
       r2.push({
         x: Math.cos(o2) * Math.min(lo.maximumTickForce, s2),
         y: Math.sin(o2) * Math.min(lo.maximumTickForce, s2)
       }), s2 *= lo.forceTickMultiplier;
+    }
     return r2;
   }
   function lJ(g2) {
@@ -4418,22 +4417,19 @@ api.net.onLoad(() => {
   }
   function Iy(g2) {
     let { character: t2 } = g2, e2 = t2.physics.getBody();
-    if (!e2 || !e2.character)
+    if (!e2 || !e2.character) {
       return;
+    }
     let I2 = e2.character.ignoredStaticBodies;
-    if (!I2.size && !g2.reset)
+    if (!I2.size && !g2.reset) {
       return;
+    }
     let o2 = /* @__PURE__ */ new Set(), s2 = Lr(t2.id), { bodies: r2 } = Ve();
-    Ve().world.intersectionsWithShape(
-      e2.rigidBody.translation(),
-      0,
-      new xI.Capsule(s2.height, s2.radius),
-      (B2) => {
-        var l2;
-        let E2 = B2.parent().userData, n2 = E2 == null ? void 0 : E2.id, Q2 = r2.find(n2);
-        return Q2 != null && Q2.character || (l2 = Q2 == null ? void 0 : Q2.terrain) != null && l2.removed || n2 && (g2.reset || I2.has(n2)) && o2.add(n2), true;
-      }
-    ), e2.character.ignoredStaticBodies = o2;
+    Ve().world.intersectionsWithShape(e2.rigidBody.translation(), 0, new xI.Capsule(s2.height, s2.radius), (B2) => {
+      var l2;
+      let E2 = B2.parent().userData, n2 = E2 == null ? void 0 : E2.id, Q2 = r2.find(n2);
+      return Q2 != null && Q2.character || (l2 = Q2 == null ? void 0 : Q2.terrain) != null && l2.removed || n2 && (g2.reset || I2.has(n2)) && o2.add(n2), true;
+    }), e2.character.ignoredStaticBodies = o2;
   }
   function Lr(g2) {
     let t2 = scene.characterManager.characters.get(g2), e2 = (t2 == null ? void 0 : t2.scale.baseScale) ?? 1;
@@ -4449,8 +4445,9 @@ api.net.onLoad(() => {
   }
   function _5(g2) {
     let { characterId: t2, jumpKeyPressed: e2 } = g2, I2 = WA2(t2);
-    if (!I2 || (I2.physics.state.jump.actuallyJumped = false, I2.physics.state.jump.jumpTicks += 1, e2 === void 0))
+    if (!I2 || (I2.physics.state.jump.actuallyJumped = false, I2.physics.state.jump.jumpTicks += 1, e2 === void 0)) {
       return;
+    }
     if (I2.physics.state.grounded) {
       I2.physics.state.jump.isJumping = false;
       let { maxJumps: r2 } = dJ({
@@ -4485,31 +4482,37 @@ api.net.onLoad(() => {
   }
   function uJ(g2) {
     let { characterId: t2 } = g2;
-    if (t2 !== ee() || k2.me.classDesigner.activeClassDeviceId === void 0)
+    if (t2 !== ee() || k2.me.classDesigner.activeClassDeviceId === void 0) {
       return;
+    }
     let e2 = _i(k2.me.classDesigner.activeClassDeviceId);
-    if (!e2)
+    if (!e2) {
       return;
+    }
     let I2 = e2.options;
-    if (I2)
+    if (I2) {
       return I2;
+    }
   }
   function fe() {
     var e2, I2;
     let g2 = k2.world.mapOptionsJSON;
-    if (g2)
+    if (g2) {
       return JSON.parse(g2);
+    }
     let t2 = (I2 = (e2 = vI()) == null ? void 0 : e2.state) == null ? void 0 : I2.mapSettings;
-    if (t2)
+    if (t2) {
       return JSON.parse(t2);
+    }
   }
   const xp = /* @__PURE__ */ new Map();
   function v5(g2, t2) {
     let e2 = dJ({
       characterId: g2.id
     }), o2 = g2.physics.state.jump.jumpCounter === 0 && !t2 ? e2.jumpHeight : e2.jumpHeight * e2.subsequentJumpMultiplier;
-    if (xp.has(o2))
+    if (xp.has(o2)) {
       return [...xp.get(o2)];
+    }
     let r2 = Math.round(e2.jumpDurationMS / (1e3 / gi.tickRate)), B2 = T5({
       count: o2,
       numTicks: r2,
@@ -4588,26 +4591,28 @@ api.net.onLoad(() => {
       g2.physics.state.grounded ? c2 ? (d2 = we.movement.ground.accelerationSpeed, y2 = we.movement.ground.maxAccelerationSpeed) : d2 = we.movement.ground.decelerationSpeed : c2 ? (d2 = we.movement.air.accelerationSpeed, y2 = we.movement.air.maxAccelerationSpeed) : d2 = we.movement.air.decelerationSpeed;
       let N2 = 20 / gi.tickRate;
       d2 *= g2.physics.state.movement.accelerationTicks * N2, y2 && (d2 = Math.min(y2, d2)), l2 > g2.physics.state.movement.xVelocity ? e2 = Phaser.Math.Clamp(g2.physics.state.movement.xVelocity + d2, g2.physics.state.movement.xVelocity, l2) : e2 = Phaser.Math.Clamp(g2.physics.state.movement.xVelocity - d2, l2, g2.physics.state.movement.xVelocity);
-    } else
+    } else {
       e2 = l2;
-    return g2.physics.state.grounded && g2.physics.state.velocity.y > we.platformerGroundSpeed * E2 && Math.sign(e2) === Math.sign(g2.physics.state.velocity.x) && (e2 = g2.physics.state.velocity.x), g2.physics.state.movement.xVelocity = e2, g2.physics.state.gravity = $5(g2.id), I2 += g2.physics.state.gravity, g2.physics.state.forces.forEach(
-      (d2) => {
-        let y2 = d2.ticks[0];
-        y2 && (e2 += y2.x, I2 += y2.y), d2.ticks.shift();
-      }
-    ), {
+    }
+    return g2.physics.state.grounded && g2.physics.state.velocity.y > we.platformerGroundSpeed * E2 && Math.sign(e2) === Math.sign(g2.physics.state.velocity.x) && (e2 = g2.physics.state.velocity.x), g2.physics.state.movement.xVelocity = e2, g2.physics.state.gravity = $5(g2.id), I2 += g2.physics.state.gravity, g2.physics.state.forces.forEach((d2) => {
+      let y2 = d2.ticks[0];
+      y2 && (e2 += y2.x, I2 += y2.y), d2.ticks.shift();
+    }), {
       x: e2,
       y: I2
     };
   }
   function $5(g2) {
     let t2 = WA2(g2);
-    if (!t2)
+    if (!t2) {
       return 0;
-    if (t2.physics.state.grounded || t2.physics.state.groundedTicks < q5)
+    }
+    if (t2.physics.state.grounded || t2.physics.state.groundedTicks < q5) {
       return we.groundedGravity;
-    if (t2.physics.state.forces.some((s2) => s2.id === "jump"))
+    }
+    if (t2.physics.state.forces.some((s2) => s2.id === "jump")) {
       return 0;
+    }
     let o2 = H5(g2);
     return Math.min(o2.maxGravity, t2.physics.state.gravity += o2.airGravity);
   }
@@ -4639,28 +4644,29 @@ api.net.onLoad(() => {
       let r2 = s2 * o2, B2 = Phaser.Math.DegToRad(t2.angle);
       e2 = Math.cos(B2) * r2, I2 = Math.sin(B2) * r2;
     }
-    return g2.physics.state.forces.forEach(
-      (o2) => {
-        let s2 = o2.ticks[0];
-        s2 && (e2 += s2.x, I2 += s2.y), o2.ticks.shift();
-      }
-    ), e2 = Math.round(e2 * 1e3) / 1e3, I2 = Math.round(I2 * 1e3) / 1e3, {
+    return g2.physics.state.forces.forEach((o2) => {
+      let s2 = o2.ticks[0];
+      s2 && (e2 += s2.x, I2 += s2.y), o2.ticks.shift();
+    }), e2 = Math.round(e2 * 1e3) / 1e3, I2 = Math.round(I2 * 1e3) / 1e3, {
       x: e2,
       y: I2
     };
   }
   function K5(g2) {
     let { characterId: t2, velocity: e2 } = g2, I2 = WA2(t2);
-    if (!I2)
+    if (!I2) {
       return;
+    }
     let { collider: o2, character: { controller: s2 } } = I2.physics.getBody();
-    if (!s2 || !o2)
+    if (!s2 || !o2) {
       return;
-    if (o2.setTranslation(o2.parent().translation()), e2.x === 0 && e2.y === 0)
+    }
+    if (o2.setTranslation(o2.parent().translation()), e2.x === 0 && e2.y === 0) {
       return {
         x: 0,
         y: 0
       };
+    }
     s2.computeColliderMovement(
       o2,
       {
@@ -4683,39 +4689,46 @@ api.net.onLoad(() => {
   function M5(g2) {
     var r2, B2, E2, n2, Q2;
     let { character: t2, otherCollider: e2 } = g2, I2 = e2.parent().userData, o2 = I2 == null ? void 0 : I2.id;
-    if (!o2)
+    if (!o2) {
       return true;
+    }
     let s2 = Ve().bodies.find(o2);
-    if (!s2 || s2.character || s2.sensor || (B2 = (r2 = t2.physics.getBody()) == null ? void 0 : r2.character) != null && B2.ignoredStaticBodies.has(o2) || (Q2 = (n2 = (E2 = t2.physics.getBody()) == null ? void 0 : E2.character) == null ? void 0 : n2.ignoredTileBodies) != null && Q2.has(o2) || N5(s2))
+    if (!s2 || s2.character || s2.sensor || (B2 = (r2 = t2.physics.getBody()) == null ? void 0 : r2.character) != null && B2.ignoredStaticBodies.has(o2) || (Q2 = (n2 = (E2 = t2.physics.getBody()) == null ? void 0 : E2.character) == null ? void 0 : n2.ignoredTileBodies) != null && Q2.has(o2) || N5(s2)) {
       return false;
+    }
     if (s2.device) {
       let l2 = _i(s2.device.id);
-      if (l2 && !l2.checkIfCollidersEnabled())
+      if (l2 && !l2.checkIfCollidersEnabled()) {
         return false;
+      }
     }
     return !t2.physics.phase;
   }
   function F5(g2) {
     let { characterY: t2 } = g2;
-    if (!Fe())
+    if (!Fe()) {
       return t2;
+    }
     let e2 = k2.world.height * se.height - 2 * se.height - Si(we.capsule.platformer.height + we.capsule.platformer.radius);
     return Math.min(t2, e2);
   }
   function N5(g2) {
     var e2, I2;
-    if (!((e2 = g2.device) != null && e2.id))
+    if (!((e2 = g2.device) != null && e2.id)) {
       return false;
+    }
     let t2 = scene.worldManager.devices.getDeviceById((I2 = g2.device) == null ? void 0 : I2.id);
     return t2 ? t2.parts.manuallyHiding : false;
   }
   function b5(g2) {
     let t2 = WA2(g2.characterId);
-    if (!t2)
+    if (!t2) {
       return;
+    }
     let e2 = t2.physics.getBody().character.controller;
-    if (!e2)
+    if (!e2) {
       return;
+    }
     let I2 = e2.numComputedCollisions(), o2 = [], s2 = [], r2 = [];
     for (let B2 = 0; B2 < I2; B2++) {
       let E2 = e2.computedCollision(B2), n2 = E2 == null ? void 0 : E2.normal1;
@@ -4730,11 +4743,13 @@ api.net.onLoad(() => {
   }
   function U5(g2) {
     let { characterId: t2, groundCollisions: e2, numOfAllCollisions: I2 } = g2, o2 = WA2(t2);
-    if (!o2)
+    if (!o2) {
       return false;
+    }
     let s2 = o2.physics.getBody().character.controller;
-    if (!s2)
+    if (!s2) {
       return false;
+    }
     let B2 = e2.length > 0;
     let E2 = s2.computedGrounded();
     return E2 !== B2 && (I2 || (B2 = E2)), B2;
@@ -4742,11 +4757,13 @@ api.net.onLoad(() => {
   function L5(g2) {
     var l2, c2;
     let { characterId: t2, isGrounded: e2, groundCollisions: I2, slideCollisions: o2 } = g2;
-    if (!Fe() || wr())
+    if (!Fe() || wr()) {
       return 0;
+    }
     let s2 = WA2(t2);
-    if (!s2 || !e2 && !o2.length)
+    if (!s2 || !e2 && !o2.length) {
       return 0;
+    }
     let { radius: r2 } = Lr(s2.id);
     let B2 = 0;
     (I2 == null ? void 0 : I2.length) === 1 && ((c2 = (l2 = I2[0]) == null ? void 0 : l2.normal1) != null && c2.x) && (B2 = r2);
@@ -4754,11 +4771,9 @@ api.net.onLoad(() => {
       x: (s2.body.x - B2) / ce.worldScale,
       y: s2.body.y / ce.worldScale
     }, n2 = [];
-    s2.physics.getBody().character.ignoredStaticBodies.forEach(
-      (h2) => {
-        n2.push(h2);
-      }
-    );
+    s2.physics.getBody().character.ignoredStaticBodies.forEach((h2) => {
+      n2.push(h2);
+    });
     let { hit: Q2 } = Ia({
       start: E2,
       end: {
@@ -4785,20 +4800,14 @@ api.net.onLoad(() => {
       y: e2.y - t2.y
     }, E2 = new xI.Ray(t2, B2);
     let n2;
-    return o2.intersectionsWithRay(
-      E2,
-      1,
-      true,
-      (Q2) => {
-        var h2, d2, y2, N2, m2;
-        let l2 = (h2 = Q2.collider.parent().userData) == null ? void 0 : h2.id, c2 = s2.find(l2);
-        return I2 && (c2 != null && c2.character) || c2 != null && c2.sensor || c2 != null && c2.device && ((y2 = g2.ignoredDevicesIds) != null && y2.includes((d2 = c2 == null ? void 0 : c2.device) == null ? void 0 : d2.id)) || c2 != null && c2.device && !_i((N2 = c2 == null ? void 0 : c2.device) == null ? void 0 : N2.id).checkIfCollidersEnabled() || g2.ignoredBodyIds && g2.ignoredBodyIds.includes(l2) || (m2 = c2 == null ? void 0 : c2.terrain) != null && m2.removed ? true : n2 ? (Q2.toi < n2.toi && (n2 = Q2), true) : (n2 = Q2, true);
-      },
-      g2.skipCharacters ? (
-        /* NB.EXCLUDE_DYNAMIC */
-        4
-      ) : void 0
-    ), {
+    return o2.intersectionsWithRay(E2, 1, true, (Q2) => {
+      var h2, d2, y2, N2, m2;
+      let l2 = (h2 = Q2.collider.parent().userData) == null ? void 0 : h2.id, c2 = s2.find(l2);
+      return I2 && (c2 != null && c2.character) || c2 != null && c2.sensor || c2 != null && c2.device && ((y2 = g2.ignoredDevicesIds) != null && y2.includes((d2 = c2 == null ? void 0 : c2.device) == null ? void 0 : d2.id)) || c2 != null && c2.device && !_i((N2 = c2 == null ? void 0 : c2.device) == null ? void 0 : N2.id).checkIfCollidersEnabled() || g2.ignoredBodyIds && g2.ignoredBodyIds.includes(l2) || (m2 = c2 == null ? void 0 : c2.terrain) != null && m2.removed ? true : n2 ? (Q2.toi < n2.toi && (n2 = Q2), true) : (n2 = Q2, true);
+    }, g2.skipCharacters ? (
+      /* NB.EXCLUDE_DYNAMIC */
+      4
+    ) : void 0), {
       ray: E2,
       hit: n2
     };
@@ -4812,8 +4821,9 @@ api.net.onLoad(() => {
   }
   function R5(g2) {
     let { characterId: t2, movement: e2, velocity: I2 } = g2, o2 = WA2(t2);
-    if (!o2)
+    if (!o2) {
       return;
+    }
     let { rigidBody: s2 } = o2.physics.getBody();
     if (s2) {
       if (Fe() && !wr()) {
