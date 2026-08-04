@@ -2,15 +2,14 @@
  * @name DownpatchPhysics
  * @description Restore physics to how it functioned in older versions of Gimkit
  * @author Gimloader Official
- * @version 0.1.1
+ * @version 0.1.2
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/DownpatchPhysics.js
  * @webpage https://gimloader.github.io/plugins/DownpatchPhysics
- * @reloadRequired ingame
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @hasSettings true
  * @gamemode 2d
  * @changelog Accomodated new Gimkit update
- * @signature 6wxYD4V07r3Ybzzfligjl5uD1/xR9wjvfzaadRVwE/EdIqKBxaRNc1vq1lk7wN9oQcVH1Gv+gRDNbOn2d/VvDg==
+ * @signature j3G16p/5A0AFWqMbIqjXT/tsbp4D99oieS/0OKjIvlu2mZ88kBJQcHKdDiaX49NqqKcoH2n0IQ1SG4Q4vXLsCA==
  */
 
 // plugins/DownpatchPhysics/src/consts.ts
