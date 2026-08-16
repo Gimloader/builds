@@ -2,14 +2,14 @@
  * @name Savestates
  * @description Allows you to save and load states/summits in Don't Look Down. Only client side, nobody else can see you move.
  * @author Gimloader Official
- * @version 0.5.1
+ * @version 0.5.2
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Savestates.js
  * @webpage https://gimloader.github.io/plugins/Savestates
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
- * @changelog Updated webpage url
- * @signature SBygiMLVe+wqNRQ40nXA2NBGW9ef6460LYMlO5m62avxO1htDQReo4Ac+qSIRwA2UI0HypODZ+8ZSdgV7ZbfCw==
+ * @changelog Fixed for new physics
+ * @signature JQFw0WFfJzxZmdni/B/Yi2Ktqp3UmjmQ5Jnjkz/rOzHVGYKLFF58T5kEphPOHp5J3Dx1zA0I/jwrysG9hPOgDA==
  */
 
 // shared/consts.ts
@@ -22,6 +22,7 @@ var summitCoords = [
   { x: 356.540008544921, y: 351.6600036621 },
   { x: 401.269989013671, y: 285.73999023437 }
 ];
+var defaultState = '{"actualMovement":{"x":0,"y":0},"movement":{"direction":"none","xVelocity":0,"accelerationTicks":0},"jump":{"isJumping":false,"jumpsLeft":2,"jumpCounter":0,"jumpTicks":291,"xVelocityAtJumpStart":0,"lastJumpGravityMultiplier":1},"wallJump":{"ticks":-1,"transitionTicks":-1,"forceInputTicks":0,"slidingTicks":0,"jumpBuffer":[],"inputVelocityX":0},"forces":[],"gravityZones":[],"inertia":{"x":0,"y":0},"velocity":{"x":0,"y":0.001},"cancelInertiaOnNextGrounded":false,"inputVelocityControlFactor":1,"lastUsedVelocityToCalculateMovement":{"x":0,"y":0.001},"grounded":true,"sliding":false,"groundedTicks":0,"lastGroundedAngle":0}';
 
 // plugins/Savestates/src/states.ts
 var defaultName = "Main";
@@ -85,7 +86,6 @@ function renameState(name, newName) {
 
 // plugins/Savestates/src/index.ts
 var desync = api.plugin("Desynchronize");
-var defaultState = '{"gravity":0.001,"velocity":{"x":0,"y":0},"movement":{"direction":"none","xVelocity":0,"accelerationTicks":0},"jump":{"isJumping":false,"jumpsLeft":2,"jumpCounter":0,"jumpTicks":118,"xVelocityAtJumpStart":0},"forces":[],"grounded":true,"groundedTicks":0,"lastGroundedAngle":0}';
 var stateLoadCallbacks = [];
 upgradeFromLegacy();
 var tp = (summit) => {
@@ -118,6 +118,10 @@ var loadState = () => {
   const selectedState = getSelectedState();
   if (!selectedState) {
     api.UI.notification.error({ message: "You don't have any states, create a state with Gimloader commands", duration: 2 });
+    return;
+  }
+  if (!selectedState.state.includes("wallJump")) {
+    api.UI.notification.error({ message: "This state was saved on a previous version of Gimkit and cannot be loaded now." });
     return;
   }
   const { rb, physics } = getPhysics();

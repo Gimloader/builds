@@ -2,13 +2,13 @@
  * @name DLDTAS
  * @description Allows you to create TASes for Dont Look Down
  * @author Gimloader Official
- * @version 0.6.0
+ * @version 0.6.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/DLDTAS.js
  * @webpage https://gimloader.github.io/plugins/DLDTAS
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
- * @changelog Added a command for jumping to any frame
- * @signature 1lDGUelB0dm4gX9WvWfMcMhAnVSgBZ4ZTilekZR4yKFz94M1vGBv1AiK/sdogcy7tdOyIjlyNJJFe1psJDOWAg==
+ * @changelog Fixed for new physics
+ * @signature 8ioDJ4gta+mULo/o6b6voGwPDyIakR2/U3QiZJ0PZ05qULMhG8NlwVKsFRedcbbVadTz4D+hluxRzLVhE7BKCA==
  */
 
 // inject-css:plugins/DLDTAS/src/styles.css
@@ -289,7 +289,6 @@ function updateLasers(frame) {
 }
 
 // plugins/DLDTAS/src/util.ts
-var defaultState = '{"gravity":0.001,"velocity":{"x":0,"y":0},"movement":{"direction":"none","xVelocity":0,"accelerationTicks":0},"jump":{"isJumping":false,"jumpsLeft":2,"jumpCounter":0,"jumpTicks":118,"xVelocityAtJumpStart":0},"forces":[],"grounded":true,"groundedTicks":0,"lastGroundedAngle":0}';
 function generatePhysicsInput(frame, lastFrame) {
   const jump = frame.up && !lastFrame?.up;
   let angle = null;
@@ -321,6 +320,9 @@ function save(frames2) {
   api.storage.setValue("frames", saveList);
   return saveList;
 }
+
+// shared/consts.ts
+var defaultState = '{"actualMovement":{"x":0,"y":0},"movement":{"direction":"none","xVelocity":0,"accelerationTicks":0},"jump":{"isJumping":false,"jumpsLeft":2,"jumpCounter":0,"jumpTicks":291,"xVelocityAtJumpStart":0,"lastJumpGravityMultiplier":1},"wallJump":{"ticks":-1,"transitionTicks":-1,"forceInputTicks":0,"slidingTicks":0,"jumpBuffer":[],"inputVelocityX":0},"forces":[],"gravityZones":[],"inertia":{"x":0,"y":0},"velocity":{"x":0,"y":0.001},"cancelInertiaOnNextGrounded":false,"inputVelocityControlFactor":1,"lastUsedVelocityToCalculateMovement":{"x":0,"y":0.001},"grounded":true,"sliding":false,"groundedTicks":0,"lastGroundedAngle":0}';
 
 // plugins/DLDTAS/src/tools.ts
 var TASTools = class {
