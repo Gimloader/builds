@@ -8,7 +8,7 @@
  * @gamemode 2d
  * @changelog Fixed messages being dropped when sent while aiming
  * @isLibrary true
- * @signature PoH0SsHnVWA93CQMS4/sXqyXZfYM64Vbrk0l4FUlqFxPTQ2Xxe8CT1yBc82UZVt3TFF/fP35OuCKPVErbg+GDg==
+ * @signature ElFtVse4M2uktTocmEv8oP2B51jYDlPHp8DD8mY7D+5gGgK+BNLBd3Wbf3RweP6uHmyBQfUito+Tvjg0V8BMCA==
  */
 
 // libraries/Communication/src/encoding.ts
@@ -66,7 +66,7 @@ var Messenger = class _Messenger {
   static alternate = false;
   static ignoreNextAngle = false;
   static init() {
-    api.net.on("send:AIMING", (message, editFn) => {
+    api.net.colyseus.on("send:AIMING", (message, editFn) => {
       if (this.ignoreNextAngle) {
         this.ignoreNextAngle = false;
         return;

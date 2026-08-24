@@ -9,7 +9,7 @@
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
  * @changelog Updated webpage url
- * @signature LNAPCCI29U7Q7hZKTAUMeyfmKFY8TTt8z1Gd3xBbjTHAh4nNWQEsJHGs3T+4cSC+KNrjsH9ZS8TUaKZGQeYjCA==
+ * @signature PKxh6haIRTSA0ViDhyrnXy3lBMIIERsnqiQ/efgEvmY+1ZIKN7U5p8sY5TW2DtYO/YuuHge71mp2Kv2xvkEgCA==
  */
 
 // shared/files.ts
@@ -46,7 +46,7 @@ async function readJsonFile() {
 
 // plugins/InputRecorder/src/updateLasers.ts
 var lasers = [];
-api.net.on("DEVICES_STATES_CHANGES", (packet) => {
+api.net.colyseus.on("DEVICES_STATES_CHANGES", (packet) => {
   for (let i = 0; i < packet.changes.length; i++) {
     const device = packet.changes[i];
     if (lasers.some((l) => l.id === device[0])) {

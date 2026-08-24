@@ -7,7 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/Overtime
  * @hasSettings true
  * @gamemode 2d
- * @signature ZQ96cEJUFLZMXq3jB77otVmTP4LSxZbujFeqM+t8dfTm+gXGVDxZmYvEEb0Rdb6sJ1qM71tpmefNOSk0IOmiCQ==
+ * @signature /QHTjU5s9fFBCGkkeFa7scwTbOuaP+qa2En6JkOl7CTrHZxeg+IcdVaPPeAzHnNuSC+iIxj/ikUZUyQvjdYkCQ==
  */
 
 // plugins/Overtime/src/index.ts
@@ -123,7 +123,7 @@ api.net.onLoad(async () => {
       overtime = new Overtime(mapOptions2, getScoreboard);
     })
   );
-  api.net.on("KNOCKOUT", () => {
+  api.net.colyseus.on("KNOCKOUT", () => {
     if (!settings.suddenDeath) return;
     overtime?.suddenDeath();
   });

@@ -6,7 +6,7 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/AutoKicker.js
  * @webpage https://gimloader.github.io/plugins/AutoKicker
  * @changelog Added a setting to disable notifying
- * @signature Kf+c48XYxrtjS99uLRKGNeDlxvFsHHlN2A5IZEC1ChEplhK9bvef5+//0nbotio+D5+iZk9kH9ZcBhIQ8qGYBA==
+ * @signature pTWK5O9QWSnSMmSIhNL/ZSjFFa6UHDh6q3FogFZpbpZqAaRrGkVU/a45FkrB8Hj02fQSHlG+LUKdmKiChfp3CQ==
  */
 
 // inject-css:plugins/AutoKicker/src/styles.css
@@ -248,8 +248,8 @@ var AutoKicker = class {
         this.scanPlayersColyseus();
       }));
     } else {
-      api.net.on("UPDATED_PLAYER_LEADERBOARD", this.boundBlueboatMsg);
-      api.onStop(() => api.net.off("UPDATED_PLAYER_LEADERBOARD", this.boundBlueboatMsg));
+      api.net.blueboat.on("UPDATED_PLAYER_LEADERBOARD", this.boundBlueboatMsg);
+      api.onStop(() => api.net.blueboat.off("UPDATED_PLAYER_LEADERBOARD", this.boundBlueboatMsg));
     }
   }
   boundBlueboatMsg = this.onBlueboatMsg.bind(this);

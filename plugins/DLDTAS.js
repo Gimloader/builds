@@ -8,7 +8,7 @@
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
  * @changelog Fixed for new physics
- * @signature 8ioDJ4gta+mULo/o6b6voGwPDyIakR2/U3QiZJ0PZ05qULMhG8NlwVKsFRedcbbVadTz4D+hluxRzLVhE7BKCA==
+ * @signature JMGNCDii8U9Z2NBJb5lmrAX842w+zw6T5SSR5gvPPtRlRodjFBywZdpl+cbdVjFT7faLV2UbTSCjRxk0e6qOAg==
  */
 
 // inject-css:plugins/DLDTAS/src/styles.css
@@ -233,7 +233,7 @@ function render() {
 // plugins/DLDTAS/src/updateLasers.ts
 var lasers = [];
 var laserOffset = api.storage.getValue("laserOffset", 0);
-api.net.on("DEVICES_STATES_CHANGES", (packet) => {
+api.net.colyseus.on("DEVICES_STATES_CHANGES", (packet) => {
   for (let i = 0; i < packet.changes.length; i++) {
     const device = packet.changes[i];
     if (lasers.some((l) => l.id === device[0])) {

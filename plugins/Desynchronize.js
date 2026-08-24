@@ -8,7 +8,7 @@
  * @optionalLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
  * @changelog Added better popup for needing communication
- * @signature pY8V+XYhXcej5Jozy003URAOCGx2m3tfXwAsC96zKqEMk1takK7t9x+HlJ+ZCie+/eSOdFKWyqpYHPGWwLFjDQ==
+ * @signature PZ07K1UbfJx+AEvG9lfegEnmAKKFtJnc0MVUVPXhbIAFuqrXX9bp3EfaNBreYeI+VBpEQ30E0Oufhe56rSBSDQ==
  */
 var __defProp = Object.defineProperty;
 var __export = (target, all) => {
@@ -316,14 +316,14 @@ api.net.onLoad(() => {
     }
     allowNext = true;
   }));
-  api.net.on("PHYSICS_STATE", (_, editFn) => {
+  api.net.colyseus.on("PHYSICS_STATE", (_, editFn) => {
     if (allowNext) {
       allowNext = false;
       return;
     }
     editFn(null);
   });
-  api.net.on("send:INPUT", (_, editFn) => {
+  api.net.colyseus.on("send:INPUT", (_, editFn) => {
     if (api.stores.session.version === "saved" && api.stores.session.phase === "preGame") return;
     editFn(null);
   });

@@ -8,7 +8,7 @@
  * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
  * @changelog Added option to show player skins in chat
- * @signature axaN7VKuGB5knRRcnX4aKqg/uewUo52zteFyyjcFCC7XByG8Z9embQRjwyvV/OsxoGe1SBEYq8Ndogtg8YlhAQ==
+ * @signature Jp+B//Oi5eTm0fNtCLpARcwJLdLh6Ig+8+RoiepIu5BvjNtEeWl6+XkNP2GbP5xaJObhoDveR8kl9iG7An1xBA==
  */
 
 // external-svelte:svelte
@@ -96,7 +96,7 @@ function parseSkin(skin) {
 var Chatter = class {
   constructor(scroll) {
     this.scroll = scroll;
-    api.net.on("ACTIVITY_FEED_MESSAGE", (message, editFn) => {
+    api.net.colyseus.on("ACTIVITY_FEED_MESSAGE", (message, editFn) => {
       this.addMessage(`> ${message.message}`, true);
       editFn(null);
     });

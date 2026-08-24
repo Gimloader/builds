@@ -6,14 +6,14 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/PreventKickForSpam.js
  * @webpage https://gimloader.github.io/plugins/PreventKickForSpam
  * @gamemode 1d
- * @signature jXhOMeKQA+/cY6he7wXhZG++FzY56k5dSdl8JVIqeXRtZyyeSdliORbp4gpq89wXMc/TQ+OQCG8Rb9RRMRc0BQ==
+ * @signature kMieODnHxDiY965idtWPHhMAQAK1yyL1wQvHUu64+2yZhPJpwyoFCOhT0PD1V0rqTJ+ZwqnbXyXsqvYcd1W4Bw==
  */
 
 // plugins/PreventKickForSpam/src/index.ts
 api.net.onLoad(() => {
   let firstAnswerTime = 0;
   let lastAnswerTime = 0;
-  api.net.on("send:QUESTION_ANSWERED", (_, editFn) => {
+  api.net.blueboat.on("send:QUESTION_ANSWERED", (_, editFn) => {
     const now = Date.now();
     firstAnswerTime ||= now;
     if (now - firstAnswerTime < 25e3) return;

@@ -10,7 +10,7 @@
  * @gamemode fishtopia
  * @gamemode oneWayOut
  * @changelog Maybe fixed Fishtopia splits resetting
- * @signature UZs8Eks26c5fh/xmtdULrOhLHcAo+pvpVHa1USrsYEcgBKBZ6Wu6zAyVH25sbXJAXDVRQOoKoYXxqroz96HGBQ==
+ * @signature 3qEhZ7DLKsi8uH1JiJXtH1VZxaRjDpgVArbX2E+FWAx1t0fb6uAYmi2EpubmB0L9IzYl0xUp6eHlRlb34BZhDg==
  */
 
 // external-svelte:svelte/internal/client
@@ -1381,7 +1381,7 @@ var FishtopiaAutosplitter = class extends SplitsAutosplitter {
         this.reset();
       }
     });
-    api.net.on("send:MESSAGE_FOR_DEVICE", (e) => {
+    api.net.colyseus.on("send:MESSAGE_FOR_DEVICE", (e) => {
       const id2 = e.deviceId;
       if (!id2) return;
       const device = api.stores.phaser.scene.worldManager.devices.getDeviceById(id2);
@@ -1437,7 +1437,7 @@ var OneWayOutAutosplitter = class extends SplitsAutosplitter {
   constructor() {
     super("OneWayOut");
     const gameSession = api.net.state.session.gameSession;
-    api.net.on("DEVICES_STATES_CHANGES", (msg) => {
+    api.net.colyseus.on("DEVICES_STATES_CHANGES", (msg) => {
       for (const change of msg.changes) {
         if (msg.values[change[1][0]] === "GLOBAL_healthPercent") {
           const device = api.stores.phaser.scene.worldManager.devices.getDeviceById(change[0]);
@@ -1454,7 +1454,7 @@ var OneWayOutAutosplitter = class extends SplitsAutosplitter {
         this.reset();
       }
     });
-    api.net.on("send:MESSAGE_FOR_DEVICE", (e) => {
+    api.net.colyseus.on("send:MESSAGE_FOR_DEVICE", (e) => {
       const id = e?.deviceId;
       if (!id) return;
       const device = api.stores.phaser.scene.worldManager.devices.getDeviceById(id);

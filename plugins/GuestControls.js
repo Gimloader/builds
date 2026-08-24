@@ -8,7 +8,7 @@
  * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature wyWVxZPKGc1fpGKh4E0d99gU+u6O4sOIcSL5lFMIZsxbWe8csbxrGUvWJhgywK+ZYkuJjKQTM/prMmE4JyYlCA==
+ * @signature O3209r9M1vVblymkrBRnJDxrwlFH24bGSLFlR2Rm0sqWJWwcPaXeb18xT3Ms68QmiB9y97eQOfgR6uA1KWhiBQ==
  */
 
 // plugins/GuestControls/src/index.ts
@@ -94,19 +94,19 @@ api.net.onLoad(() => {
       session.amIGameOwner = false;
       comms.destroy();
     });
-    api.net.on("send:END_GAME", (_, editFn) => {
+    api.net.colyseus.on("send:END_GAME", (_, editFn) => {
       comms.send(3 /* EndGame */);
       editFn(null);
     });
-    api.net.on("send:RESTORE_MAP_EARLIER", (_, editFn) => {
+    api.net.colyseus.on("send:RESTORE_MAP_EARLIER", (_, editFn) => {
       comms.send(4 /* ResetToLobby */);
       editFn(null);
     });
-    api.net.on("send:ADD_GAME_TIME", (_, editFn) => {
+    api.net.colyseus.on("send:ADD_GAME_TIME", (_, editFn) => {
       comms.send(5 /* AddGameTime */);
       editFn(null);
     });
-    api.net.on("send:KICK_PLAYER", ({ characterId }, editFn) => {
+    api.net.colyseus.on("send:KICK_PLAYER", ({ characterId }, editFn) => {
       const index = characters().findIndex((char) => char.id === characterId) + 10;
       comms.send(index);
       editFn(null);

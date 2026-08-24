@@ -8,7 +8,7 @@
  * @hasSettings true
  * @gamemode 2d
  * @changelog Added a setting for Fish Value to add your existing cash
- * @signature DJbiw2JTSd0XL5w2zusRCt0CkQDxmg3tVqeingJGrVAhiSOe+VSA+dIIxle5DwBhjHVrc2n3bWZ0OvdiakH2CA==
+ * @signature EHSmQr5k/AsaFjWxtJm2TZi15ZXv+cbyn5aTQKnNmzFE0Z4hFbrEVH3j2Rpge/vuRK8xwLh91n9f64oLdZZSCg==
  */
 
 // inject-css:plugins/InfoLines/src/styles.css
@@ -44,9 +44,9 @@ var BaseLine = class {
   net = {
     on: (...args) => {
       this.onStop(() => {
-        api.net.off(args[0], args[1]);
+        api.net.colyseus.off(args[0], args[1]);
       });
-      return api.net.on(...args);
+      return api.net.colyseus.on(...args);
     }
   };
   patcher = {
@@ -310,15 +310,15 @@ var PlantDrops = class extends BaseLine {
         dropped = true;
         this.drops++;
         this.updateDrops();
-        api.net.off("WORLD_CHANGES", addDrop);
+        api.net.colyseus.off("WORLD_CHANGES", addDrop);
       };
       setTimeout(() => {
-        api.net.off("WORLD_CHANGES", addDrop);
+        api.net.colyseus.off("WORLD_CHANGES", addDrop);
         if (!dropped) this.updateDrops();
       }, 100);
       this.net.on("WORLD_CHANGES", addDrop);
     });
-    api.net.state.session.listen("phase", () => {
+    api.net.colyseus.state.session.listen("phase", () => {
       this.knockouts = 0;
       this.drops = 0;
       this.updateDrops();

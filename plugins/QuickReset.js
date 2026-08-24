@@ -7,13 +7,13 @@
  * @webpage https://gimloader.github.io/plugins/QuickReset
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature LiTF3IfLSNOsChrvMBP2P+2cuPulWtpx/zUzEevry9xgb7P8L9Z0cOgRYNiFx9E9bfRmuwmAI+qympj6OrnKBw==
+ * @signature QKMTa6nl4VNyaeSL13uUqWugdKUdExkcS8S1hO78Z1ioeLavV5aCnZdN8tpq0HI0ZLNvtOxZnhWZURN2EfG2Dw==
  */
 
 // plugins/QuickReset/src/index.ts
 var startMessage = null;
 var ignoreNextStart = false;
-api.net.on("send:START_GAME", (message) => {
+api.net.colyseus.on("send:START_GAME", (message) => {
   if (ignoreNextStart) return;
   startMessage = message;
 });

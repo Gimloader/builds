@@ -7,13 +7,13 @@
  * @webpage https://gimloader.github.io/plugins/FixTileDupe
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature WGom1yEHNkEcThvtwE0ifEUVkuEkZg8fZ9mhfV4aCXovzHG1SG1ts1EmasDeSGPzfAbua2+O6c/JaG3pPXK+CQ==
+ * @signature 9nNceRAnPDQy4WE6m1D7YjZ3OcNXW4dapZPQ/kNMCZyhZcd68z+teZZmbWyzQTth14h7Tkg8l2lOr4HNdaZ3DA==
  */
 
 // plugins/FixTileDupe/src/index.ts
 api.net.onLoad(() => {
   const placedTiles = /* @__PURE__ */ new Set();
-  api.net.on("send:CONSUME", (data, editFn) => {
+  api.net.colyseus.on("send:CONSUME", (data, editFn) => {
     if (!("x" in data)) return;
     const tileString = `${data.x}_${data.y}`;
     if (placedTiles.has(tileString)) {
@@ -22,7 +22,7 @@ api.net.onLoad(() => {
       placedTiles.add(tileString);
     }
   });
-  api.net.on("TERRAIN_CHANGES", (data) => {
+  api.net.colyseus.on("TERRAIN_CHANGES", (data) => {
     if (data.initial) return;
     setTimeout(() => {
       for (const [x, y] of data.added.tiles) {
