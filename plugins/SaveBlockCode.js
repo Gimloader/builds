@@ -6,7 +6,7 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/SaveBlockCode.js
  * @webpage https://gimloader.github.io/plugins/SaveBlockCode
  * @gamemode creative
- * @signature oOcCIVGfi9vy8gx095/U8fBQkuRybTrXzrn1CAZLkjq96subSjpVoZcreUce3yBT3UE32CsLv/gK1dmiKbPsDw==
+ * @signature rbpqWBLDjtZjpL34qYTJhLTi5jHSGieT8fHcxvKdwwFC0TxjvKYhTkWvv5zlZ+bm5I9V3ZrDwduU7qchp81+Dg==
  */
 
 // shared/files.ts
@@ -75,7 +75,7 @@ async function setBlockJson(json) {
   const gridId = deviceEditing.currentlyEditedGridId;
   if (!deviceId || !gridId) return error("Could not detect a currently edited block");
   try {
-    const unsub = api.net.state.world.devices.codeGrids.get(deviceId)?.items.get(gridId)?.listen("json", () => {
+    const unsub = api.net.colyseus.state.world.devices.codeGrids.get(deviceId)?.items.get(gridId)?.listen("json", () => {
       api.UI.forceReactUpdate();
       clearTimeout(updateTimeout);
       unsub();
@@ -84,11 +84,11 @@ async function setBlockJson(json) {
       api.logger.warn("Code grid failed to update after 2 seconds");
       unsub();
     }, 2e3);
-    api.net.send("JOIN_CODE_GRID", {
+    api.net.colyseus.send("JOIN_CODE_GRID", {
       deviceId,
       gridId
     });
-    api.net.send("SET_CODE_GRID_JSON", {
+    api.net.colyseus.send("SET_CODE_GRID_JSON", {
       deviceId,
       gridId,
       json

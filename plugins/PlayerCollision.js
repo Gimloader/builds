@@ -8,7 +8,7 @@
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature YuaeoPyUGi/Ep3nMym2jRCFawGx3V2ywbccU0c6+g0JXoXso2NpkpLtcwDLVb5t7CGqrQrwARK0XyYDzwum2AQ==
+ * @signature g1N/oGxCncR/AoJW+2Ey/Ws0OvoyC6UVRMpHz7JGYQhcesh7kEqwnXvsOaxyGDbofdbn+M04FLHdMvlTvPCPBw==
  */
 
 // plugins/PlayerCollision/src/index.ts
@@ -70,7 +70,7 @@ api.net.onLoad(async () => {
     }
   });
   api.onStop(
-    api.net.state.characters.onAdd((char) => {
+    api.net.colyseus.state.characters.onAdd((char) => {
       if (char.id === myId) return;
       if (char.type === "player" && !settings.collidePlayers) return;
       if (char.type === "sentry" && !settings.collideSentries) return;
@@ -82,8 +82,8 @@ api.net.onLoad(async () => {
   );
   if (!api.net.isHost) {
     const { gameOwnerId } = api.stores.session;
-    api.net.state.session.listen("phase", (phase) => {
-      if (api.net.state.characters.get(gameOwnerId)?.teamId === "__SPECTATORS_TEAM" && phase === "game") {
+    api.net.colyseus.state.session.listen("phase", (phase) => {
+      if (api.net.colyseus.state.characters.get(gameOwnerId)?.teamId === "__SPECTATORS_TEAM" && phase === "game") {
         removeCollider(gameOwnerId);
       } else {
         createCollider(gameOwnerId);

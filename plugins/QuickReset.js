@@ -7,7 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/QuickReset
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature QKMTa6nl4VNyaeSL13uUqWugdKUdExkcS8S1hO78Z1ioeLavV5aCnZdN8tpq0HI0ZLNvtOxZnhWZURN2EfG2Dw==
+ * @signature TNptb+Q4BUQrfQSmCgfPYK3PSKdKUAUG+sLnT/AuJe63WbclhUZzQIW8Qwxir7SXe48NQpH9aRfV09PTRvm/Bg==
  */
 
 // plugins/QuickReset/src/index.ts
@@ -19,13 +19,13 @@ api.net.colyseus.on("send:START_GAME", (message) => {
 });
 function reset() {
   if (api.net.type !== "Colyseus" || !api.net.isHost) return;
-  api.net.send("END_GAME");
-  api.net.send("RESTORE_MAP_EARLIER");
-  const gameSession = api.net.state.session.gameSession;
+  api.net.colyseus.send("END_GAME");
+  api.net.colyseus.send("RESTORE_MAP_EARLIER");
+  const gameSession = api.net.colyseus.state.session.gameSession;
   if (gameSession.phase === "countdown") return;
   ignoreNextStart = true;
   const interval = setInterval(() => {
-    api.net.send("START_GAME", startMessage);
+    api.net.colyseus.send("START_GAME", startMessage);
   }, 100);
   const unsub = gameSession.listen("phase", (phase) => {
     if (phase !== "countdown") return;
@@ -36,8 +36,8 @@ function reset() {
 }
 function exitToLobby() {
   if (api.net.type !== "Colyseus" || !api.stores.session.amIGameOwner) return;
-  api.net.send("END_GAME");
-  api.net.send("RESTORE_MAP_EARLIER");
+  api.net.colyseus.send("END_GAME");
+  api.net.colyseus.send("RESTORE_MAP_EARLIER");
 }
 api.hotkeys.addConfigurableHotkey({
   category: "Quick Reset",

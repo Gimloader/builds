@@ -8,14 +8,14 @@
  * @needsLib CharacterLabels | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/CharacterLabels.js
  * @gamemode 2d
  * @changelog Used the CharacterLabels library
- * @signature vBvYfnKUsQkB39hBCdya6l76bG0zkYyoN8MZEIz0AOgM4MX147s8st60mh/Pswsi5ApnEobyAYYHYfRnawSCBA==
+ * @signature mY+/QMg81AHyrtJh2oraW49LAugVQV4/0ynAakHqg0oDS4CvMqhlg/xfgkvrgyxWc5Nca9yQcRoQMeA4V+0ZCQ==
  */
 
 // plugins/Healthbars/src/index.ts
 api.net.onLoad(() => {
   const options = JSON.parse(api.stores.world.mapOptionsJSON);
   let visible = options.showHealthAndShield && options.healthMode === "healthAndShield";
-  api.onStop(api.net.state.listen("mapSettings", (settingsJson) => {
+  api.onStop(api.net.colyseus.state.listen("mapSettings", (settingsJson) => {
     const options2 = JSON.parse(settingsJson);
     visible = options2.showHealthAndShield && options2.healthMode === "healthAndShield";
   }, false));
@@ -26,7 +26,7 @@ api.net.onLoad(() => {
   const gray = 5592405;
   const addLabel = api.lib("CharacterLabels");
   const destroy = addLabel((character) => {
-    const stateChar = api.net.state.characters.get(character.id);
+    const stateChar = api.net.colyseus.state.characters.get(character.id);
     if (!stateChar) return;
     const bg = scene.add.rectangle(0, 0, width, 10, gray);
     const health = scene.add.rectangle(0, 0, width, 10, red);

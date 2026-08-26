@@ -6,7 +6,7 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/AutoKicker.js
  * @webpage https://gimloader.github.io/plugins/AutoKicker
  * @changelog Added a setting to disable notifying
- * @signature pTWK5O9QWSnSMmSIhNL/ZSjFFa6UHDh6q3FogFZpbpZqAaRrGkVU/a45FkrB8Hj02fQSHlG+LUKdmKiChfp3CQ==
+ * @signature yTg8mV3ZC4EWB6zyUJu4L3NsZ7CsRLInA2MBLG1/UqYSoCJBY3jfEG9c68WtVwP8cFbtmRSAI15L9rgWzQSABw==
  */
 
 // inject-css:plugins/AutoKicker/src/styles.css
@@ -226,7 +226,7 @@ var AutoKicker = class {
   }
   start() {
     if (api.net.type === "Colyseus") {
-      const chars = api.net.state.characters;
+      const chars = api.net.colyseus.state.characters;
       api.onStop(chars.onAdd((e) => {
         if (!e || e.id === this.myId) return;
         if (this.kickIdle) {
@@ -325,7 +325,7 @@ var AutoKicker = class {
     }
   }
   scanPlayersColyseus() {
-    const characters2 = api.net.state.characters;
+    const characters2 = api.net.colyseus.state.characters;
     const nameCount = /* @__PURE__ */ new Map();
     if (this.kickDuplicateNames) {
       for (const [_, player] of characters2.entries()) {
@@ -382,15 +382,15 @@ var AutoKicker = class {
   colyseusKick(id, reason) {
     if (this.kicked.has(id)) return;
     this.kicked.add(id);
-    const char = api.net.state.characters.get(id);
-    api.net.send("KICK_PLAYER", { characterId: id });
+    const char = api.net.colyseus.state.characters.get(id);
+    api.net.colyseus.send("KICK_PLAYER", { characterId: id });
     if (settings.notify) api.UI.notification.open({ message: `Kicked ${char.name} for ${reason}` });
   }
   blueboatKick(id, reason) {
     if (this.kicked.has(id)) return;
     this.kicked.add(id);
     const playername = this.lastLeaderboard?.find((e) => e.id === id)?.name;
-    api.net.send("KICK_PLAYER", id);
+    api.net.blueboat.send("KICK_PLAYER", id);
     if (settings.notify) api.UI.notification.open({ message: `Kicked ${playername ?? "player"} for ${reason}` });
   }
 };

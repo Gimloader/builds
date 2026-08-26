@@ -8,7 +8,7 @@
  * @hasSettings true
  * @gamemode 2d
  * @changelog Added a setting for Fish Value to add your existing cash
- * @signature EHSmQr5k/AsaFjWxtJm2TZi15ZXv+cbyn5aTQKnNmzFE0Z4hFbrEVH3j2Rpge/vuRK8xwLh91n9f64oLdZZSCg==
+ * @signature MFDhpO/L3NnwzlSnNXyOOruw6/XN2LDdwHKF3Q8v8zJnYDI4u3LnErttoMH3JH6s3GBCMgtTQI48c6GsVHGLAg==
  */
 
 // inject-css:plugins/InfoLines/src/styles.css
@@ -192,7 +192,7 @@ var Ping = class extends BaseLine {
       editFn(null);
     });
     const interval = setInterval(async () => {
-      api.net.send("REQUEST_INITIAL_WORLD");
+      api.net.colyseus.send("REQUEST_INITIAL_WORLD");
       const start = Date.now();
       await new Promise((res) => deviceChangeRes = res);
       this.update(`ping: ${Date.now() - start} ms`);

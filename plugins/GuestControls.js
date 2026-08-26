@@ -8,7 +8,7 @@
  * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature O3209r9M1vVblymkrBRnJDxrwlFH24bGSLFlR2Rm0sqWJWwcPaXeb18xT3Ms68QmiB9y97eQOfgR6uA1KWhiBQ==
+ * @signature 2TSfPFab8CYTykq53JlGNJnRHF8Dx29etluqw7cYkCpna41fRK/D6S/sJp0h0748kgE3bnkUHbNpVEwpiptrBw==
  */
 
 // plugins/GuestControls/src/index.ts
@@ -60,18 +60,18 @@ api.net.onLoad(() => {
           if (Comms.enabled) comms.send(0 /* PluginOn */);
           break;
         case 3 /* EndGame */:
-          api.net.send("END_GAME");
+          api.net.colyseus.send("END_GAME");
           break;
         case 4 /* ResetToLobby */:
-          api.net.send("RESTORE_MAP_EARLIER");
+          api.net.colyseus.send("RESTORE_MAP_EARLIER");
           break;
         case 5 /* AddGameTime */:
-          api.net.send("ADD_GAME_TIME");
+          api.net.colyseus.send("ADD_GAME_TIME");
           break;
         default: {
           const character = characters()[message - 10];
           if (!character) return;
-          api.net.send("KICK_PLAYER", {
+          api.net.colyseus.send("KICK_PLAYER", {
             characterId: character.id
           });
         }
@@ -79,7 +79,7 @@ api.net.onLoad(() => {
     });
   } else {
     const { session } = api.stores;
-    api.net.state.session.listen("phase", (phase) => {
+    api.net.colyseus.state.session.listen("phase", (phase) => {
       if (phase !== "game") session.amIGameOwner = false;
     });
     if (Comms.enabled) comms.send(2 /* GuestJoined */);

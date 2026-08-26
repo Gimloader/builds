@@ -10,7 +10,7 @@
  * @gamemode fishtopia
  * @gamemode oneWayOut
  * @changelog Maybe fixed Fishtopia splits resetting
- * @signature 3qEhZ7DLKsi8uH1JiJXtH1VZxaRjDpgVArbX2E+FWAx1t0fb6uAYmi2EpubmB0L9IzYl0xUp6eHlRlb34BZhDg==
+ * @signature jzNi2hA8xyF6LsFVuqrJ1oyO14yIe6hgMsuODDtt9HTngJqlY7IQS7AN/g9bp4p5pA+RRhZBH3IpXT19e7r6AA==
  */
 
 // external-svelte:svelte/internal/client
@@ -1367,8 +1367,8 @@ var FishtopiaAutosplitter = class extends SplitsAutosplitter {
   usedChannels = /* @__PURE__ */ new Set();
   constructor() {
     super("Fishtopia");
-    const gameSession = api.net.state.session.gameSession;
-    api.net.state.session.listen("loadingPhase", (val) => {
+    const gameSession = api.net.colyseus.state.session.gameSession;
+    api.net.colyseus.state.session.listen("loadingPhase", (val) => {
       if (val) return;
       if (gameSession.phase === "game") {
         this.addAttempt();
@@ -1397,7 +1397,7 @@ var FishtopiaAutosplitter = class extends SplitsAutosplitter {
       });
     });
     const id = api.stores.phaser.mainCharacter.id;
-    api.net.state.characters.get(id).inventory.slots.onChange((_, key2) => {
+    api.net.colyseus.state.characters.get(id).inventory.slots.onChange((_, key2) => {
       if (key2 === "gim-fish") {
         this.timer.split();
         this.timer.stop();
@@ -1436,7 +1436,7 @@ var OneWayOutAutosplitter = class extends SplitsAutosplitter {
   stage = 0;
   constructor() {
     super("OneWayOut");
-    const gameSession = api.net.state.session.gameSession;
+    const gameSession = api.net.colyseus.state.session.gameSession;
     api.net.colyseus.on("DEVICES_STATES_CHANGES", (msg) => {
       for (const change of msg.changes) {
         if (msg.values[change[1][0]] === "GLOBAL_healthPercent") {

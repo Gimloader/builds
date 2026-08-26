@@ -7,7 +7,7 @@
  * @webpage https://gimloader.github.io/libraries/CharacterLabels
  * @gamemode 2d
  * @isLibrary true
- * @signature RkXoIjiT+gCZ7OTDSNCi9FT9c3MTsMwOsm8LDQ7UevUyffZbMZmbqs5xdEvrVyxix71cpnwCKcC0IOJfWKXEDQ==
+ * @signature Oxwb5Yt2vkbAFpBb23RbdxBvWWyp2A2FR38ACukWKyv8noO9MyXLzlBxjrSSgzyQQnDacA96xjL4L5Ge9F5mDA==
  */
 
 // libraries/CharacterLabels/src/index.ts
@@ -57,7 +57,7 @@ function patchCharacter(character) {
   const unpatchUpdate = api.patcher.after(character.nametag, "update", () => {
     if (!character.nametag.tag) return;
     const { x, y, depth } = character.nametag.tag;
-    const stateChar = api.net.state.characters.get(character.id);
+    const stateChar = api.net.colyseus.state.characters.get(character.id);
     let offset = 22;
     if (character.nametag.fragilityTag) offset += 15;
     for (const label of labels) {

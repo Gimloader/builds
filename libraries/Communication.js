@@ -8,7 +8,7 @@
  * @gamemode 2d
  * @changelog Fixed messages being dropped when sent while aiming
  * @isLibrary true
- * @signature ElFtVse4M2uktTocmEv8oP2B51jYDlPHp8DD8mY7D+5gGgK+BNLBd3Wbf3RweP6uHmyBQfUito+Tvjg0V8BMCA==
+ * @signature ChmJFAnhSXIq7SlN5JBDnGGRSUgZdW4NuJEf/ryYQiTh4UT86E7J0ZEx8chr3DFDOD+dCg5xW6c7+moVqQ0lAA==
  */
 
 // libraries/Communication/src/encoding.ts
@@ -74,7 +74,7 @@ var Messenger = class _Messenger {
       this.realAngle = message.angle;
       if (this.angleQueue.length > 0) editFn(null);
     });
-    api.net.state.session.listen("phase", (phase) => {
+    api.net.colyseus.state.session.listen("phase", (phase) => {
       if (phase === "game") return;
       this.angleQueue.forEach((pending) => pending.reject());
       this.angleQueue.length = 0;
@@ -179,7 +179,7 @@ var Messenger = class _Messenger {
     while (this.angleQueue.length > 0) {
       const queuedAngle = this.angleQueue[0];
       this.ignoreNextAngle = true;
-      api.net.send("AIMING", { angle: queuedAngle.angle });
+      api.net.colyseus.send("AIMING", { angle: queuedAngle.angle });
       try {
         await this.awaitAngleChange();
       } catch {
@@ -189,7 +189,7 @@ var Messenger = class _Messenger {
       this.angleQueue.shift();
     }
     if (!this.realAngle) return;
-    api.net.send("AIMING", { angle: this.realAngle });
+    api.net.colyseus.send("AIMING", { angle: this.realAngle });
   }
   static async awaitAngleChange() {
     return new Promise((res, rej) => {
@@ -345,7 +345,7 @@ var Messenger = class _Messenger {
 function listenToCharacter(character) {
   if (character.id === api.stores.network.authId) return;
   api.patcher.before(character.aimingAndLookingAround, "setTargetAngle", (_, [angle]) => {
-    const netChar = api.net.state.characters.get(character.id);
+    const netChar = api.net.colyseus.state.characters.get(character.id);
     const bytes = Messenger.getBytes(netChar, angle);
     if (!bytes) return;
     Messenger.handleBytes(netChar, bytes);
@@ -361,7 +361,7 @@ api.net.onLoad(() => {
   for (const character of scene.characterManager.characters.values()) {
     listenToCharacter(character);
   }
-  api.net.state.characters.get(api.stores.network.authId).projectiles.listen("aimAngle", (angle) => {
+  api.net.colyseus.state.characters.get(api.stores.network.authId).projectiles.listen("aimAngle", (angle) => {
     if (!angle || angle !== Messenger.pendingAngle) return;
     Messenger.angleChangeRes?.();
   }, false);
@@ -386,10 +386,10 @@ var Communication = class _Communication {
     return Messenger.callbacks.get(this.#identifierString);
   }
   static get enabled() {
-    return api.net.state?.session.phase === "game";
+    return api.net.colyseus?.state.session.phase === "game";
   }
   onEnabledChanged(callback) {
-    const unsub = api.net.state.session.listen("phase", (phase) => {
+    const unsub = api.net.colyseus.state.session.listen("phase", (phase) => {
       callback(phase === "game");
     }, false);
     this.#onDisabledCallbacks.push(unsub);
@@ -399,7 +399,7 @@ var Communication = class _Communication {
     if (!_Communication.enabled) {
       throw new Error("Communication can only be used after the game is started");
     }
-    const players = [...api.net.state.characters.values()].filter((char) => char.type === "player");
+    const players = [...api.net.colyseus.state.characters.values()].filter((char) => char.type === "player");
     if (players.length <= 1) return;
     switch (typeof message) {
       case "number": {

@@ -8,7 +8,7 @@
  * @reloadRequired ingame
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature EMLGErK7vAPrIVK6LJ8cSqN+w1OJuKGMAXGECDx2OTfG0ZyQUbfq26EH1eO0O/oIylorEwH9mvBe2qLs+ubgDA==
+ * @signature TxHGEKlidzudYZrHVrr0LUq5tRy+6m2tWA/xyQhNf6B+2xz2GkFm9cPJoo1BJETdqsTODaHi/0c1M0q8WnyOCg==
  */
 
 // plugins/IdleForXp/src/index.ts
@@ -30,7 +30,7 @@ function answerQuestion() {
     const correctAnswerId = question.answers.find((a) => a.correct)._id;
     packet.data.answer = correctAnswerId;
   }
-  api.net.send("MESSAGE_FOR_DEVICE", packet);
+  api.net.colyseus.send("MESSAGE_FOR_DEVICE", packet);
 }
 api.net.colyseus.on("DEVICES_STATES_CHANGES", (event) => {
   for (const change of event.changes) {

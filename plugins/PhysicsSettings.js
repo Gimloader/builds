@@ -9,7 +9,7 @@
  * @hasSettings true
  * @gamemode 2d
  * @changelog Updated webpage url
- * @signature WtUTEt3/9x32yH/Gsh1Jrra0krJlhy9QRgYBJYZl10ocEUCw2bDQUaupdMN4QpZX6eclwua+Hdx/WZLvde56CA==
+ * @signature bwyoJrdK672+YcZxMM2claPwAnGYm3GZBSsMvzOdo2NLy7QUcvsUmPWBinXfHdMcrSoFQHcVfjw0/Fxhis07DA==
  */
 
 // shared/rewritingUtils.ts
@@ -111,7 +111,7 @@ var applyAll = () => {
 api.net.onLoad(() => {
   if (!rewritten && settings.tps !== 12) api.requestReload();
   if (api.stores?.session?.mapStyle !== "platformer") return;
-  api.net.state.listen("mapSettings", () => {
+  api.net.colyseus.state.listen("mapSettings", () => {
     applyAll();
   });
   const dldTas = api.plugin("DLDTAS");

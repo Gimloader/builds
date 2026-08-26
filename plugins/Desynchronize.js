@@ -8,7 +8,7 @@
  * @optionalLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
  * @changelog Added better popup for needing communication
- * @signature PZ07K1UbfJx+AEvG9lfegEnmAKKFtJnc0MVUVPXhbIAFuqrXX9bp3EfaNBreYeI+VBpEQ30E0Oufhe56rSBSDQ==
+ * @signature D3Qepd5wv77IzYJlKk2XfXowhbhSfMiUeCYOqnOY8gpgSaMFxw7kfkP1H3c+tY5uIyCJ86n0ky2YGnEW6u3jCw==
  */
 var __defProp = Object.defineProperty;
 var __export = (target, all) => {
@@ -148,7 +148,7 @@ var floorHeight = 638.37;
 var lastCheckpointReached = 0;
 var canRespawn = false;
 api.net.onLoad(() => {
-  api.net.state.session.gameSession.listen("phase", (phase) => {
+  api.net.colyseus.state.session.gameSession.listen("phase", (phase) => {
     if (phase !== "results") return;
     canRespawn = false;
     lastCheckpointReached = 0;
@@ -174,7 +174,7 @@ var enable = () => {
   let wasOnLastFrame = false;
   let startImmunityActive = false;
   api.patcher.after(physics, "physicsStep", () => {
-    if (api.net.state.session.gameSession.phase === "results") return;
+    if (api.net.colyseus.state.session.gameSession.phase === "results") return;
     if (startImmunityActive) return;
     const devicesInView = api.stores.phaser.scene.worldManager.devices.devicesInView;
     const lasers = devicesInView.filter((d) => d.laser);
@@ -309,7 +309,7 @@ var settings = api.settings.create([
 api.net.onLoad(() => {
   let allowNext = false;
   let firstPhase = true;
-  api.onStop(api.net.state.session.listen("phase", () => {
+  api.onStop(api.net.colyseus.state.session.listen("phase", () => {
     if (firstPhase) {
       firstPhase = false;
       return;

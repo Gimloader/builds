@@ -8,7 +8,7 @@
  * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
  * @changelog Added option to show player skins in chat
- * @signature Jp+B//Oi5eTm0fNtCLpARcwJLdLh6Ig+8+RoiepIu5BvjNtEeWl6+XkNP2GbP5xaJObhoDveR8kl9iG7An1xBA==
+ * @signature R6dsDZj4otc57lyNC+3bwm0vdbkUVONT0pIC5WhO00tgWUfn63P7EXoNSYsxxTz7VgvM4EyXkM5ePgDuEz8WCQ==
  */
 
 // external-svelte:svelte
@@ -164,7 +164,7 @@ var Chatter = class {
         }
       }
     });
-    api.onStop(api.net.state.characters.onRemove((char) => {
+    api.onStop(api.net.colyseus.state.characters.onRemove((char) => {
       joinedPlayers.delete(char.id);
       this.playersTyping = this.playersTyping.filter((c) => c !== char);
     }));
@@ -192,7 +192,7 @@ var Chatter = class {
     });
   }
   comms = new Comms("Chat");
-  me = api.net.state.characters.get(api.stores.network.authId);
+  me = api.net.colyseus.state.characters.get(api.stores.network.authId);
   typing = false;
   timeout = null;
   #playersTyping = state(proxy([]));

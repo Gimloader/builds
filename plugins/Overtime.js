@@ -7,7 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/Overtime
  * @hasSettings true
  * @gamemode 2d
- * @signature /QHTjU5s9fFBCGkkeFa7scwTbOuaP+qa2En6JkOl7CTrHZxeg+IcdVaPPeAzHnNuSC+iIxj/ikUZUyQvjdYkCQ==
+ * @signature yFjlahte0dVLM47E07Adk4b8muCtE1IpUCXoRQmHpzRVoGKnNK0QbYoP3NT1Mm+4So8icXeO7LrmUjYPPdoeAQ==
  */
 
 // plugins/Overtime/src/index.ts
@@ -74,7 +74,7 @@ var Overtime = class {
     if (!this.isTied()) return;
     this.overtimeCount++;
     for (let i = 0; i < settings.length; i++) {
-      api.net.send("ADD_GAME_TIME");
+      api.net.colyseus.send("ADD_GAME_TIME");
     }
     api.UI.notification.info({
       message: `Overtime #${this.overtimeCount}`
@@ -87,7 +87,7 @@ var Overtime = class {
   suddenDeath() {
     if (!this.overtimeCount || this.isTied()) return;
     this.stop();
-    api.net.send("END_GAME");
+    api.net.colyseus.send("END_GAME");
   }
 };
 api.net.onLoad(async () => {
@@ -107,7 +107,7 @@ api.net.onLoad(async () => {
   if (!mapOptions) return;
   if (mapOptions.options.scoreType !== "Knockout" || !mapOptions.options.useScoreboard) return;
   let overtime = null;
-  const session = api.net.state.session;
+  const session = api.net.colyseus.state.session;
   api.onStop(
     session.gameSession.listen("phase", (phase) => {
       if (phase !== "results") return;
