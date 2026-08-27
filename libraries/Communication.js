@@ -8,7 +8,7 @@
  * @gamemode 2d
  * @changelog Fixed messages being dropped when sent while aiming
  * @isLibrary true
- * @signature ChmJFAnhSXIq7SlN5JBDnGGRSUgZdW4NuJEf/ryYQiTh4UT86E7J0ZEx8chr3DFDOD+dCg5xW6c7+moVqQ0lAA==
+ * @signature XrOY/6DL9ujM50wElMcJuTZpcQBWpSgbWMoTK/JtDmvvRuz4upy+WOO3n0NztxDiErXY41QzTAOT/LTZ2A22BQ==
  */
 
 // libraries/Communication/src/encoding.ts
@@ -386,7 +386,7 @@ var Communication = class _Communication {
     return Messenger.callbacks.get(this.#identifierString);
   }
   static get enabled() {
-    return api.net.colyseus?.state.session.phase === "game";
+    return api.net.colyseus.state?.session.phase === "game";
   }
   onEnabledChanged(callback) {
     const unsub = api.net.colyseus.state.session.listen("phase", (phase) => {
