@@ -2,12 +2,12 @@
  * @name CustomUI
  * @description Allows you to customize various things about the Gimkit UI
  * @author Gimloader Official
- * @version 0.3.5
+ * @version 0.4.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CustomUI.js
  * @webpage https://gimloader.github.io/plugins/CustomUI
  * @hasSettings true
- * @changelog Fixed theme displaying on 1d answer screen even when disabled
- * @signature o8dE5QffcbkSnzm29E28XQJh1dIZMsiyEGhkVO4Pg399y+PtVh6odmPJb+K50vtawXHW1ObbhcNAaiLSTlLdAg==
+ * @changelog Added option to edit custom themes
+ * @signature FhdvTM4XVFfjgwlV3wyPelPUGCw9lhlk0yui8O7/0Ywpd5vWHvtuXE/5mqp81GR50fDoRPNoi9RJ2SX4A7dnAw==
  */
 
 // inject-css:plugins/CustomUI/src/styles.css
@@ -53,7 +53,7 @@ api.UI.addStyles(`.cui-settings {
     gap: 5px;
     align-items: center;
 
-    .delete {
+    .delete, .edit {
         cursor: pointer;
         font-size: 30px;
         flex-shrink: 0;
@@ -473,33 +473,35 @@ function parseHex(hex) {
 }
 
 // plugins/CustomUI/src/ui/themeCreator.tsx
-function ThemeCreator({ onChange }) {
+function ThemeCreator({ defaultTheme, onChange }) {
   const React = api.React;
-  const [theme, setTheme] = React.useState({
-    name: "New theme",
-    question: {
-      background: "#303f9f",
-      text: "#ffffff"
-    },
-    palette: [
-      {
-        background: "#771322",
+  const [theme, setTheme] = React.useState(
+    defaultTheme ?? {
+      name: "New theme",
+      question: {
+        background: "#303f9f",
         text: "#ffffff"
       },
-      {
-        background: "#a85c15",
-        text: "#ffffff"
-      },
-      {
-        background: "#0d6b33",
-        text: "#ffffff"
-      },
-      {
-        background: "#076296",
-        text: "#ffffff"
-      }
-    ]
-  });
+      palette: [
+        {
+          background: "#771322",
+          text: "#ffffff"
+        },
+        {
+          background: "#a85c15",
+          text: "#ffffff"
+        },
+        {
+          background: "#0d6b33",
+          text: "#ffffff"
+        },
+        {
+          background: "#076296",
+          text: "#ffffff"
+        }
+      ]
+    }
+  );
   React.useEffect(() => {
     onChange(theme);
   }, [theme]);
@@ -733,9 +735,10 @@ function ThemePicker(props) {
     if (themeType === "default") setActiveTheme(defaultThemes_default[themeIndex]);
     else setActiveTheme(customThemes[themeIndex]);
   }, [themeType, themeIndex]);
-  const openThemeCreator = () => {
+  const openThemeCreator = (editingIndex) => {
+    const defaultTheme = editingIndex !== void 0 ? customThemes[editingIndex] : void 0;
     let creatingTheme;
-    api.UI.showModal(/* @__PURE__ */ GL.React.createElement(ThemeCreator, { onChange: (theme) => creatingTheme = theme }), {
+    api.UI.showModal(/* @__PURE__ */ GL.React.createElement(ThemeCreator, { defaultTheme, onChange: (theme) => creatingTheme = theme }), {
       id: "ThemeCreator",
       title: "Create New Theme",
       closeOnBackgroundClick: false,
@@ -747,9 +750,16 @@ function ThemePicker(props) {
         text: "Save",
         style: "primary",
         onClick: () => {
-          setThemeIndex(customThemes.length);
-          setThemeType("custom");
-          setCustomThemes([...customThemes, creatingTheme]);
+          if (editingIndex !== void 0) {
+            const newThemes = [...customThemes];
+            newThemes[editingIndex] = creatingTheme;
+            setCustomThemes(newThemes);
+            if (customThemes[editingIndex] === activeTheme) setActiveTheme(creatingTheme);
+          } else {
+            setThemeIndex(customThemes.length);
+            setThemeType("custom");
+            setCustomThemes([...customThemes, creatingTheme]);
+          }
         }
       }]
     });
@@ -764,7 +774,7 @@ function ThemePicker(props) {
     newThemes.splice(index, 1);
     setCustomThemes(newThemes);
   };
-  return /* @__PURE__ */ GL.React.createElement("div", { className: "themePicker" }, /* @__PURE__ */ GL.React.createElement("h1", null, "Custom Themes"), /* @__PURE__ */ GL.React.createElement("div", { className: "previews" }, customThemes.map((theme, i) => /* @__PURE__ */ GL.React.createElement("div", { className: "customTheme" }, /* @__PURE__ */ GL.React.createElement("div", { className: "delete", onClick: () => deleteTheme(i) }, "\u{1F5D1}"), /* @__PURE__ */ GL.React.createElement(
+  return /* @__PURE__ */ GL.React.createElement("div", { className: "themePicker" }, /* @__PURE__ */ GL.React.createElement("h1", null, "Custom Themes"), /* @__PURE__ */ GL.React.createElement("div", { className: "previews" }, customThemes.map((theme, i) => /* @__PURE__ */ GL.React.createElement("div", { className: "customTheme" }, /* @__PURE__ */ GL.React.createElement("div", { className: "delete", onClick: () => deleteTheme(i) }, "\u{1F5D1}"), /* @__PURE__ */ GL.React.createElement("div", { className: "edit", onClick: () => openThemeCreator(i) }, "\u270E"), /* @__PURE__ */ GL.React.createElement(
     "div",
     {
       className: "customThemePreview",
@@ -782,7 +792,7 @@ function ThemePicker(props) {
         }
       }
     )
-  ))), /* @__PURE__ */ GL.React.createElement("button", { className: "addCustomTheme", onClick: openThemeCreator }, "Create New Theme")), /* @__PURE__ */ GL.React.createElement("h1", null, "Default Themes"), /* @__PURE__ */ GL.React.createElement("div", { className: "previews" }, defaultThemes_default.map((theme, i) => /* @__PURE__ */ GL.React.createElement(
+  ))), /* @__PURE__ */ GL.React.createElement("button", { className: "addCustomTheme", onClick: () => openThemeCreator() }, "Create New Theme")), /* @__PURE__ */ GL.React.createElement("h1", null, "Default Themes"), /* @__PURE__ */ GL.React.createElement("div", { className: "previews" }, defaultThemes_default.map((theme, i) => /* @__PURE__ */ GL.React.createElement(
     "div",
     {
       style: {
