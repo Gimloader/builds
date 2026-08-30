@@ -2,12 +2,12 @@
  * @name CustomUI
  * @description Allows you to customize various things about the Gimkit UI
  * @author Gimloader Official
- * @version 0.3.4
+ * @version 0.3.5
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CustomUI.js
  * @webpage https://gimloader.github.io/plugins/CustomUI
  * @hasSettings true
- * @changelog Updated webpage url
- * @signature iEK7GjFigd57xKsy/8GN8D3M48GnyFPxnoTt4144Fx3TSAGUf+9f7AH8EaFG84oV7BVjDwM4FGifR1RKjx0DAg==
+ * @changelog Fixed theme displaying on 1d answer screen even when disabled
+ * @signature o8dE5QffcbkSnzm29E28XQJh1dIZMsiyEGhkVO4Pg399y+PtVh6odmPJb+K50vtawXHW1ObbhcNAaiLSTlLdAg==
  */
 
 // inject-css:plugins/CustomUI/src/styles.css
@@ -188,7 +188,7 @@ api.UI.addStyles(`.cui-settings {
     }
 }
 
-.flex-column.maxAll > .maxWidth > span {
+.useCustomTheme .flex-column.maxAll > .maxWidth > span {
     &:nth-child(1) > div {
         background-color: var(--answer-bg-1) !important;
         color: var(--answer-text-1) !important;
