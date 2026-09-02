@@ -7,7 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/CustomUI
  * @hasSettings true
  * @changelog Added option to edit custom themes
- * @signature FhdvTM4XVFfjgwlV3wyPelPUGCw9lhlk0yui8O7/0Ywpd5vWHvtuXE/5mqp81GR50fDoRPNoi9RJ2SX4A7dnAw==
+ * @signature w5LeVAUqeuOA3Yo2A/ZfuCA7sJh4k0Gq6LIs99McXo+dpqoicoGt3njLN9iSkJipFk/5+lMO44SbUWcB31JgAQ==
  */
 
 // inject-css:plugins/CustomUI/src/styles.css
@@ -764,9 +764,9 @@ function ThemePicker(props) {
       }]
     });
   };
-  const deleteTheme = (index) => {
+  const deleteTheme = async (index) => {
     const theme = customThemes[index];
-    const confirm = window.confirm(`Are you sure you want to delete the theme "${theme.name}"?`);
+    const confirm = await api.UI.confirm("Theme Deletion", `Are you sure you want to delete the theme "${theme.name}"?`);
     if (!confirm) return;
     if (theme === activeTheme) setThemeIndex(0);
     if (customThemes.length === 1) setThemeType("default");

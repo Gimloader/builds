@@ -6,7 +6,7 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/AutoKicker.js
  * @webpage https://gimloader.github.io/plugins/AutoKicker
  * @changelog Added a setting to disable notifying
- * @signature yTg8mV3ZC4EWB6zyUJu4L3NsZ7CsRLInA2MBLG1/UqYSoCJBY3jfEG9c68WtVwP8cFbtmRSAI15L9rgWzQSABw==
+ * @signature WTTmWy5Xq+33+6P8zmHbRZT6XuNQhj0lfAFBunlMF2WCUtsDgAMsralYg60KyRvGpjPo532n5/mi+Ma34u1uCQ==
  */
 
 // inject-css:plugins/AutoKicker/src/styles.css
@@ -502,12 +502,11 @@ function UI({ autoKicker: autoKicker2 }) {
     "button",
     {
       className: "add",
-      onClick: () => {
-        let name = prompt("Enter the name to blacklist");
+      onClick: async () => {
+        const name = await api.UI.prompt("Enter the name to blacklist");
         if (!name) return;
-        name = name.trim();
         autoKicker2.blacklist.push({
-          name,
+          name: name.trim(),
           exact: true
         });
         setBlacklist([...autoKicker2.blacklist]);

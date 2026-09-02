@@ -10,7 +10,7 @@
  * @gamemode fishtopia
  * @gamemode oneWayOut
  * @changelog Maybe fixed Fishtopia splits resetting
- * @signature jzNi2hA8xyF6LsFVuqrJ1oyO14yIe6hgMsuODDtt9HTngJqlY7IQS7AN/g9bp4p5pA+RRhZBH3IpXT19e7r6AA==
+ * @signature a1z7zK7QLDg2hI/IelGPHHH7vAu5Ua0MxlcyLpSIMvfkjBc9qmXl7jBDSJVDP6z23KRIK0No5ZuRu5bHTk3+Ag==
  */
 
 // external-svelte:svelte/internal/client
@@ -205,8 +205,8 @@ var root = from_html(`<div>Attempts: <input type="number"/></div> <table><thead>
 function FullGame($$anchor, $$props) {
   push($$props, true);
   let data = prop($$props, "data", 15);
-  function resetSplits() {
-    let conf = confirm("Are you sure you want to reset all splits for this category?");
+  async function resetSplits() {
+    let conf = await api.UI.confirm("Reset Splits", "Are you sure you want to reset all splits for this category?");
     if (!conf) return;
     data(data().pb[$$props.category] = [], true);
     data(data().bestSplits[$$props.category] = [], true);

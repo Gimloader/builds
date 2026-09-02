@@ -9,7 +9,7 @@
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
  * @changelog Updated webpage url
- * @signature PKxh6haIRTSA0ViDhyrnXy3lBMIIERsnqiQ/efgEvmY+1ZIKN7U5p8sY5TW2DtYO/YuuHge71mp2Kv2xvkEgCA==
+ * @signature thi0KMLDHm8NxfDeyUmtjTrojuSqPYDjOAXfyaE1eynY1gHB+TXRAJ9D9r4IqQg5jU8cUIHqCBu9fTATpB6NDA==
  */
 
 // shared/files.ts
@@ -106,11 +106,9 @@ var Recorder = class {
   frames = [];
   recording = false;
   playing = false;
-  toggleRecording() {
-    if (this.recording) {
-      const conf = window.confirm("Do you want to save the recording?");
-      this.stopRecording(conf);
-    } else this.startRecording();
+  async toggleRecording() {
+    if (this.recording) this.stopRecording(true);
+    else this.startRecording();
   }
   startRecording() {
     this.recording = true;
@@ -126,11 +124,12 @@ var Recorder = class {
       updateLasers(this.frames.length);
     };
   }
-  stopRecording(save, fileName) {
+  async stopRecording(promptSave, fileName) {
     this.recording = false;
     this.physicsManager.physicsStep = this.nativeStep;
     stopUpdatingLasers();
-    if (!save) return;
+    if (!promptSave) return;
+    if (!await api.UI.confirm("Recording ended", "Do you want to save the recording?")) return;
     const json = {
       startPos: this.startPos,
       startState: this.startState,
@@ -177,14 +176,11 @@ var Recorder = class {
 
 // plugins/InputRecorder/src/index.ts
 var recorder;
-function startRecording() {
+function toggleRecording() {
   if (!recorder) return;
   if (recorder.playing) {
     api.UI.notification.open({ message: "Cannot record while playing", type: "error" });
     return;
-  }
-  if (recorder.recording) {
-    api.hotkeys.releaseAll();
   }
   recorder.toggleRecording();
 }
@@ -213,7 +209,7 @@ api.hotkeys.addConfigurableHotkey({
     key: "KeyR",
     alt: true
   }
-}, startRecording);
+}, toggleRecording);
 api.hotkeys.addConfigurableHotkey({
   category: "Input Recorder",
   title: "Play Back Recording",
@@ -224,7 +220,7 @@ api.hotkeys.addConfigurableHotkey({
 }, playBackRecording);
 api.net.onLoad(() => {
   recorder = new Recorder(api.stores.phaser.scene.worldManager.physics);
-  api.commands.addCommand({ text: () => `InputRecorder: ${recorder.recording ? "Stop Recording" : "Start Recording"}` }, startRecording);
+  api.commands.addCommand({ text: () => `InputRecorder: ${recorder.recording ? "Stop Recording" : "Start Recording"}` }, toggleRecording);
   api.commands.addCommand({ text: "InputRecorder: Play Back Recording" }, playBackRecording);
 });
 function getRecorder() {

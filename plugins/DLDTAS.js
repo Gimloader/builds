@@ -8,7 +8,7 @@
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
  * @changelog Fixed for new physics
- * @signature JMGNCDii8U9Z2NBJb5lmrAX842w+zw6T5SSR5gvPPtRlRodjFBywZdpl+cbdVjFT7faLV2UbTSCjRxk0e6qOAg==
+ * @signature c9v9PM8MiCzzpduesdamg2UQfb15fvqGSRVj0EXTmnQYYEI4h/ZvjLJmTb8a89kdo5w79rQ/uqQowrk4dMWLBA==
  */
 
 // inject-css:plugins/DLDTAS/src/styles.css
@@ -246,13 +246,15 @@ function initLasers(values2) {
   api.hotkeys.addHotkey({
     key: "KeyL",
     alt: true
-  }, () => {
+  }, async () => {
     api.hotkeys.releaseAll();
-    const offset = prompt(`Enter the laser offset in frames, from 0 to 65 (currently ${laserOffset})`);
+    const offset = await api.UI.prompt("Laser offset", {
+      text: `Enter the laser offset in frames, from 0 to 65 (currently ${laserOffset})`
+    });
     if (offset === null) return;
     const parsed = parseInt(offset, 10);
     if (Number.isNaN(parsed) || parsed < 0 || parsed > 65) {
-      alert("Invalid offset");
+      api.UI.notification.error({ message: "Invalid laser offset" });
       return;
     }
     setLaserOffset(parsed);
@@ -545,8 +547,8 @@ function createUI() {
     }).catch(() => {
     });
   });
-  div.querySelector("#reset")?.addEventListener("click", () => {
-    const conf = confirm("Are you sure you want to reset?");
+  div.querySelector("#reset")?.addEventListener("click", async () => {
+    const conf = await api.UI.confirm("Reset TAS", "Are you sure you want to reset your TAS?");
     if (!conf) return;
     setPlaying(false);
     setControlling(false);
