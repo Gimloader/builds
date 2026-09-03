@@ -2,14 +2,14 @@
  * @name DownpatchPhysics
  * @description Restore physics to how it functioned in older versions of Gimkit
  * @author Gimloader Official
- * @version 0.1.2
+ * @version 0.1.3
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/DownpatchPhysics.js
  * @webpage https://gimloader.github.io/plugins/DownpatchPhysics
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @hasSettings true
  * @gamemode 2d
- * @changelog Accomodated new Gimkit update
- * @signature j3G16p/5A0AFWqMbIqjXT/tsbp4D99oieS/0OKjIvlu2mZ88kBJQcHKdDiaX49NqqKcoH2n0IQ1SG4Q4vXLsCA==
+ * @changelog Fix jumping fully not working. There may still be more issues.
+ * @signature ubA0oGvbg9i4y9Njysolzbq/IusttQI6BHoZdyCQJwZl75szPDQ6qxzg6iTcWcR3DVR6r6rePKJtP3uU5J0UDA==
  */
 
 // plugins/DownpatchPhysics/src/consts.ts
@@ -25,6 +25,16 @@ var lo = {
     rightAngle: 11 * PI / 6,
     notWhenWithin: [[4 * PI / 3, 5 * PI / 3], [PI / 3, 2 * PI / 3]]
   }
+};
+var mapOptions = {
+  maxGravityPerSecond: 10,
+  timeToMaxGravityMS: 630,
+  yTravelUntilMaxGravity: 3.5,
+  jumpHeight: 1.92,
+  jumpDurationMS: 400,
+  jumpHangTimeMS: 50,
+  subsequentJumpMultiplier: 0.66,
+  maxJumps: 2
 };
 var defaultAirMovement = {
   accelerationSpeed: 0.08125,
@@ -139,6 +149,31 @@ api.rewriter.exposeVar("App", {
 });
 api.net.onLoad(() => {
   const scene = api.stores.phaser.scene;
+  api.stores.phaser.mainCharacter.physics.state = {
+    "gravity": 1e-3,
+    "velocity": {
+      "x": 0,
+      "y": 0
+    },
+    "movement": {
+      "direction": "none",
+      "xVelocity": 0,
+      "accelerationTicks": 0
+    },
+    "jump": {
+      "isJumping": false,
+      "jumpsLeft": 2,
+      "jumpCounter": 0,
+      "jumpTicks": 118,
+      "xVelocityAtJumpStart": 0
+    },
+    "forces": [],
+    "grounded": true,
+    "groundedTicks": 0,
+    "lastGroundedAngle": 0
+  };
+  api.patcher.instead(api.stores.phaser.mainCharacter.physics, "sendToServer", () => {
+  });
   api.patcher.instead(api.stores.phaser.mainCharacter.physics, "preUpdate", (thisVal) => {
     thisVal.prevState = {
       ...thisVal.state,
@@ -388,7 +423,7 @@ api.net.onLoad(() => {
   function dJ(g) {
     let { characterId: t } = g, e = uJ({
       characterId: t
-    }), I = fe(), o = e != null && e.overrideJumpHeight ? e.jumpHeight ?? I.jumpHeight : I.jumpHeight, s = e != null && e.overrideJumpDurationMS ? e.jumpDurationMS ?? I.jumpDurationMS : I.jumpDurationMS, r = e != null && e.overrideJumpHangTimeMS ? e.jumpHangTimeMS ?? I.jumpHangTimeMS : I.jumpHangTimeMS, B = e != null && e.overrideSubsequentJumpMultiplier ? e.subsequentJumpMultiplier ?? I.subsequentJumpMultiplier : I.subsequentJumpMultiplier, E = e != null && e.overrideMaxJumps ? e.maxJumps ?? I.maxJumps : I.maxJumps;
+    }), o = e != null && e.overrideJumpHeight ? e.jumpHeight ?? mapOptions.jumpHeight : mapOptions.jumpHeight, s = e != null && e.overrideJumpDurationMS ? e.jumpDurationMS ?? mapOptions.jumpDurationMS : mapOptions.jumpDurationMS, r = e != null && e.overrideJumpHangTimeMS ? e.jumpHangTimeMS ?? mapOptions.jumpHangTimeMS : mapOptions.jumpHangTimeMS, B = e != null && e.overrideSubsequentJumpMultiplier ? e.subsequentJumpMultiplier ?? mapOptions.subsequentJumpMultiplier : mapOptions.subsequentJumpMultiplier, E = e != null && e.overrideMaxJumps ? e.maxJumps ?? mapOptions.maxJumps : mapOptions.maxJumps;
     return {
       jumpHeight: o,
       jumpDurationMS: s,
@@ -409,17 +444,6 @@ api.net.onLoad(() => {
     let I = e.options;
     if (I) {
       return I;
-    }
-  }
-  function fe() {
-    var e, I;
-    let g = k.world.mapOptionsJSON;
-    if (g) {
-      return JSON.parse(g);
-    }
-    let t = (I = (e = vI()) == null ? void 0 : e.state) == null ? void 0 : I.mapSettings;
-    if (t) {
-      return JSON.parse(t);
     }
   }
   const xp = /* @__PURE__ */ new Map();
@@ -545,7 +569,7 @@ api.net.onLoad(() => {
   function x5(g) {
     let { characterId: t } = g, e = uJ({
       characterId: t
-    }), I = fe(), o = e != null && e.overrideMaxGravityPerSecond ? (e == null ? void 0 : e.maxGravityPerSecond) ?? I.maxGravityPerSecond : I.maxGravityPerSecond, s = e != null && e.overrideTimeToMaxGravityMS ? e.timeToMaxGravityMS ?? I.timeToMaxGravityMS : I.timeToMaxGravityMS, r = e != null && e.overrideYTravelUntilMaxGravity ? e.yTravelUntilMaxGravity ?? I.yTravelUntilMaxGravity : I.yTravelUntilMaxGravity;
+    }), o = e != null && e.overrideMaxGravityPerSecond ? (e == null ? void 0 : e.maxGravityPerSecond) ?? mapOptions.maxGravityPerSecond : mapOptions.maxGravityPerSecond, s = e != null && e.overrideTimeToMaxGravityMS ? e.timeToMaxGravityMS ?? mapOptions.timeToMaxGravityMS : mapOptions.timeToMaxGravityMS, r = e != null && e.overrideYTravelUntilMaxGravity ? e.yTravelUntilMaxGravity ?? mapOptions.yTravelUntilMaxGravity : mapOptions.yTravelUntilMaxGravity;
     return {
       maxGravityPerSecond: o,
       timeToMaxGravityMS: s,
