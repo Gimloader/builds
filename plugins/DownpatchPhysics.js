@@ -2,14 +2,14 @@
  * @name DownpatchPhysics
  * @description Restore physics to how it functioned in older versions of Gimkit
  * @author Gimloader Official
- * @version 0.1.3
+ * @version 0.1.4
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/DownpatchPhysics.js
  * @webpage https://gimloader.github.io/plugins/DownpatchPhysics
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @hasSettings true
  * @gamemode 2d
- * @changelog Fix jumping fully not working. There may still be more issues.
- * @signature ubA0oGvbg9i4y9Njysolzbq/IusttQI6BHoZdyCQJwZl75szPDQ6qxzg6iTcWcR3DVR6r6rePKJtP3uU5J0UDA==
+ * @changelog Fully restored parity with older version of physics
+ * @signature 9aC3T5xy1EQRBTSqR0ISGrhUmv6wnGrJM1mXEvi+Zyyxab9G+4TRMBOWq0Q+yJtk3wETOFJzBR4XN9W2bMhmAQ==
  */
 
 // plugins/DownpatchPhysics/src/consts.ts
@@ -149,6 +149,13 @@ api.rewriter.exposeVar("App", {
 });
 api.net.onLoad(() => {
   const scene = api.stores.phaser.scene;
+  const character = api.stores.phaser.mainCharacter.physics.getBody().character;
+  character.controller.setMaxSlopeClimbAngle(Phaser.Math.DegToRad(45));
+  character.controller.setMinSlopeSlideAngle(Phaser.Math.DegToRad(45));
+  api.onStop(() => {
+    character.controller.setMaxSlopeClimbAngle(Phaser.Math.DegToRad(46));
+    character.controller.setMinSlopeSlideAngle(Phaser.Math.DegToRad(46));
+  });
   api.stores.phaser.mainCharacter.physics.state = {
     "gravity": 1e-3,
     "velocity": {
