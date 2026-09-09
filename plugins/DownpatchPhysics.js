@@ -9,7 +9,7 @@
  * @hasSettings true
  * @gamemode 2d
  * @changelog Accurately restored the original platformer physics
- * @signature ySiCtlECnac7e1LHL1+cJpqtIWbgwv3tLNu5C4sZKghdDTRCQH0SjkMPyyLiMpcIZ7ZxFuTHbK8ajcABWj1sCw==
+ * @signature 6RV1pyNL1D96NovANkXPS0Vlt4DiQeJxN8PsKPcjdV8IojHMD/kQjMEXpd69MPOuwZzvXN8Jk8k1Umg8zHgQBA==
  */
 
 // plugins/DownpatchPhysics/src/consts.ts
@@ -35,11 +35,6 @@ var mapOptions = {
   jumpHangTimeMS: 50,
   subsequentJumpMultiplier: 0.66,
   maxJumps: 2
-};
-var defaultAirMovement = {
-  accelerationSpeed: 0.08125,
-  decelerationSpeed: 0.08125,
-  maxAccelerationSpeed: 0.14130434782608697
 };
 var we = {
   "capsule": {
@@ -91,7 +86,11 @@ var we = {
       "decelerationSpeed": 0.1625,
       "maxAccelerationSpeed": 0.14130434782608697
     },
-    "air": defaultAirMovement
+    "air": {
+      "accelerationSpeed": 0.08125,
+      "decelerationSpeed": 0.08125,
+      "maxAccelerationSpeed": 0.14130434782608697
+    }
   },
   "jump": {
     "coyoteJumpLimitMS": 200,
@@ -209,7 +208,6 @@ api.net.onLoad(() => {
   const ee = () => api.stores.network.authId;
   const Ve = () => scene.worldManager.physics;
   const _i = (id) => scene.worldManager.devices.getDeviceById(id);
-  const vI = () => api.stores.network.room;
   const Fe = () => api.stores.session.mapStyle === "platformer";
   const wr2 = () => api.stores.session.phase === "preGame";
   const Fr = () => api.stores.session.phase === "game";
