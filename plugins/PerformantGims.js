@@ -2,13 +2,14 @@
  * @name PerformantGims
  * @description Replaces configurable gims with images of them. Looks like crap, runs really fast.
  * @author Gimloader Official
- * @version 0.5.2
+ * @version 0.5.3
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/PerformantGims.js
  * @webpage https://gimloader.github.io/plugins/PerformantGims
  * @reloadRequired ingame
  * @hasSettings true
- * @changelog Updated webpage url
- * @signature KND8nqYg/TZfbGK75Zn+ntnS66KCddw2Xhf03C8VZH9YhcNuEN3w42eP3dLAVn1m88/+xLHR+PKGTeeOd3T2Cw==
+ * @changelog Deprecated in favor of the Simple Gim Mode in base Gimkit
+ * @deprecated Superceded by Simple Gim Mode in base Gimkit
+ * @signature U3PUFgIGTtlsEBsE07/kRlMDzi8zCNHwQXQ4mPvMBsEW1/R9QAev0cePbbyNCfTbZRNdfZ91sYt8/ZQxTAHnCg==
  */
 
 // plugins/PerformantGims/src/index.ts
