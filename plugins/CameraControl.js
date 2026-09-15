@@ -2,14 +2,14 @@
  * @name CameraControl
  * @description Lets you freely move and zoom your camera
  * @author Gimloader Official
- * @version 1.1.0
+ * @version 1.1.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CameraControl.js
  * @webpage https://gimloader.github.io/plugins/CameraControl
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
  * @hasSettings true
  * @gamemode 2d
- * @changelog Exposed freecam functions for other scripts to use
- * @signature iF5/416VgUOUW+vcvYDLyhT8trzvrJhUv2JMFuW+4LN/sN5wsmDdLDvB7kUj2o0+KMmmDN+L73QzgJz3GXM9CQ==
+ * @changelog Bumped version to force update
+ * @signature bO1M43wt8yWU/J+uta3zqAelzcie4M/38xhs1v/Ux+0tY6I9GW9Or6ZpLFdLlrywiTG44yu2cg2hSbxm8zBBBQ==
  */
 
 // plugins/CameraControl/src/settings.ts

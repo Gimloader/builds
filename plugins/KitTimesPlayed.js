@@ -2,12 +2,12 @@
  * @name KitTimesPlayed
  * @description Shows the number of times that kits have been played on the kits screen
  * @author Gimloader Official
- * @version 0.1.2
+ * @version 0.1.3
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/KitTimesPlayed.js
  * @webpage https://gimloader.github.io/plugins/KitTimesPlayed
  * @reloadRequired notingame
- * @changelog Updated webpage url
- * @signature bgfj6TOTqa2uGi2/ocm4ays0OqiJhrwHrKB8UKmSk50pXhDcfBUBR1aGgfHV0/MWM6wj4xeHDSoZRG0qrV7eAg==
+ * @changelog Bumped version to force update
+ * @signature B8TbB44YQ8Ji6wmG+QtTwklRDuYYEGOsarfMilc23fJ/4febQEQowQswMoN6FzgYrpexjsm35PYoC2t9Ni4WCA==
  */
 
 // shared/rewritingUtils.ts

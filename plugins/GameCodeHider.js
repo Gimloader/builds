@@ -2,11 +2,11 @@
  * @name GameCodeHider
  * @description Allows hiding/revealing your game code everywhere
  * @author Gimloader Official
- * @version 0.1.2
+ * @version 0.1.3
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/GameCodeHider.js
  * @webpage https://gimloader.github.io/plugins/GameCodeHider
- * @changelog Fixed code not being hidden when building in Creative editor
- * @signature tgUiCLdQl9ThLxFqsvG07itDtY6T78quq1BR71z93zK3ESbDVCxkVEA+TmI/2PovC3aLLY+bBeGD+UY18qymCQ==
+ * @changelog Bumped version to force update
+ * @signature bec8MMDH9QOMKlLAvySb+7IsZX1rHivBXh5bpt6/ll57jPw0K7SPqdd+dSx/alJp5nm+0+5TOYwMl/AjmS0dBw==
  */
 
 // inject-css:plugins/GameCodeHider/src/styles.css
