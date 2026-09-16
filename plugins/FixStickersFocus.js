@@ -2,11 +2,13 @@
  * @name FixStickersFocus
  * @description Fixes the in-game stickers button keeping focus after being closed
  * @author Gimloader Official
- * @version 0.1.0
+ * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/FixStickersFocus.js
  * @webpage https://gimloader.github.io/plugins/FixStickersFocus
  * @reloadRequired ingame
- * @signature 0XTghVELfP9oP0XG9L65DEhzyYTx2sk3v4ky82X3Hq03LWmns5WhvahBF1GtgA8eewiypQkMZMj4ndfRZQGEAg==
+ * @changelog Deprecate since this bug has been fixed
+ * @deprecated This bug has been fixed by Gimkit
+ * @signature SI2HlEN2FdQvsWgIW4YuvP2xKmv8kcH4JnqFm5J8x2xXhw99ZEFoxzsQgVkDV8K13Kd++RCoeUl05skM9ocBBg==
  */
 
 // shared/rewritingUtils.ts
