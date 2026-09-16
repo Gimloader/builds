@@ -8,7 +8,7 @@
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
  * @changelog Fixed for new physics
- * @signature c9v9PM8MiCzzpduesdamg2UQfb15fvqGSRVj0EXTmnQYYEI4h/ZvjLJmTb8a89kdo5w79rQ/uqQowrk4dMWLBA==
+ * @signature BIejw60jTGCMmwHT+5lwy0/yS1zVezMIIPqmBPi7il+KBM9X+3d1sY1+BtQYlOPbZEpavC1AYX8a9K9TqI/yBg==
  */
 
 // inject-css:plugins/DLDTAS/src/styles.css
@@ -302,7 +302,13 @@ function generatePhysicsInput(frame, lastFrame) {
   else if (frame.right && frame.left && !frame.up) angle = null;
   else if (!frame.right && frame.left && frame.up) angle = 225;
   else if (frame.right && frame.left && frame.up) angle = 225;
-  return { angle, jump, _jumpKeyPressed: frame.up };
+  return {
+    angle,
+    jump,
+    _jumpKeyPressed: frame.up,
+    isHoldingLeft: frame.left,
+    isHoldingRight: frame.right
+  };
 }
 var getTickKeys = (input) => ({
   left: input.angle === 180 || input.angle === 225,

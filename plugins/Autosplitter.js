@@ -10,7 +10,7 @@
  * @gamemode fishtopia
  * @gamemode oneWayOut
  * @changelog Maybe fixed Fishtopia splits resetting
- * @signature a1z7zK7QLDg2hI/IelGPHHH7vAu5Ua0MxlcyLpSIMvfkjBc9qmXl7jBDSJVDP6z23KRIK0No5ZuRu5bHTk3+Ag==
+ * @signature WqaRMY9jTKrUBZ3IT02lo142pLWwNRr/tuN4ZPsonxPHbbo5RVdAscqTD/T6SeUazo9kYOZ4+XhCysZ2Dk3vBw==
  */
 
 // external-svelte:svelte/internal/client
@@ -1390,7 +1390,7 @@ var FishtopiaAutosplitter = class extends SplitsAutosplitter {
       if (!boatChannels.includes(channel)) return;
       if (this.usedChannels.has(channel)) return;
       this.usedChannels.add(channel);
-      api.net.once("PHYSICS_STATE", (e2) => {
+      api.net.colyseus.once("PHYSICS_STATE", (e2) => {
         if (e2.teleport) {
           this.timer.split();
         }
