@@ -2,12 +2,12 @@
  * @name QuickReset
  * @description Quickly lets you restart 2d gamemodes
  * @author Gimloader Official
- * @version 0.4.2
+ * @version 0.4.3
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/QuickReset.js
  * @webpage https://gimloader.github.io/plugins/QuickReset
  * @gamemode 2d
- * @changelog Updated webpage url
- * @signature TNptb+Q4BUQrfQSmCgfPYK3PSKdKUAUG+sLnT/AuJe63WbclhUZzQIW8Qwxir7SXe48NQpH9aRfV09PTRvm/Bg==
+ * @changelog Bump version to force update
+ * @signature JA/QMKlVAb2KG5gBxer0X6pC7yAYWGoP+9iKdxa4yY2dlcM2cLJ/N7mWu2ARM6cDRmjZgdrKhCa/mi8UqVnpAw==
  */
 
 // plugins/QuickReset/src/index.ts

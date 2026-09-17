@@ -2,13 +2,13 @@
  * @name Communication
  * @description Communication between different clients in 2D gamemodes
  * @author Gimloader Official
- * @version 0.5.2
+ * @version 0.5.3
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @webpage https://gimloader.github.io/libraries/Communication
  * @gamemode 2d
- * @changelog Fixed messages being dropped when sent while aiming
+ * @changelog Bump version to force update
  * @isLibrary true
- * @signature XrOY/6DL9ujM50wElMcJuTZpcQBWpSgbWMoTK/JtDmvvRuz4upy+WOO3n0NztxDiErXY41QzTAOT/LTZ2A22BQ==
+ * @signature 0yN8fki/6Qzj/BknetO9lXGDXd7/1X/8ab4jwKOyKuaMJOiUlr/v8B+WvPKu4QZY+YGuHcZrEEa/UYXSmIEsBA==
  */
 
 // libraries/Communication/src/encoding.ts

@@ -2,13 +2,13 @@
  * @name Desynchronize
  * @description Disables the client being snapped back by the server, others cannot see you move. Breaks most gamemodes.
  * @author Gimloader Official
- * @version 0.3.0
+ * @version 0.3.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @webpage https://gimloader.github.io/plugins/Desynchronize
  * @optionalLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
- * @changelog Added better popup for needing communication
- * @signature D3Qepd5wv77IzYJlKk2XfXowhbhSfMiUeCYOqnOY8gpgSaMFxw7kfkP1H3c+tY5uIyCJ86n0ky2YGnEW6u3jCw==
+ * @changelog Bump version to force update
+ * @signature Unz1slJAK/gRo20946DoshtCSOjExEf1keAfRTRKurZDLGjVyk1lJWN7Tw/nXV6Y7z+MMlSOD1eTUvh6pOcQCQ==
  */
 var __defProp = Object.defineProperty;
 var __export = (target, all) => {

@@ -2,13 +2,13 @@
  * @name Chat
  * @description Adds an in-game chat to 2d gamemodes
  * @author Gimloader Official
- * @version 0.5.0
+ * @version 0.5.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Chat.js
  * @webpage https://gimloader.github.io/plugins/Chat
  * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
- * @changelog Added option to show player skins in chat
- * @signature R6dsDZj4otc57lyNC+3bwm0vdbkUVONT0pIC5WhO00tgWUfn63P7EXoNSYsxxTz7VgvM4EyXkM5ePgDuEz8WCQ==
+ * @changelog Bump version to force update
+ * @signature tiUspQaUsmMnSgn7gGwqzksnJ7H6AqjLeo8cBRfn6TgCXB7ESvWxXJSML3GPKcSjqjPBfunAYBtaKx4xwBQCBw==
  */
 
 // external-svelte:svelte

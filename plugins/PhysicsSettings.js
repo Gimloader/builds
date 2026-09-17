@@ -2,14 +2,14 @@
  * @name PhysicsSettings
  * @description Allows you to configure various things about the physics in platformer modes (client-side only)
  * @author Gimloader Official
- * @version 0.3.1
+ * @version 0.3.2
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/PhysicsSettings.js
  * @webpage https://gimloader.github.io/plugins/PhysicsSettings
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @hasSettings true
  * @gamemode 2d
- * @changelog Updated webpage url
- * @signature bwyoJrdK672+YcZxMM2claPwAnGYm3GZBSsMvzOdo2NLy7QUcvsUmPWBinXfHdMcrSoFQHcVfjw0/Fxhis07DA==
+ * @changelog Bump version to force update
+ * @signature ND3YopXNnjppLvOTwGBaiSJqDhf03BR7ryeFhZXzJnIkXTphhreG04xYMiBblykRqYyqBMfy2NsE876m34KZBA==
  */
 
 // shared/rewritingUtils.ts

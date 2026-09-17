@@ -2,11 +2,11 @@
  * @name AutoKicker
  * @description Automatically kicks players from your lobby with a customizable set of rules
  * @author Gimloader Official
- * @version 0.3.0
+ * @version 0.3.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/AutoKicker.js
  * @webpage https://gimloader.github.io/plugins/AutoKicker
- * @changelog Added a setting to disable notifying
- * @signature WTTmWy5Xq+33+6P8zmHbRZT6XuNQhj0lfAFBunlMF2WCUtsDgAMsralYg60KyRvGpjPo532n5/mi+Ma34u1uCQ==
+ * @changelog Bump version to force update
+ * @signature fCSx6hoGT7UMvvfsZzCNsn9T8VnLv2pQPncUgOCNHnnJdJpo4sRB8c7lilmOeEgNwNs/H5Me8TbQl7lhPoIEBg==
  */
 
 // inject-css:plugins/AutoKicker/src/styles.css

@@ -2,12 +2,12 @@
  * @name CharacterLabels
  * @description Allows easily making labels that follow players in 2d gamemodes
  * @author Gimloader Official
- * @version 0.1.0
+ * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/libraries/CharacterLabels.js
  * @webpage https://gimloader.github.io/libraries/CharacterLabels
- * @gamemode 2d
+ * @changelog Bump version to force update
  * @isLibrary true
- * @signature Oxwb5Yt2vkbAFpBb23RbdxBvWWyp2A2FR38ACukWKyv8noO9MyXLzlBxjrSSgzyQQnDacA96xjL4L5Ge9F5mDA==
+ * @signature tDVNJvNFg0rReelzBxFGb4aGaVpQXZjYYv9aGzay+BXFahSNaZT4rwNcZDw6DyRoJ4bwcflGSmmhHpv9icxvDg==
  */
 
 // libraries/CharacterLabels/src/index.ts

@@ -2,12 +2,13 @@
  * @name Overtime
  * @description Gives automatic overtime when the score is tied in knockout games
  * @author Gimloader Official
- * @version 0.1.0
+ * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Overtime.js
  * @webpage https://gimloader.github.io/plugins/Overtime
  * @hasSettings true
  * @gamemode 2d
- * @signature yFjlahte0dVLM47E07Adk4b8muCtE1IpUCXoRQmHpzRVoGKnNK0QbYoP3NT1Mm+4So8icXeO7LrmUjYPPdoeAQ==
+ * @changelog Bump version to force update
+ * @signature 5V3Qz6VXx0kQrTcJQjuFtA4C4dRRSnbzVz5k0qMwWThYe477S6/SJRo1ItvRZfPX/XNbbb751rZ/9yMfqMPrDQ==
  */
 
 // plugins/Overtime/src/index.ts
