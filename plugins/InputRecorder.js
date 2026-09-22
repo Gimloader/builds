@@ -2,14 +2,14 @@
  * @name InputRecorder
  * @description Records your inputs in Don't Look Down
  * @author Gimloader Official
- * @version 0.4.1
+ * @version 0.4.2
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/InputRecorder.js
  * @webpage https://gimloader.github.io/plugins/InputRecorder
  * @reloadRequired ingame
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
- * @changelog Updated webpage url
- * @signature thi0KMLDHm8NxfDeyUmtjTrojuSqPYDjOAXfyaE1eynY1gHB+TXRAJ9D9r4IqQg5jU8cUIHqCBu9fTATpB6NDA==
+ * @changelog Fixed crashing
+ * @signature bGEAserxzWUOmOY8fwlKKIuXVnoorJp7O0tXS55QuMJREPOmzorDIurMtT11yz3dEOulww88IlLOt2vxAVZGCg==
  */
 
 // shared/files.ts
@@ -102,7 +102,6 @@ var Recorder = class {
   getPhysicsInput = this.inputManager.getPhysicsInput;
   startPos = { x: 0, y: 0 };
   startState = "";
-  platformerPhysics = "";
   frames = [];
   recording = false;
   playing = false;
@@ -114,7 +113,6 @@ var Recorder = class {
     this.recording = true;
     this.startPos = this.rb.translation();
     this.startState = JSON.stringify(this.physics.state);
-    this.platformerPhysics = JSON.stringify(api.platformerPhysics);
     this.frames = [];
     api.UI.notification.open({ message: "Started Recording" });
     this.inputManager.getPhysicsInput = this.getPhysicsInput;
@@ -133,7 +131,6 @@ var Recorder = class {
     const json = {
       startPos: this.startPos,
       startState: this.startState,
-      platformerPhysics: this.platformerPhysics,
       frames: this.frames
     };
     const name = api.stores.phaser.mainCharacter.nametag.name;
@@ -143,10 +140,8 @@ var Recorder = class {
     const desync = api.plugin("Desynchronize");
     desync.DLD.cancelRespawn();
     this.playing = true;
-    this.platformerPhysics = JSON.stringify(api.platformerPhysics);
     this.rb.setTranslation(data.startPos, true);
     this.physics.state = JSON.parse(data.startState);
-    Object.assign(api.platformerPhysics, JSON.parse(data.platformerPhysics));
     this.physicsManager.physicsStep = (dt) => {
       api.stores.phaser.mainCharacter.physics.postUpdate(dt);
     };
@@ -167,7 +162,6 @@ var Recorder = class {
   }
   stopPlayback() {
     this.playing = false;
-    Object.assign(api.platformerPhysics, JSON.parse(this.platformerPhysics));
     stopUpdatingLasers();
     this.physicsManager.physicsStep = this.nativeStep;
     this.inputManager.getPhysicsInput = this.getPhysicsInput;
