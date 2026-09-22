@@ -2,13 +2,13 @@
  * @name GuestControls
  * @description Allows guests to perform host actions in 2d modes, when the host has this plugin on
  * @author Gimloader Official
- * @version 0.1.3
+ * @version 0.2.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/GuestControls.js
  * @webpage https://gimloader.github.io/plugins/GuestControls
  * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
- * @changelog Bump version to force update
- * @signature vtd7L+0y36kR8NgkUH+miMxSf9qSuLUW2sDGgP2zJx4HPr4b5sFySm+4c6zrN3KLT4I1zld4BZwC/TdxF1hbDA==
+ * @changelog Allowed guests to start the game
+ * @signature e0b/EbOfJysJaGU+SpqRoL03SWELaSKp7Q/Y0uUMkAITxJNnNoMfoycy7pcHYWJZr2FrOjavOnS7KFobuRH3AQ==
  */
 
 // plugins/GuestControls/src/index.ts
@@ -27,6 +27,10 @@ api.net.onLoad(() => {
   const characters = () => [...api.stores.characters.characters.values()];
   comms.onMessage((message, char) => {
     if (!settings.notification || message === 1 /* PluginOff */ || message === 0 /* PluginOn */) return;
+    if (Array.isArray(message)) {
+      api.UI.notification.info({ message: `${char.name} started the game` });
+      return;
+    }
     switch (message) {
       case 3 /* EndGame */:
         api.UI.notification.info({ message: `${char.name} ended the game` });
@@ -55,6 +59,23 @@ api.net.onLoad(() => {
       comms.destroy();
     });
     comms.onMessage((message) => {
+      if (Array.isArray(message)) {
+        const customTeams = {};
+        if (message.length > 0) {
+          for (let i = 0; i < message.length; i += 2) {
+            const [index, team] = message.slice(i, i + 2);
+            const id = characters()[index]?.id;
+            if (!id) return;
+            customTeams[id] = team.toString();
+          }
+        }
+        api.net.colyseus.send("START_GAME", {
+          customTeams,
+          modeType: api.stores.me.preferences.startGameWithMode,
+          ownerAsSpectator: api.stores.session.ownerRole === "spectator"
+        });
+        return;
+      }
       switch (message) {
         case 2 /* GuestJoined */:
           if (Comms.enabled) comms.send(0 /* PluginOn */);
@@ -79,9 +100,6 @@ api.net.onLoad(() => {
     });
   } else {
     const { session } = api.stores;
-    api.net.colyseus.state.session.listen("phase", (phase) => {
-      if (phase !== "game") session.amIGameOwner = false;
-    });
     if (Comms.enabled) comms.send(2 /* GuestJoined */);
     comms.onMessage((message) => {
       if (message === 0 /* PluginOn */) {
@@ -93,6 +111,15 @@ api.net.onLoad(() => {
     api.onStop(() => {
       session.amIGameOwner = false;
       comms.destroy();
+    });
+    api.net.colyseus.on("send:START_GAME", (data, editFn) => {
+      const teams = [];
+      for (const [playerId, team] of Object.entries(data.customTeams)) {
+        const index = characters().findIndex((char) => char.id === playerId);
+        teams.push(index, Number(team));
+      }
+      comms.send(teams);
+      editFn(null);
     });
     api.net.colyseus.on("send:END_GAME", (_, editFn) => {
       comms.send(3 /* EndGame */);

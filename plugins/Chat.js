@@ -2,13 +2,13 @@
  * @name Chat
  * @description Adds an in-game chat to 2d gamemodes
  * @author Gimloader Official
- * @version 0.5.1
+ * @version 0.6.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Chat.js
  * @webpage https://gimloader.github.io/plugins/Chat
  * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
- * @changelog Bump version to force update
- * @signature tiUspQaUsmMnSgn7gGwqzksnJ7H6AqjLeo8cBRfn6TgCXB7ESvWxXJSML3GPKcSjqjPBfunAYBtaKx4xwBQCBw==
+ * @changelog Allowed sending messages in the lobby
+ * @signature wcx3cyEi3Awn2rYu+UFCE7EsOQDoSpBO9JioYOZ0DXK/yEqb6sP3Q5ICxQWSfuAtFDC5zFoFlSgWU7F/JjR6CA==
  */
 
 // external-svelte:svelte
@@ -100,15 +100,9 @@ var Chatter = class {
       this.addMessage(`> ${message.message}`, true);
       editFn(null);
     });
-    if (Comms.enabled) {
-      this.comms.send(
-        2
-        /* Greet */
-      );
-    }
     settings.listen("showSkins", (value) => this.showSkins = value);
     const joinedPlayers = /* @__PURE__ */ new Set();
-    this.comms.onStringStream(async (chunks, char) => {
+    this.comms.onStringStream((subscribe, char) => {
       if (!settings.streamMessages) return;
       this.playersTyping = this.playersTyping.filter((c) => c !== char);
       this.scroll(false);
@@ -118,13 +112,13 @@ var Chatter = class {
         formatted: false
       });
       const message = this.messages[this.messages.length - 1];
-      for await (const chunk of chunks) {
+      subscribe((chunk, done) => {
         this.scroll(false);
         message.text += chunk;
-      }
-      if (!format) return;
-      message.text = format({ inputText: message.text });
-      message.formatted = true;
+        if (!done || !format) return;
+        message.text = format({ inputText: message.text });
+        message.formatted = true;
+      });
     });
     this.comms.onMessage((message, char) => {
       const removePlayerTyping = () => {
@@ -138,7 +132,7 @@ var Chatter = class {
       } else {
         switch (message) {
           case 0:
-            if (joinedPlayers.has(char.id)) return;
+            if (joinedPlayers.has(char.id)) break;
             this.addMessage(`${char.name} connected to the chat`, false, char.appearance.skin);
             joinedPlayers.add(char.id);
             break;
@@ -168,12 +162,15 @@ var Chatter = class {
       joinedPlayers.delete(char.id);
       this.playersTyping = this.playersTyping.filter((c) => c !== char);
     }));
-    this.comms.onEnabledChanged(() => {
-      this.enabled = Comms.enabled;
-      if (Comms.enabled) {
+    this.comms.onEnabledChanged((enabled, afterReady) => {
+      this.enabled = enabled;
+      if (enabled) {
         this.addMessage("The chat is active!", false);
         this.comms.send(
-          0
+          afterReady ? 2 : (
+            /* Greet */
+            0
+          )
           /* Join */
         );
       } else {
@@ -184,11 +181,12 @@ var Chatter = class {
         }
       }
     });
-    window.addEventListener("beforeunload", this.sendLeave);
+    const sendLeave = () => this.sendLeave();
+    window.addEventListener("beforeunload", sendLeave);
     api.onStop(() => {
       this.sendLeave();
       this.comms.destroy();
-      window.removeEventListener("beforeunload", this.sendLeave);
+      window.removeEventListener("beforeunload", sendLeave);
     });
   }
   comms = new Comms("Chat");
@@ -307,13 +305,14 @@ function UI($$anchor, $$props) {
   let wrap;
   let input;
   async function scroll(force) {
+    if (!wrap) return;
     const shouldScroll = wrap.scrollHeight - wrap.scrollTop - wrap.clientHeight < 1;
     await tick();
     if (shouldScroll || force) wrap.scrollTop = wrap.scrollHeight;
   }
   const chatter = new Chatter(scroll);
   let inputPlaceholder = derived(() => {
-    if (!chatter.enabled) return "Chat not available in lobby";
+    if (!chatter.enabled) return "Chat cannot be used when in lobby without stickers";
     if (chatter.sending) return "Sending...";
     return "...";
   });

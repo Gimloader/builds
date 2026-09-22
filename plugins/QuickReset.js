@@ -2,12 +2,12 @@
  * @name QuickReset
  * @description Quickly lets you restart 2d gamemodes
  * @author Gimloader Official
- * @version 0.4.3
+ * @version 0.5.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/QuickReset.js
  * @webpage https://gimloader.github.io/plugins/QuickReset
  * @gamemode 2d
- * @changelog Bump version to force update
- * @signature JA/QMKlVAb2KG5gBxer0X6pC7yAYWGoP+9iKdxa4yY2dlcM2cLJ/N7mWu2ARM6cDRmjZgdrKhCa/mi8UqVnpAw==
+ * @changelog Allowed completely restarting the game when using GuestControls
+ * @signature l0omcDtsfHRLppdo2qnaEBXqxXzRDi9tyQA4qqVPx9KDL/75uaHIHaveBUJe4f6sFio6dA4c8yl4eqzZxFtTCA==
  */
 
 // plugins/QuickReset/src/index.ts
@@ -18,9 +18,8 @@ api.net.colyseus.on("send:START_GAME", (message) => {
   startMessage = message;
 });
 function reset() {
-  if (api.net.type !== "Colyseus" || !api.net.isHost) return;
-  api.net.colyseus.send("END_GAME");
-  api.net.colyseus.send("RESTORE_MAP_EARLIER");
+  if (api.net.type !== "Colyseus" || !api.stores.session.amIGameOwner) return;
+  exitToLobby();
   const gameSession = api.net.colyseus.state.session.gameSession;
   if (gameSession.phase === "countdown") return;
   ignoreNextStart = true;
