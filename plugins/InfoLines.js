@@ -2,13 +2,13 @@
  * @name InfoLines
  * @description Displays a configurable list of info on the screen
  * @author Gimloader Official
- * @version 1.3.1
+ * @version 1.4.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/InfoLines.js
  * @webpage https://gimloader.github.io/plugins/InfoLines
  * @hasSettings true
  * @gamemode 2d
- * @changelog Bump version to force update
- * @signature rAZxsDrUTgkQANmZ+sNyrGQq/irbnmUOhF7ujz18pKkkB0S9bXZuaR14WBRcIXuVqSc5hpp7xVOdrp2IX4aDAA==
+ * @changelog Made settings menu more readable
+ * @signature iWDvyc/pqOsYeBXFMKygCMZImkGo5DBogr0Vc2ggv4QkSY5vqKEfD1btjH79Vt3xFrHrJj7qXuidRO2bg6Q0Bw==
  */
 
 // inject-css:plugins/InfoLines/src/styles.css
@@ -370,13 +370,22 @@ var InfoLines = class {
       }
     ];
     for (const line of this.lines) {
-      settings.push({
-        type: "toggle",
-        id: line.name,
-        title: line.name,
-        default: line.enabledDefault
-      });
-      if (line.settings) settings.push(...line.settings);
+      if (line.settings) {
+        settings.push({
+          type: "togglegroup",
+          id: line.name,
+          title: line.name,
+          default: line.enabledDefault,
+          settings: line.settings
+        });
+      } else {
+        settings.push({
+          type: "toggle",
+          id: line.name,
+          title: line.name,
+          default: line.enabledDefault
+        });
+      }
     }
     api.settings.create(settings);
     api.net.onLoad(() => {
