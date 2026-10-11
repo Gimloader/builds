@@ -2,14 +2,14 @@
  * @name DownpatchPhysics
  * @description Restore physics to how it functioned in older versions of Gimkit
  * @author Gimloader Official
- * @version 0.1.6
+ * @version 0.1.7
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/DownpatchPhysics.js
  * @webpage https://gimloader.github.io/plugins/DownpatchPhysics
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @hasSettings true
  * @gamemode 2d
- * @changelog Fix release physics crashing
- * @signature 3m5ZWQyDjwzjeo+kMZsZU3WTSuDvtS2FromVVwsExYat2VJhp2O72xP8VaIxVPrfVjjYGFIpmxgKTO7mer8yDw==
+ * @changelog Fixed for new Gimkit update
+ * @signature ZEtLhsxqdVsZVgxUP5+mGAx+4/C+fTqqae4xcYzSRrQNFtPCSfZX9JBdSp/pkp4eGN0zILOOKxh32fbBfByMBg==
  */
 
 // plugins/DownpatchPhysics/src/consts.ts
@@ -131,7 +131,7 @@ var settings = api.settings.create([
   }
 ]);
 var RAPIER;
-api.rewriter.exposeVar("App", {
+api.rewriter.exposeVar("Device-", {
   check: "get RigidBodyType()",
   find: /(\w{1,3})=Object\.freeze\({__proto__:null,version/,
   callback: (rapier) => RAPIER = rapier

@@ -2,13 +2,13 @@
  * @name Chat
  * @description Adds an in-game chat to 2d gamemodes
  * @author Gimloader Official
- * @version 0.6.0
+ * @version 0.6.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Chat.js
  * @webpage https://gimloader.github.io/plugins/Chat
  * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
- * @changelog Allowed sending messages in the lobby
- * @signature wcx3cyEi3Awn2rYu+UFCE7EsOQDoSpBO9JioYOZ0DXK/yEqb6sP3Q5ICxQWSfuAtFDC5zFoFlSgWU7F/JjR6CA==
+ * @changelog Fixed for new Gimkit update
+ * @signature b4fel4mkcR57+Cr8md8AAIKMomzeLRNvrcT8EmgaLIOc0nujKF4y4HYEbE9EHrSuK13OD+VKwCOqW1tPlr2zBA==
  */
 
 // external-svelte:svelte
@@ -82,7 +82,7 @@ var Op = ((Op2) => {
 var format = null;
 api.rewriter.exposeVar("App", {
   check: ">%SPACE_HERE",
-  find: /}\);let (\S+)=.=>.{0,175}>%SPACE_HERE%/,
+  find: /}\);var (\w+)=.=>.{0,250}>%SPACE_HERE%/,
   callback: (formatter) => format = formatter
 });
 function parseSkin(skin) {
