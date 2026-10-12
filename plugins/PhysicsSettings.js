@@ -2,55 +2,15 @@
  * @name PhysicsSettings
  * @description Allows you to configure various things about the physics in platformer modes (client-side only)
  * @author Gimloader Official
- * @version 0.3.2
+ * @version 0.3.3
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/PhysicsSettings.js
  * @webpage https://gimloader.github.io/plugins/PhysicsSettings
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @hasSettings true
  * @gamemode 2d
- * @changelog Bump version to force update
- * @signature ND3YopXNnjppLvOTwGBaiSJqDhf03BR7ryeFhZXzJnIkXTphhreG04xYMiBblykRqYyqBMfy2NsE876m34KZBA==
+ * @changelog Fixed for new Gimkit update
+ * @signature Eb+xpVHpzIjR0Q5SfSZf6LrT0QIYeLuhrtlTCTPmE0L2KGac+1QKiCHclnVwFlExfNN83opDB27X9uXcy3JxCw==
  */
-
-// shared/rewritingUtils.ts
-function getRange(code, match) {
-  const snippets = [];
-  let currentWord = "";
-  for (const letter of match) {
-    if (letter === "#") {
-      snippets.push(currentWord);
-      currentWord = "";
-    } else if (letter === "@") {
-      snippets.push(currentWord);
-      currentWord = "";
-      snippets.push("@");
-    } else {
-      currentWord += letter;
-    }
-  }
-  snippets.push(currentWord);
-  const matchIndex = snippets.indexOf("@");
-  const snippetsBeforeMatch = snippets.slice(0, matchIndex);
-  let startIndex = 0;
-  for (const snippet of snippetsBeforeMatch) {
-    startIndex = code.indexOf(snippet, startIndex) + snippet.length;
-  }
-  const snippetAfterMatch = snippets[matchIndex + 1];
-  const endIndex = code.indexOf(snippetAfterMatch, startIndex);
-  return {
-    startIndex,
-    endIndex
-  };
-}
-function replaceSection(code, match, replacement) {
-  const { startIndex, endIndex } = getRange(code, match);
-  const start = code.slice(0, startIndex);
-  const end = code.slice(endIndex);
-  if (typeof replacement === "function") {
-    replacement = replacement(code.slice(startIndex, endIndex));
-  }
-  return start + replacement + end;
-}
 
 // plugins/PhysicsSettings/src/index.ts
 var settings = api.settings.create([
@@ -92,9 +52,9 @@ var settings = api.settings.create([
 var rewritten = false;
 var getTps = api.rewriter.createShared("GetTPS", () => settings.tps);
 var triggerRewritten = api.rewriter.createShared("TriggerRewritten", () => rewritten = true);
-api.rewriter.addParseHook("App", (code) => {
-  if (!code.includes('.zoneAbilitiesOverrides.listen("allowResourceDrop",')) return code;
-  code = replaceSection(code, ",staticGridSize:#=@,", `${getTps}?.() ?? 12`);
+api.rewriter.addParseHook("FixPhaserBootProcess-", (code) => {
+  if (!code.includes("{tickRate:12")) return code;
+  code = code.replace("{tickRate:12", `{tickRate:${getTps}?.()??12`);
   return code + `${triggerRewritten}?.();`;
 });
 var updateMapOption = (key, value) => {

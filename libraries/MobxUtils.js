@@ -2,12 +2,13 @@
  * @name MobxUtils
  * @description Some simple utilities for react injection with MobX
  * @author Gimloader Official
- * @version 0.3.3
+ * @version 0.3.4
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/libraries/MobxUtils.js
  * @webpage https://gimloader.github.io/libraries/MobxUtils
- * @changelog Updated webpage url
+ * @reloadRequired true
+ * @changelog Fixed for new Gimkit update
  * @isLibrary true
- * @signature JBxHFRoB9BCc1eOm52E84zEt86zSn6SC8ePcFy6DZQboCCZJ9amSLeF33b5QYA0N/WJ+3uUXFFdDdKsGLOTWBA==
+ * @signature fzsaAz9geRoX6APY1slwRFKOL7F2LIMD6RzeGFlCHdxxcG8ChyFudvHoduPU3SsSQX+R1m1qSx68h6jkB2sQCw==
  */
 
 // libraries/MobxUtils/src/index.ts
@@ -32,7 +33,7 @@ api.rewriter.addParseHook("mobxreact", (code) => {
   const funcStart = code.lastIndexOf("function", index);
   const nameEnd = code.indexOf("(", funcStart);
   const name = code.slice(funcStart + 9, nameEnd);
-  const funcEnd = code.indexOf("}", code.indexOf(".forwardRef", index)) + 1;
+  const funcEnd = code.indexOf("}", code.indexOf(".forwardRef)(", index)) + 1;
   const func = code.slice(funcStart, funcEnd);
   code = code.slice(0, funcStart) + `const ${name}=(${wrapObserver}??(v => v))(${func});` + code.slice(funcEnd);
   return code;
