@@ -2,13 +2,13 @@
  * @name InfoLines
  * @description Displays a configurable list of info on the screen
  * @author Gimloader Official
- * @version 1.4.0
+ * @version 1.4.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/InfoLines.js
  * @webpage https://gimloader.github.io/plugins/InfoLines
  * @hasSettings true
  * @gamemode 2d
- * @changelog Made settings menu more readable
- * @signature iWDvyc/pqOsYeBXFMKygCMZImkGo5DBogr0Vc2ggv4QkSY5vqKEfD1btjH79Vt3xFrHrJj7qXuidRO2bg6Q0Bw==
+ * @changelog Fixed for new Gimkit update
+ * @signature de948aLl17aHz1J2ThuyVP25OynJ+xVGViwo2hXwG0BundfAwA1/3c22+lwN9JBN8Ri2TRB9xkHMmND/pu+cBQ==
  */
 
 // inject-css:plugins/InfoLines/src/styles.css
@@ -248,7 +248,7 @@ var FishValue = class extends BaseLine {
   async init() {
     this.allDevices = api.stores.phaser.scene.worldManager.devices.allDevices;
     const autorunFn = await new Promise((res) => {
-      api.rewriter.exposeVar(true, {
+      api.rewriter.exposeVar("decorate-", {
         find: /isMobxAction===!0}function (\S+)\(/,
         callback: res
       });

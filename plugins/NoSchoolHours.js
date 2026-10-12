@@ -2,56 +2,28 @@
  * @name NoSchoolHours
  * @description Bypasses the creative discovery page school hours
  * @author Gimloader Official
- * @version 0.1.1
+ * @version 0.2.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/NoSchoolHours.js
  * @webpage https://gimloader.github.io/plugins/NoSchoolHours
- * @reloadRequired notingame
- * @changelog Updated webpage url
- * @signature 8cM11jEIg3XFNWrj6IW3z0VKHE8pCii8oaaWROYCiU+C/BTHWMKvgurO2eRjJghSdKeYJYXvNtMuy313aZHRAw==
+ * @changelog Updated to not need a reload
+ * @signature iWOpQo10nqIo0ozeSgYGNVJkNCybg+27+cUu2A6rNw8Wbtj840zjNxQ14B1u4/OT9hPpKD1l2UeI/EFT14m/BQ==
  */
 
-// shared/rewritingUtils.ts
-function getRange(code, match) {
-  const snippets = [];
-  let currentWord = "";
-  for (const letter of match) {
-    if (letter === "#") {
-      snippets.push(currentWord);
-      currentWord = "";
-    } else if (letter === "@") {
-      snippets.push(currentWord);
-      currentWord = "";
-      snippets.push("@");
-    } else {
-      currentWord += letter;
-    }
-  }
-  snippets.push(currentWord);
-  const matchIndex = snippets.indexOf("@");
-  const snippetsBeforeMatch = snippets.slice(0, matchIndex);
-  let startIndex = 0;
-  for (const snippet of snippetsBeforeMatch) {
-    startIndex = code.indexOf(snippet, startIndex) + snippet.length;
-  }
-  const snippetAfterMatch = snippets[matchIndex + 1];
-  const endIndex = code.indexOf(snippetAfterMatch, startIndex);
-  return {
-    startIndex,
-    endIndex
-  };
-}
-function replaceSection(code, match, replacement) {
-  const { startIndex, endIndex } = getRange(code, match);
-  const start = code.slice(0, startIndex);
-  const end = code.slice(endIndex);
-  if (typeof replacement === "function") {
-    replacement = replacement(code.slice(startIndex, endIndex));
-  }
-  return start + replacement + end;
-}
-
 // plugins/NoSchoolHours/src/index.ts
-api.rewriter.addParseHook("App", (code) => {
-  if (!code.includes("Discovery Is Closed During School Hours")) return code;
-  return replaceSection(code, "()&&@?", "false");
+var FakeDate = api.rewriter.createShared("FakeDate", {
+  default: () => {
+    return {
+      day: () => 0,
+      hour: () => 0
+    };
+  }
+});
+api.rewriter.runInScope("App-", (code, run, initial) => {
+  const index = code.indexOf("Discovery Is Closed During School Hours");
+  if (index === -1) return;
+  const startIndex = code.lastIndexOf("\n`,", index) + 3;
+  const endIndex = code.indexOf("=", startIndex);
+  const varName = code.slice(startIndex, endIndex);
+  run(`${varName}=${FakeDate}`);
+  if (!initial) api.UI.forceReactUpdate();
 });
