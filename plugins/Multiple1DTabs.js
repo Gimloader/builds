@@ -2,13 +2,14 @@
  * @name Multiple1DTabs
  * @description Allows having multiple different tabs connected to a single 1D game
  * @author Gimloader Official
- * @version 0.1.1
+ * @version 0.2.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Multiple1DTabs.js
  * @webpage https://gimloader.github.io/plugins/Multiple1DTabs
- * @reloadRequired ingame
- * @changelog Fixed for new Gimkit update
- * @signature vdbYrQoJThQUIR9nWYffW3l/dqUs3m19IPqrSaXrulxngZ52sHdWOMcJcVYtMWX6XXHXn1iN0KHP2hrNUc22DQ==
+ * @changelog Removed need to reload after installing
+ * @signature 8Kk9M6IRN9u0kRuYf9jGAHg+XscOqfyo+XrkNdCWrXhmkDuxu8FdkY/rafaUqxhux9so8G/IkNQzjaACU5udAQ==
  */
 
 // plugins/Multiple1DTabs/src/index.ts
-api.rewriter.addParseHook("ObjectListener", (code) => code.replace("this.useClientIdSaving=!0", "this.useClientIdSaving=false"));
+api.patcher.before(localStorage, "getItem", (_, args) => {
+  if (args[0]?.startsWith?.("blueboat-id-")) return true;
+});

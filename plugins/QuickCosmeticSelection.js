@@ -2,70 +2,35 @@
  * @name QuickCosmeticSelection
  * @description Allows you to select your cosmetics by only clicking on them.
  * @author Gimloader Official
- * @version 0.1.0
+ * @version 0.2.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/QuickCosmeticSelection.js
  * @webpage https://gimloader.github.io/plugins/QuickCosmeticSelection
- * @reloadRequired true
- * @signature WcPoXsjjDReiwg5WL6iy2MChUa9zdYXnEnluX73LYc0z40/7XkejqgQe+XvYm29+gAgfxRMSGlKslRCqF9GwDg==
+ * @changelog Updated to not require a reload
+ * @signature 3OpVRn8u5TmWXlK3WylWiAeRpcRDCtViV724C/41SGpyHulz5oCe9PvLnAboewk3JgToB8kwAy6mfUwkD/XKAQ==
  */
 
-// shared/rewritingUtils.ts
-function getRange(code, match) {
-  const snippets = [];
-  let currentWord = "";
-  for (const letter of match) {
-    if (letter === "#") {
-      snippets.push(currentWord);
-      currentWord = "";
-    } else if (letter === "@") {
-      snippets.push(currentWord);
-      currentWord = "";
-      snippets.push("@");
-    } else {
-      currentWord += letter;
-    }
-  }
-  snippets.push(currentWord);
-  const matchIndex = snippets.indexOf("@");
-  const snippetsBeforeMatch = snippets.slice(0, matchIndex);
-  let startIndex = 0;
-  for (const snippet of snippetsBeforeMatch) {
-    startIndex = code.indexOf(snippet, startIndex) + snippet.length;
-  }
-  const snippetAfterMatch = snippets[matchIndex + 1];
-  const endIndex = code.indexOf(snippetAfterMatch, startIndex);
-  return {
-    startIndex,
-    endIndex
-  };
-}
-function getSection(code, match) {
-  const { startIndex, endIndex } = getRange(code, match);
-  return code.slice(startIndex, endIndex);
-}
-function replaceSection(code, match, replacement) {
-  const { startIndex, endIndex } = getRange(code, match);
-  const start = code.slice(0, startIndex);
-  const end = code.slice(endIndex);
-  if (typeof replacement === "function") {
-    replacement = replacement(code.slice(startIndex, endIndex));
-  }
-  return start + replacement + end;
-}
-function insert(code, match, string) {
-  const { endIndex } = getRange(code, match);
-  const start = code.slice(0, endIndex);
-  const end = code.slice(endIndex);
-  return start + string + end;
-}
-
 // plugins/QuickCosmeticSelection/src/index.ts
-api.rewriter.addParseHook("App", (code) => {
-  if (!code.includes(".sticker?12:void")) return code;
-  let selectCosmeticCode = getSection(code, '"Update":"Selected"#onClick#{#,@}}};');
-  selectCosmeticCode = replaceSection(selectCosmeticCode, ".type,@onSuccess", "");
-  const isStickerCode = getSection(code, ".sticker?12:void#if@return");
-  const shouldShowInfo = getSection(code, '"Update":"Selected"#disabled:@&');
-  code = insert(code, ".sticker?12:void 0#onClick#,@#", `(!(${shouldShowInfo}) && !${isStickerCode}) ? ${selectCosmeticCode} : `);
-  return code;
+api.rewriter.swapVar("App-", {
+  check: "useLocalstorageState:",
+  find: /0.93\);\n`,(\w{1,3})=/,
+  callback: (val, initial) => {
+    if (!initial) api.UI.forceReactUpdate();
+    api.onStop(() => api.UI.forceReactUpdate());
+    return function(props) {
+      const result = val.apply(this, arguments);
+      const iconProps = result.props.children[0].props;
+      const onClick = iconProps.onClick;
+      iconProps.onClick = () => {
+        if (props.selected || props.type === "sticker") {
+          onClick();
+          return;
+        }
+        const actions = result.props.children[1].props.callToAction({
+          editStyles: props.editStyles
+        });
+        actions.onClick();
+      };
+      return result;
+    };
+  }
 });

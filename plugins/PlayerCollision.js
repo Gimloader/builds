@@ -2,13 +2,13 @@
  * @name PlayerCollision
  * @description Makes you collide with other players in 2d gamemodes
  * @author Gimloader Official
- * @version 0.2.2
+ * @version 0.2.3
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/PlayerCollision.js
  * @webpage https://gimloader.github.io/plugins/PlayerCollision
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode 2d
- * @changelog Bump version to force update
- * @signature epW2BDX4DfjwU1vZTnxja/1mQYhNg4rSiuEuE73zSYN5Dx/l+7QeZIXb/ijxat6Tq63yoqglKzlTthu3LwLCAA==
+ * @changelog Fix for new Gimkit update
+ * @signature XSgvgY/bLZTDgdTElkKRMiB1k1P1zey7VBDKnPJEb++ERj/ROsSSav5ksC8koz9xVSphmYgwuSC9BW93/7KWAg==
  */
 
 // plugins/PlayerCollision/src/index.ts
@@ -28,9 +28,9 @@ var settings = api.settings.create([
 ]);
 api.net.onLoad(async () => {
   const rapier = await new Promise((res) => {
-    api.rewriter.exposeVar("App", {
-      check: "this.device.parts.destroySpecificPart",
-      find: /var (\S+)=Object.freeze\({__proto__:null/,
+    api.rewriter.exposeVar("Device-", {
+      check: "get RigidBodyType()",
+      find: /(\w{1,3})=Object\.freeze\({__proto__:null,version/,
       callback: res
     });
   });
