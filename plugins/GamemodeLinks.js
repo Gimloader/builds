@@ -7,7 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/GamemodeLinks
  * @hasSettings true
  * @changelog Removed requirement to reload the page
- * @signature +HQT+7PNxZT14RqS8DAQn9VJcR/mAlHPuX+AaJRR6ok5fUYmPqgzCyBn2tMM7apaoZLW+snwMf44ciaSIZEsBA==
+ * @signature 6EfbCguI7VrK22h38DROmB8gA+yoLEigOLhEQ7CGFXnSgYE6021tOPuBgEU80Y3dBa6/JDw8gjXPAPbBnq2EBg==
  */
 
 // plugins/GamemodeLinks/src/makeGame.ts
@@ -107,16 +107,20 @@ var gamemodeTitle = "";
 var pathname = location.pathname;
 var title = document.title;
 function updatePage() {
-  if (!selectOpen || !experienceId) {
-    setLink(pathname);
-  } else {
-    const newSearch = new URLSearchParams(hooks);
-    setLink(`/gamemode/${experienceId}?${newSearch.toString()}`);
+  if (api.settings.updateLink) {
+    if (!selectOpen || !experienceId) {
+      setLink(pathname);
+    } else {
+      const newSearch = new URLSearchParams(hooks);
+      setLink(`/gamemode/${experienceId}?${newSearch.toString()}`);
+    }
   }
-  if (!selectOpen || !gamemodeTitle) {
-    document.title = title;
-  } else {
-    document.title = gamemodeTitle;
+  if (api.settings.updateTitle) {
+    if (!selectOpen || !gamemodeTitle) {
+      document.title = title;
+    } else {
+      document.title = gamemodeTitle;
+    }
   }
 }
 api.onStop(() => {
