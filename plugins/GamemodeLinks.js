@@ -2,12 +2,12 @@
  * @name GamemodeLinks
  * @description Creates game rooms from links, particularly useful in bookmarks.
  * @author Gimloader Official
- * @version 0.4.0
+ * @version 0.5.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/GamemodeLinks.js
  * @webpage https://gimloader.github.io/plugins/GamemodeLinks
  * @hasSettings true
- * @changelog Removed requirement to reload the page
- * @signature 6EfbCguI7VrK22h38DROmB8gA+yoLEigOLhEQ7CGFXnSgYE6021tOPuBgEU80Y3dBa6/JDw8gjXPAPbBnq2EBg==
+ * @changelog Added custom page when loading a gamemode link
+ * @signature qTvd6GRtQJ6YSRVF7BL9hOYKm+NAsdGOFZCWHyD6d0LzpSQDK2j/ZBfDtDwm4hQv9cRWBLg+XK6qKGrn/9UfBw==
  */
 
 // plugins/GamemodeLinks/src/makeGame.ts
@@ -92,6 +92,11 @@ async function makeGame(id2, entries) {
   });
   if (creationRes.status === 500) throw new Error("This map doesn't exist, or you had invalid search parameters");
   return await creationRes.text();
+}
+
+// plugins/GamemodeLinks/src/LoadingScreen.tsx
+function LoadingScreen() {
+  return /* @__PURE__ */ GL.React.createElement("div", { style: { display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "250px" } }, /* @__PURE__ */ GL.React.createElement("h2", { style: { fontSize: "2rem", fontWeight: "bold" } }, "GamemodeLinks: Loading Game"), /* @__PURE__ */ GL.React.createElement("p", { style: { fontSize: "1.2rem", marginTop: "1rem" } }, "This should only take a moment..."));
 }
 
 // plugins/GamemodeLinks/src/index.ts
@@ -181,6 +186,14 @@ if (root === "gamemode") {
     api.UI.modal.error({
       content: err.message
     });
+  });
+  api.rewriter.exposeVar("NotFound-", {
+    find: /\):null,(\w{1,3})=\({prefixCls:/,
+    callback: (component) => {
+      api.patcher.afterReact(component, () => {
+        return api.React.createElement(LoadingScreen);
+      });
+    }
   });
 } else {
   fetch("/api/games/summary/me").then((res) => res.json()).then(({ games }) => {
