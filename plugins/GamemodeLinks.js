@@ -2,64 +2,13 @@
  * @name GamemodeLinks
  * @description Creates game rooms from links, particularly useful in bookmarks.
  * @author Gimloader Official
- * @version 0.3.4
+ * @version 0.4.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/GamemodeLinks.js
  * @webpage https://gimloader.github.io/plugins/GamemodeLinks
- * @reloadRequired notingame
  * @hasSettings true
- * @changelog Fixed for gimloader v1.12.0
- * @signature APOiDgVOevCl6uUhrN04iT/CGjOF7yTlY6XFkPfu2v120b6fylNfQBqwmLgMRsCE47VxeKK4RpUMDv/u06IdCw==
+ * @changelog Removed requirement to reload the page
+ * @signature +HQT+7PNxZT14RqS8DAQn9VJcR/mAlHPuX+AaJRR6ok5fUYmPqgzCyBn2tMM7apaoZLW+snwMf44ciaSIZEsBA==
  */
-
-// shared/rewritingUtils.ts
-function getRange(code, match) {
-  const snippets = [];
-  let currentWord = "";
-  for (const letter of match) {
-    if (letter === "#") {
-      snippets.push(currentWord);
-      currentWord = "";
-    } else if (letter === "@") {
-      snippets.push(currentWord);
-      currentWord = "";
-      snippets.push("@");
-    } else {
-      currentWord += letter;
-    }
-  }
-  snippets.push(currentWord);
-  const matchIndex = snippets.indexOf("@");
-  const snippetsBeforeMatch = snippets.slice(0, matchIndex);
-  let startIndex = 0;
-  for (const snippet of snippetsBeforeMatch) {
-    startIndex = code.indexOf(snippet, startIndex) + snippet.length;
-  }
-  const snippetAfterMatch = snippets[matchIndex + 1];
-  const endIndex = code.indexOf(snippetAfterMatch, startIndex);
-  return {
-    startIndex,
-    endIndex
-  };
-}
-function getSection(code, match) {
-  const { startIndex, endIndex } = getRange(code, match);
-  return code.slice(startIndex, endIndex);
-}
-function replaceSection(code, match, replacement) {
-  const { startIndex, endIndex } = getRange(code, match);
-  const start = code.slice(0, startIndex);
-  const end = code.slice(endIndex);
-  if (typeof replacement === "function") {
-    replacement = replacement(code.slice(startIndex, endIndex));
-  }
-  return start + replacement + end;
-}
-function insert(code, match, string) {
-  const { endIndex } = getRange(code, match);
-  const start = code.slice(0, endIndex);
-  const end = code.slice(endIndex);
-  return start + string + end;
-}
 
 // plugins/GamemodeLinks/src/makeGame.ts
 var matchmakerOptions = {
@@ -84,9 +33,9 @@ async function makeGame(id2, entries) {
     if (gameRes.status === 500) throw new Error("This map doesn't exist.");
     return await gameRes.text();
   }
-  const { hooks } = hooksJson;
+  const { hooks: hooks2 } = hooksJson;
   const defaultHooks = {};
-  for (const hook of hooks) {
+  for (const hook of hooks2) {
     if (hook.type === "selectBox") {
       defaultHooks[hook.key] = hook.options.defaultOption;
     } else if (hook.type === "number") {
@@ -100,7 +49,7 @@ async function makeGame(id2, entries) {
     if (key === "joinInLate" || key === "useRandomNamePicker") {
       matchmakerOptions[key] = value !== "0" && value.toLowerCase() !== "false" && value.toLowerCase() !== "no";
     }
-    const hook = hooks.find((hook2) => hook2.key === key);
+    const hook = hooks2.find((hook2) => hook2.key === key);
     if (!hook) continue;
     if (hook.type === "selectBox") {
       if (!hook.options.options.includes(value)) {
@@ -126,7 +75,7 @@ async function makeGame(id2, entries) {
       }
     }
   };
-  const kitHook = hooks.find((hook) => hook.type === "kit");
+  const kitHook = hooks2.find((hook) => hook.type === "kit");
   if (kitHook) {
     if (!api.settings.kit) {
       const meRes = await fetch("/api/games/summary/me");
@@ -146,26 +95,80 @@ async function makeGame(id2, entries) {
 }
 
 // plugins/GamemodeLinks/src/index.ts
-var copyUrlWrapper = api.rewriter.createShared("CopyURLWrapper", (id2) => {
-  navigator.clipboard.writeText(`${location.origin}/gamemode/${id2}`).then(() => api.UI.message.success({ content: "Map link copied" })).catch(() => api.UI.message.error({ content: "Failed to copy map link" }));
-});
-api.rewriter.addParseHook("App", (code) => {
-  if (!code.includes("Note that deleting a map will also remove it from Creative Discovery")) return code;
-  let linkItem = getSection(code, "{menu:{items:[@,{key:`delete");
-  const idString = getSection(linkItem, "rename-${@}");
-  linkItem = linkItem.replace("rename", "link");
-  linkItem = linkItem.replace("Rename", "Copy Edit Link");
-  linkItem = linkItem.replace("fa-edit", "fa-link");
-  linkItem = replaceSection(linkItem, ".stopPropagation(),@}", `${copyUrlWrapper}?.(${idString})`);
-  return insert(code, "danger:!0,onClick:#()}}@#", `,${linkItem}`);
-});
-var setLink = (path) => history.pushState({}, "", path);
-var { pathname } = location;
-var { title } = document;
-function cleanup() {
+var setLink = (path) => {
+  const href = new URL(path, location.href).href;
+  if (location.href === href) return;
+  history.pushState({}, "", href);
+};
+var experienceId = "";
+var hooks = {};
+var selectOpen = false;
+var gamemodeTitle = "";
+var pathname = location.pathname;
+var title = document.title;
+function updatePage() {
+  if (!selectOpen || !experienceId) {
+    setLink(pathname);
+  } else {
+    const newSearch = new URLSearchParams(hooks);
+    setLink(`/gamemode/${experienceId}?${newSearch.toString()}`);
+  }
+  if (!selectOpen || !gamemodeTitle) {
+    document.title = title;
+  } else {
+    document.title = gamemodeTitle;
+  }
+}
+api.onStop(() => {
   setLink(pathname);
   document.title = title;
-}
+});
+api.rewriter.swapVar("App-", {
+  check: "`EXPERIENCE_HOOKS`",
+  find: /}\):null]}\)},(\w{1,3})=.=>{let{options/,
+  callback: (updateHooks, initial) => {
+    if (!initial) api.UI.forceReactUpdate();
+    return function(props) {
+      const options = { ...props.options };
+      const kitKey = Object.keys(options).find((hook) => hook.toLowerCase().includes("kit"));
+      if (kitKey) delete options[kitKey];
+      experienceId = props.experienceId;
+      hooks = options;
+      updatePage();
+      return updateHooks.apply(this, arguments);
+    };
+  }
+});
+api.rewriter.exposeVar("App-", {
+  check: "`EXPERIENCE_GROUP_CACHE`",
+  find: /EXPERIENCE_GROUP_CACHE`,(\w{1,3})=/,
+  callback: (modal) => {
+    api.patcher.afterReact(modal, (_, props, returnVal) => {
+      pathname = location.pathname;
+      title = document.title;
+      const close = props[0].close;
+      props[0].close = () => {
+        close();
+        selectOpen = false;
+        experienceId = "";
+        gamemodeTitle = "";
+        updatePage();
+      };
+      selectOpen = returnVal.props.children.props.children.props.children[1].props.game !== void 0;
+      updatePage();
+    });
+  }
+});
+api.rewriter.exposeVar("App-", {
+  check: "(min-height: 650px)",
+  find: /image:`gamepad`}},(\w{1,3})=/,
+  callback: (titleComponent) => {
+    api.patcher.beforeReact(titleComponent, (_, props) => {
+      gamemodeTitle = props[0].title;
+      updatePage();
+    });
+  }
+});
 var [root, id] = location.pathname.split("/").slice(1);
 if (root === "gamemode") {
   makeGame(id, new URLSearchParams(location.search).entries()).then((gameId) => {
@@ -191,9 +194,7 @@ if (root === "gamemode") {
         title: "Update Tab Link",
         description: "If the tab link text should be updated to the gamemode link when using the gamemode selector",
         default: true,
-        onChange(enabled) {
-          if (!enabled) cleanup();
-        }
+        onChange: updatePage
       },
       {
         id: "updateTitle",
@@ -201,55 +202,8 @@ if (root === "gamemode") {
         title: "Update Tab Title",
         description: "If the tab title should be updated to the gamemode name using the gamemode selector",
         default: true,
-        onChange(enabled) {
-          if (!enabled) cleanup();
-        }
+        onChange: updatePage
       }
     ]);
   }, api.logger.error);
-  api.net.modifyFetchResponse("**/create", cleanup);
-  api.onStop(() => {
-    if (location.pathname.startsWith("/gamemode")) cleanup();
-  });
 }
-var setHooksWrapper = api.rewriter.createShared("SetHooksWrapper", (hooks) => {
-  if (!api.settings.updateLink) return;
-  hooks = { ...hooks };
-  const kitKey = Object.keys(hooks).find((hook) => hook.toLowerCase().includes("kit"));
-  if (kitKey) delete hooks[kitKey];
-  for (const key in hooks) {
-    if (typeof hooks[key] === "number") {
-      hooks[key] = hooks[key].toString();
-    }
-  }
-  const searchParams = new URLSearchParams(hooks);
-  const newLink = `?${searchParams.toString()}`;
-  if (location.search === newLink) return;
-  setLink(newLink);
-});
-var setMapDataWrapper = api.rewriter.createShared("SetMapDataWrapper", (id2, name) => {
-  if (api.settings.updateLink) {
-    const path = location.pathname.split("/");
-    if (path[1] !== "gamemode") {
-      pathname = location.pathname;
-      title = document.title;
-    }
-    if (path[2] === id2) return;
-    setLink("/gamemode/" + id2 + location.search);
-  }
-  if (api.settings.updateTitle) {
-    document.title = name;
-  }
-});
-var closePopupWrapper = api.rewriter.createShared("ClosePopupWrapper", cleanup);
-api.rewriter.addParseHook("App", (code) => {
-  if (code.includes("We're showing this hook for testing purposes")) {
-    const name = getSection(code, "state:@,");
-    return insert(code, ".readOnly]);@#", `${setHooksWrapper}?.(${name});`);
-  } else if (code.includes("The more reliable, the easier it is for crewmates to win")) {
-    const gameVarName = getSection(code, ".name,description:@.");
-    code = insert(code, ")=>{let[#=()=>{@#", `${closePopupWrapper}?.();`);
-    return insert(code, '"EXPERIENCE_HOOKS"})@}', `;${setMapDataWrapper}?.(${gameVarName}?._id, ${gameVarName}?.name);`);
-  }
-  return code;
-});
