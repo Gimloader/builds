@@ -2,13 +2,14 @@
  * @name MobxUtils
  * @description Some simple utilities for react injection with MobX
  * @author Gimloader Official
- * @version 0.3.4
+ * @version 0.3.5
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/libraries/MobxUtils.js
  * @webpage https://gimloader.github.io/libraries/MobxUtils
  * @reloadRequired true
- * @changelog Fixed for new Gimkit update
+ * @changelog Deprecated in favor of native Gimloader apis
  * @isLibrary true
- * @signature fzsaAz9geRoX6APY1slwRFKOL7F2LIMD6RzeGFlCHdxxcG8ChyFudvHoduPU3SsSQX+R1m1qSx68h6jkB2sQCw==
+ * @deprecated MobxUtils has been superceded by native Gimloader apis
+ * @signature cHL/5omwsdqLbj5Eb63V7Ob2GIK2m2R8n4NkRRNv+7j2Sh42VPZqG7hGeCivPstKovfgLPObZhSnjb5of6dgAA==
  */
 
 // libraries/MobxUtils/src/index.ts
