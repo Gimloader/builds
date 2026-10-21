@@ -7,7 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/GamemodeLinks
  * @hasSettings true
  * @changelog Added custom page when loading a gamemode link
- * @signature qTvd6GRtQJ6YSRVF7BL9hOYKm+NAsdGOFZCWHyD6d0LzpSQDK2j/ZBfDtDwm4hQv9cRWBLg+XK6qKGrn/9UfBw==
+ * @signature crvN2mOI+4P4bw8/+iFfPMT6wYYBYJhLMr92rcub/aWWR/bDjob02/hJOFjZftKp9deiZ58GoAzbEMVnizzxCg==
  */
 
 // plugins/GamemodeLinks/src/makeGame.ts
@@ -183,8 +183,10 @@ if (root === "gamemode") {
   makeGame(id, new URLSearchParams(location.search).entries()).then((gameId) => {
     location.href = `/host?id=${gameId}`;
   }).catch((err) => {
-    api.UI.modal.error({
-      content: err.message
+    api.UI.onComponentLoad("modal", () => {
+      api.UI.modal.error({
+        content: err.message
+      });
     });
   });
   api.rewriter.exposeVar("NotFound-", {
