@@ -2,12 +2,14 @@
  * @name CreativeTools
  * @description Adds various quality of life improvements to the Creative editor
  * @author Gimloader Official
- * @version 0.1.0
+ * @version 0.2.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CreativeTools.js
  * @webpage https://gimloader.github.io/plugins/CreativeTools
  * @reloadRequired ingame
  * @gamemode creative
- * @signature krA+n615u3KEMHie//hP4LYRGknCuzQp367h2B02IVrYYOfC4cH//BHD00H/cQr6x0FwaxtiY1NF5VZFTshjDw==
+ * @changelog Added the ability to remove everything from your map
+ * @changelog Added a loading toast when importing a map
+ * @signature HR3evPTl1YHtZNTK7zcfV5+ThoZVhzRrNg+sx5sR5TS6uwY5+U/Q+v2M5UX0/v0TvMVObaIwr/WcG3o99ZJdDQ==
  */
 
 // shared/files.ts
@@ -106,7 +108,7 @@ function getWholeMapData() {
 }
 
 // plugins/CreativeTools/src/util.ts
-var maxSendsPerSecond = 100;
+var maxSendsPerSecond = 150;
 var sendDelay = 1e3 / maxSendsPerSecond;
 function pauseSend() {
   return new Promise((res) => setTimeout(res, sendDelay));
@@ -143,7 +145,11 @@ function prepareOptions(options) {
 async function importWholeMap() {
   try {
     const data = await readJsonFile();
-    await importWholeMapData(data);
+    api.UI.toast.promise(importWholeMapData(data), {
+      loading: "Importing map data...",
+      success: "Done!",
+      error: "Something went wrong"
+    });
   } catch {
   }
 }
@@ -234,6 +240,10 @@ function addAction(type, data, mergeWithLast = false) {
     batchTimeoutStarted = false;
     if (undoStack.length > maxUndoStackSize) undoStack.shift();
   }, 0);
+}
+function clearUndoStacks() {
+  undoStack.length = 0;
+  redoStack.length = 0;
 }
 api.net.onLoad(() => {
   const devices = api.stores.phaser.scene.worldManager.devices;
@@ -365,6 +375,39 @@ function redo() {
   }
   undoStack.push(actions);
   api.UI.toast.success(`Redid ${actions.length} action${actions.length > 1 ? "s" : ""}`);
+}
+
+// plugins/CreativeTools/src/tools/nuke.ts
+async function nukeMap() {
+  const warning = "Are you sure you want to remove everything from the map? This cannot be undone.";
+  if (!api.UI.confirm("Remove Everything Confirmation", warning)) return;
+  api.UI.toast.promise(removeTilesAndDevices(), {
+    loading: "Removing everything from map...",
+    success: "Done!",
+    error: "Something went wrong"
+  });
+}
+async function removeTilesAndDevices() {
+  const layerManager = api.stores.phaser.scene.tileManager.layerManager;
+  clearUndoStacks();
+  for (let i = 1; i <= 5; i++) {
+    const layer = layerManager.layers.get(`terrain-${i}`);
+    for (const tile of layer.tiles.values()) {
+      api.net.colyseus.sendDirect("REMOVE_TERRAIN", {
+        x: tile.x,
+        y: tile.y,
+        depth: i
+      });
+      await pauseSend();
+    }
+  }
+  const deviceManager = api.stores.phaser.scene.worldManager.devices;
+  for (const device of deviceManager.allDevices) {
+    if (device.deviceOption.id === "mapOptions") continue;
+    api.net.colyseus.sendDirect("REMOVE_DEVICE", { id: device.id });
+    await pauseSend();
+  }
+  clearUndoStacks();
 }
 
 // plugins/CreativeTools/src/settings.ts
@@ -800,6 +843,9 @@ api.commands.addCommand({
 api.commands.addCommand({
   text: "CreativeTools: Import World"
 }, importWholeMap);
+api.commands.addCommand({
+  text: "CreativeTools: Remove Everything From Map"
+}, nukeMap);
 api.net.onLoad(() => {
   api.hotkeys.addHotkey({
     ctrl: true,
