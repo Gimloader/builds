@@ -2,13 +2,13 @@
  * @name CreativeTools
  * @description Adds various quality of life improvements to the Creative editor
  * @author Gimloader Official
- * @version 0.2.1
+ * @version 0.3.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CreativeTools.js
  * @webpage https://gimloader.github.io/plugins/CreativeTools
  * @reloadRequired ingame
  * @gamemode creative
- * @changelog Increased speed of nuke/import commands
- * @signature 22akCZuLHQWLM2TXbA7BurhIWVnrAs2DeERYLFf2jyRM7vOH6/XmJ/QamltNucPNL90DkvNPB8o7nXDc58Z+Cg==
+ * @changelog Added find/replace for selected terrain
+ * @signature dsrOy8IISS/4I8qC+ciD+F4Bb+rl/me8/nnBMKQRCP6jn26puvFehn4+O4eYRox27GzkFjVaBvgKRzQfo/FnDw==
  */
 
 // shared/files.ts
@@ -414,6 +414,42 @@ var movingTiles = [];
 var isMovingTiles = false;
 var updateAction;
 var multiselectMode = api.storage.getValue("multiselectMode", "all");
+async function replaceSelection(ctx) {
+  if (isMovingTiles) {
+    api.UI.toast.error("Cannot replace selection while moving tiles");
+    return;
+  }
+  if (selectedTiles.length === 0) {
+    api.UI.toast.error("No tiles selected");
+    return;
+  }
+  const terrainOptions = api.stores.worldOptions.terrainOptions;
+  const terrainTypes = terrainOptions.map((t) => ({
+    label: t.name,
+    value: t.id
+  }));
+  const possibleTerrainTypes = terrainTypes.filter((t) => selectedTiles.some((tile) => tile.terrainOption.id === t.value));
+  const fromId = await ctx.select({
+    title: "Terrain type to replace",
+    options: possibleTerrainTypes
+  });
+  const toId = await ctx.select({
+    title: "Replace with",
+    options: terrainTypes
+  });
+  const matchingTiles = selectedTiles.filter((tile) => tile.terrainOption.id === fromId);
+  for (const tile of matchingTiles) {
+    removeTile(tile);
+    api.net.colyseus.send("PLACE_TERRAIN", {
+      x: tile.realX,
+      y: tile.realY,
+      collides: tile.collides,
+      depth: tile.depth,
+      terrain: toId
+    });
+  }
+  api.UI.toast.success(`Replaced ${matchingTiles.length} tile${matchingTiles.length === 1 ? "" : "s"}`);
+}
 api.net.onLoad(() => {
   const multiselect = api.stores.phaser.scene.actionManager.multiselect;
   const layerManager = api.stores.phaser.scene.tileManager.layerManager;
@@ -823,15 +859,23 @@ async function renameBlock(deviceId, gridId, grid) {
 }
 
 // plugins/CreativeTools/src/index.ts
+var isNotInGame = () => api.net.type !== "Colyseus";
 api.commands.addCommand({
-  text: "CreativeTools: Export World"
+  text: "CreativeTools: Export World",
+  hidden: isNotInGame
 }, exportWholeMap);
 api.commands.addCommand({
-  text: "CreativeTools: Import World"
+  text: "CreativeTools: Import World",
+  hidden: isNotInGame
 }, importWholeMap);
 api.commands.addCommand({
-  text: "CreativeTools: Remove Everything From Map"
+  text: "CreativeTools: Remove Everything From Map",
+  hidden: isNotInGame
 }, nukeMap);
+api.commands.addCommand({
+  text: "CreativeTools: Find/Replace Selected Terrain",
+  hidden: isNotInGame
+}, replaceSelection);
 api.net.onLoad(() => {
   api.hotkeys.addHotkey({
     ctrl: true,
