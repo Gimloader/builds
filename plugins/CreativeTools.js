@@ -8,7 +8,7 @@
  * @reloadRequired ingame
  * @gamemode creative
  * @changelog Added find/replace for selected terrain
- * @signature dsrOy8IISS/4I8qC+ciD+F4Bb+rl/me8/nnBMKQRCP6jn26puvFehn4+O4eYRox27GzkFjVaBvgKRzQfo/FnDw==
+ * @signature e99lSpHD0YjmO2Gdmk4jmgCQfvuTzc+prcFkC/LcwCdcCPxHja2RlmryeQbwktijuSQhd4SSrraXhstUqpe6Dg==
  */
 
 // shared/files.ts
@@ -66,7 +66,7 @@ function getWholeMapData() {
     devices.push({
       x: device.x,
       y: device.y,
-      depth: device.depth,
+      depth: device.layers.depth,
       layerId: device.layers.layer,
       deviceId: device.deviceOption.id,
       id: device.id,
