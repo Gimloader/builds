@@ -2,13 +2,13 @@
  * @name CreativeTools
  * @description Adds various quality of life improvements to the Creative editor
  * @author Gimloader Official
- * @version 0.3.0
+ * @version 0.3.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CreativeTools.js
  * @webpage https://gimloader.github.io/plugins/CreativeTools
  * @reloadRequired ingame
  * @gamemode creative
- * @changelog Added find/replace for selected terrain
- * @signature e99lSpHD0YjmO2Gdmk4jmgCQfvuTzc+prcFkC/LcwCdcCPxHja2RlmryeQbwktijuSQhd4SSrraXhstUqpe6Dg==
+ * @changelog Fixed custom assets not being exported
+ * @signature knt2JVwr37RJ/mB88xetzjGjnx0oLFcN6/AEWmjT4u0NzVmX3lznJr77Yi0j1icl+c2tD2ISh2YPkXx9h/8pDA==
  */
 
 // shared/files.ts
@@ -98,11 +98,14 @@ function getWholeMapData() {
       };
     }
   }
+  const mobxCustomAssets = api.stores.world.customAssets.customAssets;
+  const customAssets = Object.fromEntries(JSON.parse(JSON.stringify(mobxCustomAssets)));
   return {
     terrain,
     devices,
     wires,
-    codeGrids
+    codeGrids,
+    customAssets
   };
 }
 
@@ -148,6 +151,16 @@ async function importWholeMap() {
   }
 }
 async function importWholeMapData(data) {
+  for (const id in data.customAssets) {
+    const asset = data.customAssets[id];
+    api.net.colyseus.send("ADD_CUSTOM_ASSET", {
+      data: JSON.stringify(asset.data),
+      icon: asset.icon,
+      id: asset.id,
+      name: asset.name,
+      optionId: asset.optionId
+    });
+  }
   for (const tile of data.terrain) {
     api.net.colyseus.send("PLACE_TERRAIN", tile);
   }
