@@ -8,7 +8,7 @@
  * @reloadRequired ingame
  * @gamemode creative
  * @changelog Fixed custom assets not being exported
- * @signature knt2JVwr37RJ/mB88xetzjGjnx0oLFcN6/AEWmjT4u0NzVmX3lznJr77Yi0j1icl+c2tD2ISh2YPkXx9h/8pDA==
+ * @signature dwmaekkZUhDngNOcI1kiSvk+RtP+nIwISc4if3F3u/ATyh36eVqp5c2iQt8Nw2syvfJoe3OGvE/lxJKI8EpHDg==
  */
 
 // shared/files.ts
@@ -178,13 +178,15 @@ async function importWholeMapData(data) {
   for (const wire of data.wires) {
     api.net.colyseus.send("PLACE_WIRE", wire);
   }
-  for (const deviceId in data.codeGrids) {
-    for (const key in data.codeGrids[deviceId]) {
-      const grid = data.codeGrids[deviceId][key];
-      const json = JSON.stringify(grid.json);
-      await createCodeGrid(deviceId, json, grid.triggerType, grid.triggerValue);
-    }
-  }
+  await Promise.all(
+    Object.keys(data.codeGrids).map(async (deviceId) => {
+      for (const key in data.codeGrids[deviceId]) {
+        const grid = data.codeGrids[deviceId][key];
+        const json = JSON.stringify(grid.json);
+        await createCodeGrid(deviceId, json, grid.triggerType, grid.triggerValue);
+      }
+    })
+  );
 }
 async function createCodeGrid(deviceId, json, triggerType, triggerValue) {
   api.net.colyseus.send("CREATE_CODE_GRID", {
@@ -835,8 +837,8 @@ api.rewriter.addParseHook("App", (code) => {
 });
 
 // plugins/CreativeTools/src/tools/renameBlocks.ts
-api.rewriter.exposeVar("App-BZH0", {
-  find: /ht/,
+api.rewriter.exposeVar("App-", {
+  find: /\.gridId}\)},\w{1,3}=\w{1,3}\(\),(\w{1,3})=/,
   callback: (display) => {
     api.UI.forceReactUpdate();
     api.patcher.afterReact(display.type, (_, args, returnVal) => {
