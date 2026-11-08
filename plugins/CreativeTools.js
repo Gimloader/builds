@@ -2,13 +2,13 @@
  * @name CreativeTools
  * @description Adds various quality of life improvements to the Creative editor
  * @author Gimloader Official
- * @version 0.3.1
+ * @version 0.3.2
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CreativeTools.js
  * @webpage https://gimloader.github.io/plugins/CreativeTools
  * @reloadRequired ingame
  * @gamemode creative
- * @changelog Fixed custom assets not being exported
- * @signature dwmaekkZUhDngNOcI1kiSvk+RtP+nIwISc4if3F3u/ATyh36eVqp5c2iQt8Nw2syvfJoe3OGvE/lxJKI8EpHDg==
+ * @changelog Made export not break on certain maps
+ * @signature almO+cCe/TgOxh+VEQvEBgsViEMyVKOFlUMJntZu6tOtWQtRHnY0VbqKOwqlL5kEcHfleo+JlKuBU0EiVM+QCg==
  */
 
 // shared/files.ts
@@ -38,6 +38,42 @@ async function readJsonFile() {
   const file = await readFile(".json");
   const text = await file.text();
   return JSON.parse(text);
+}
+
+// plugins/CreativeTools/src/util.ts
+function dataFromDevice(device) {
+  return {
+    x: device.x,
+    y: device.y,
+    depth: device.depth,
+    layerId: device.layers.layer,
+    deviceTypeId: device.deviceOption.id,
+    id: device.id,
+    options: JSON.stringify(prepareOptions(device.options))
+  };
+}
+function dataFromDeviceInfo(device) {
+  return {
+    x: device.x,
+    y: device.y,
+    depth: device.depth,
+    layerId: device.layerId,
+    deviceTypeId: device.deviceOption.id,
+    id: device.id,
+    options: JSON.stringify(prepareOptions(device.options))
+  };
+}
+function prepareOptions(options) {
+  if (options.grantItemWhenDamaged || options.itemToGrant === void 0) return options;
+  const { itemToGrant, ...rest } = options;
+  return rest;
+}
+function safeParse(json, defaultVal) {
+  try {
+    return JSON.parse(json);
+  } catch {
+    return defaultVal;
+  }
 }
 
 // plugins/CreativeTools/src/tools/export.ts
@@ -94,7 +130,7 @@ function getWholeMapData() {
       codeGrids[deviceId][gridId] = {
         triggerType: grid.triggerType,
         triggerValue: grid.triggerValue,
-        json: JSON.parse(grid.json)
+        json: safeParse(grid.json, {})
       };
     }
   }
@@ -107,35 +143,6 @@ function getWholeMapData() {
     codeGrids,
     customAssets
   };
-}
-
-// plugins/CreativeTools/src/util.ts
-function dataFromDevice(device) {
-  return {
-    x: device.x,
-    y: device.y,
-    depth: device.depth,
-    layerId: device.layers.layer,
-    deviceTypeId: device.deviceOption.id,
-    id: device.id,
-    options: JSON.stringify(prepareOptions(device.options))
-  };
-}
-function dataFromDeviceInfo(device) {
-  return {
-    x: device.x,
-    y: device.y,
-    depth: device.depth,
-    layerId: device.layerId,
-    deviceTypeId: device.deviceOption.id,
-    id: device.id,
-    options: JSON.stringify(prepareOptions(device.options))
-  };
-}
-function prepareOptions(options) {
-  if (options.grantItemWhenDamaged || options.itemToGrant === void 0) return options;
-  const { itemToGrant, ...rest } = options;
-  return rest;
 }
 
 // plugins/CreativeTools/src/tools/import.ts
