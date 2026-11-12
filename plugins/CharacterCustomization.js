@@ -2,13 +2,15 @@
  * @name CharacterCustomization
  * @description Allows you to use any gim or a custom gim client-side
  * @author Gimloader Official
- * @version 1.0.0
+ * @version 1.0.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CharacterCustomization.js
  * @webpage https://gimloader.github.io/plugins/CharacterCustomization
  * @hasSettings true
  * @gamemode 2d
- * @changelog Updated webpage url
- * @signature zyHRyGwbtnXkgVw1jWLvI7C/wygEbvgQFMyarsVemaNphM9sVrUC3aQGl0N3Eb1fDiPezFkaSnfPOGyakpf5Bw==
+ * @changelog Overhauled interface
+ * @changelog Past gims/trails are now saved
+ * @changelog Your selection may have been reset
+ * @signature Z2lBtCeqgkGITPDLWwh3UplkLl0kf11l+WaynRqwVQ/jsRNRdt9NDr8lOGxqn2UZMQh0bms9BcaRBU2/zBY+Dg==
  */
 var __create = Object.create;
 var __defProp = Object.defineProperty;
@@ -1237,16 +1239,16 @@ var root_12 = from_html(`<!> <!>`, 1);
 var root_9 = from_html(`<img alt="Custom gim" class="svelte-1hoee5"/>`);
 var root_8 = from_html(`<button><!></button>`);
 var root_72 = from_html(`<!> <!>`, 1);
-var root_62 = from_html(`<div class="svelte-1hoee5"> <!></div>`);
+var root_62 = from_html(`<div class="svelte-1hoee5"><!> </div>`);
 var root_16 = from_html(`<span class="styles-indicator svelte-1hoee5" title="Edit styles available">\u{1F3A8}</span>`);
 var root_15 = from_html(`<button><img class="svelte-1hoee5"/> <!></button>`);
 var root_17 = from_html(`<!> <!>`, 1);
 var root_14 = from_html(`<!> <!>`, 1);
-var root_13 = from_html(`<div class="svelte-1hoee5"> <!></div>`);
+var root_13 = from_html(`<div class="svelte-1hoee5"><!> </div>`);
 var root_23 = from_html(`<button><img class="svelte-1hoee5"/></button>`);
 var root_22 = from_html(`<!> <!>`, 1);
-var root_21 = from_html(`<div class="svelte-1hoee5"> <!></div>`);
-var root = from_html(`<h2 class="svelte-1hoee5">Gim</h2> <div class="button-container svelte-1hoee5"><div class="svelte-1hoee5">New <!></div> <div class="svelte-1hoee5">Unchanged <button style="font-size: 32px">\u{1F5D9}</button></div> <!> <!></div> <h2 class="svelte-1hoee5">Trail</h2> <div class="button-container svelte-1hoee5"><div class="svelte-1hoee5">New <button style="font-size: 50px" class="item-button">+</button></div> <div class="svelte-1hoee5">Unchanged <button style="font-size: 32px">\u{1F5D9}</button></div> <!></div>`, 1);
+var root_21 = from_html(`<div class="svelte-1hoee5"><!> </div>`);
+var root = from_html(`<h2 class="svelte-1hoee5">Gim</h2> <div class="button-container svelte-1hoee5"><div class="svelte-1hoee5"><!> New</div> <div class="svelte-1hoee5"><button style="font-size: 32px">\u{1F5D9}</button> Unchanged</div> <!> <!></div> <h2 class="svelte-1hoee5">Trail</h2> <div class="button-container svelte-1hoee5"><div class="svelte-1hoee5"><button style="font-size: 50px" class="item-button">+</button> New</div> <div class="svelte-1hoee5"><button style="font-size: 32px">\u{1F5D9}</button> Unchanged</div> <!></div>`, 1);
 var $$css2 = {
   hash: "svelte-1hoee5",
   code: "h2.svelte-1hoee5 {font-weight:bold;border-bottom:1px solid black;}.button-container.svelte-1hoee5 {display:flex;flex-wrap:wrap;gap:6px;}.button-container.svelte-1hoee5 > div:where(.svelte-1hoee5) {text-align:center;font-size:12px;width:100px;overflow-wrap:break-word;}.item-button {width:100px;height:100px;background-color:var(--secondary);border-radius:8px;border:1px solid black;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;}.item-button.selected.svelte-1hoee5 {border:3px solid var(--primary-600);}.item-button.svelte-1hoee5 > img:where(.svelte-1hoee5) {width:94px;height:94px;}.styles-indicator.svelte-1hoee5 {position:absolute;top:4px;right:4px;}"
@@ -1261,7 +1263,7 @@ function Selector($$anchor, $$props) {
   var fragment = root();
   var div = sibling(first_child(fragment), 2);
   var div_1 = child(div);
-  var node = sibling(child(div_1));
+  var node = child(div_1);
   DropdownMenu.Root(node, {
     children: ($$anchor2, $$slotProps) => {
       var fragment_1 = root_12();
@@ -1308,17 +1310,18 @@ function Selector($$anchor, $$props) {
     },
     $$slots: { default: true }
   });
+  next();
   reset(div_1);
   var div_2 = sibling(div_1, 2);
-  var button = sibling(child(div_2));
+  var button = child(div_2);
   let classes;
   button.__click = () => selection_svelte_default.unselectSkin();
+  next();
   reset(div_2);
   var node_5 = sibling(div_2, 2);
   each(node_5, 1, () => selection_svelte_default.customSkins, index, ($$anchor2, name) => {
     var div_3 = root_62();
-    var text_3 = child(div_3);
-    var node_6 = sibling(text_3);
+    var node_6 = child(div_3);
     ContextMenu.Root(node_6, {
       children: ($$anchor3, $$slotProps) => {
         var fragment_3 = root_72();
@@ -1356,9 +1359,9 @@ function Selector($$anchor, $$props) {
               onclick: () => selection_svelte_default.deleteCustomSkin(get(name)),
               children: ($$anchor5, $$slotProps3) => {
                 next();
-                var text_4 = text();
-                template_effect(() => set_text(text_4, `Delete ${get(name) ?? ""}`));
-                append($$anchor5, text_4);
+                var text_3 = text();
+                template_effect(() => set_text(text_3, `Delete ${get(name) ?? ""}`));
+                append($$anchor5, text_3);
               },
               $$slots: { default: true }
             });
@@ -1369,15 +1372,15 @@ function Selector($$anchor, $$props) {
       },
       $$slots: { default: true }
     });
+    var text_4 = sibling(node_6);
     reset(div_3);
-    template_effect(() => set_text(text_3, `${get(name) ?? ""} `));
+    template_effect(() => set_text(text_4, ` ${get(name) ?? ""}`));
     append($$anchor2, div_3);
   });
   var node_10 = sibling(node_5, 2);
   each(node_10, 1, () => selection_svelte_default.pastSkins, index, ($$anchor2, skin) => {
     var div_4 = root_13();
-    var text_5 = child(div_4);
-    var node_11 = sibling(text_5);
+    var node_11 = child(div_4);
     ContextMenu.Root(node_11, {
       children: ($$anchor3, $$slotProps) => {
         var fragment_7 = root_14();
@@ -1420,9 +1423,9 @@ function Selector($$anchor, $$props) {
               onclick: () => selection_svelte_default.deleteOfficialGim(get(skin).id),
               children: ($$anchor5, $$slotProps3) => {
                 next();
-                var text_6 = text();
-                template_effect(() => set_text(text_6, `Delete ${get(skin).id ?? ""}`));
-                append($$anchor5, text_6);
+                var text_5 = text();
+                template_effect(() => set_text(text_5, `Delete ${get(skin).id ?? ""}`));
+                append($$anchor5, text_5);
               },
               $$slots: { default: true }
             });
@@ -1433,8 +1436,8 @@ function Selector($$anchor, $$props) {
                   onclick: () => selection_svelte_default.updateEditStyles(get(skin).id),
                   children: ($$anchor6, $$slotProps3) => {
                     next();
-                    var text_7 = text("Update edit styles");
-                    append($$anchor6, text_7);
+                    var text_6 = text("Update edit styles");
+                    append($$anchor6, text_6);
                   },
                   $$slots: { default: true }
                 });
@@ -1451,26 +1454,28 @@ function Selector($$anchor, $$props) {
       },
       $$slots: { default: true }
     });
+    var text_7 = sibling(node_11);
     reset(div_4);
-    template_effect(() => set_text(text_5, `${get(skin).id ?? ""} `));
+    template_effect(() => set_text(text_7, ` ${get(skin).id ?? ""}`));
     append($$anchor2, div_4);
   });
   reset(div);
   var div_5 = sibling(div, 4);
   var div_6 = child(div_5);
-  var button_3 = sibling(child(div_6));
+  var button_3 = child(div_6);
   button_3.__click = () => selection_svelte_default.addTrail();
+  next();
   reset(div_6);
   var div_7 = sibling(div_6, 2);
-  var button_4 = sibling(child(div_7));
+  var button_4 = child(div_7);
   let classes_3;
   button_4.__click = () => selection_svelte_default.unselectTrail();
+  next();
   reset(div_7);
   var node_17 = sibling(div_7, 2);
   each(node_17, 1, () => selection_svelte_default.pastTrails, index, ($$anchor2, trail) => {
     var div_8 = root_21();
-    var text_8 = child(div_8);
-    var node_18 = sibling(text_8);
+    var node_18 = child(div_8);
     ContextMenu.Root(node_18, {
       children: ($$anchor3, $$slotProps) => {
         var fragment_11 = root_22();
@@ -1499,9 +1504,9 @@ function Selector($$anchor, $$props) {
               onclick: () => selection_svelte_default.deleteTrail(get(trail)),
               children: ($$anchor5, $$slotProps3) => {
                 next();
-                var text_9 = text();
-                template_effect(() => set_text(text_9, `Delete ${get(trail) ?? ""}`));
-                append($$anchor5, text_9);
+                var text_8 = text();
+                template_effect(() => set_text(text_8, `Delete ${get(trail) ?? ""}`));
+                append($$anchor5, text_8);
               },
               $$slots: { default: true }
             });
@@ -1512,8 +1517,9 @@ function Selector($$anchor, $$props) {
       },
       $$slots: { default: true }
     });
+    var text_9 = sibling(node_18);
     reset(div_8);
-    template_effect(() => set_text(text_8, `${get(trail) ?? ""} `));
+    template_effect(() => set_text(text_9, ` ${get(trail) ?? ""}`));
     append($$anchor2, div_8);
   });
   reset(div_5);
