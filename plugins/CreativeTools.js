@@ -2,13 +2,13 @@
  * @name CreativeTools
  * @description Adds various quality of life improvements to the Creative editor
  * @author Gimloader Official
- * @version 0.3.2
+ * @version 0.3.3
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CreativeTools.js
  * @webpage https://gimloader.github.io/plugins/CreativeTools
  * @reloadRequired ingame
  * @gamemode creative
- * @changelog Made export not break on certain maps
- * @signature almO+cCe/TgOxh+VEQvEBgsViEMyVKOFlUMJntZu6tOtWQtRHnY0VbqKOwqlL5kEcHfleo+JlKuBU0EiVM+QCg==
+ * @changelog Fixed undo/redo still happening in menus
+ * @signature pcEyJn5Thki4VsVY5CD4piXS0i8+5qvtCkphA/rW1BrGEAcibH01OmAA63UfzSBU/3tGJoVAoQHRKjA3L32CAQ==
  */
 
 // shared/files.ts
@@ -324,6 +324,7 @@ api.rewriter.addParseHook("PlaceDevice-", (code) => {
   return code.slice(0, insertIndex) + `${onDeviceCreated}?.(${argName});` + code.slice(insertIndex);
 });
 function undo() {
+  if (!api.stores.phaser.scene.input.isOver) return;
   const actions = undoStack.pop();
   if (!actions) {
     api.UI.toast.error("Nothing to undo");
@@ -357,6 +358,7 @@ function undo() {
   api.UI.toast.success(`Undid ${actions.length} action${actions.length > 1 ? "s" : ""}`);
 }
 function redo() {
+  if (!api.stores.phaser.scene.input.isOver) return;
   const actions = redoStack.pop();
   if (!actions) {
     api.UI.toast.error("Nothing to redo");
