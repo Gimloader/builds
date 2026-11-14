@@ -2,15 +2,14 @@
  * @name CharacterCustomization
  * @description Allows you to use any gim or a custom gim client-side
  * @author Gimloader Official
- * @version 1.0.1
+ * @version 1.1.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CharacterCustomization.js
  * @webpage https://gimloader.github.io/plugins/CharacterCustomization
+ * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @hasSettings true
  * @gamemode 2d
- * @changelog Overhauled interface
- * @changelog Past gims/trails are now saved
- * @changelog Your selection may have been reset
- * @signature Z2lBtCeqgkGITPDLWwh3UplkLl0kf11l+WaynRqwVQ/jsRNRdt9NDr8lOGxqn2UZMQh0bms9BcaRBU2/zBY+Dg==
+ * @changelog Added option to synchronize cosmetic selection
+ * @signature 14Pc3RuPTLkRDvwUxo6swxEVUeeaZAGbid5nSp/J8q5jdxvudjBrQw/OWV5ef8xrH+Q7d1JaMucRRulT7FDkDg==
  */
 var __create = Object.create;
 var __defProp = Object.defineProperty;
@@ -757,7 +756,7 @@ var CosmeticController = class {
         return;
       }
       this.defaultSkin = args[0];
-      if (this.character.isMain && this.skin) return true;
+      if (this.skin) return true;
     });
     this.unpatchTrail = api.patcher.before(this.character.characterTrail, "updateAppearance", (_, args) => {
       if (this.manuallyChangingTrail) {
@@ -765,7 +764,7 @@ var CosmeticController = class {
         return;
       }
       this.defaultTrail = args[0];
-      if (this.character.isMain && this.trail) return true;
+      if (this.trail) return true;
     });
     if (this.skin) this.setSkin(this.skin);
     if (this.trail) this.setTrail(this.trail);
@@ -852,6 +851,78 @@ function updateSkin(id, skin) {
 function updateTrail(id, trail) {
   controllers.get(id)?.setTrail(trail);
 }
+function disableNonMainCosmetics() {
+  for (const [id, controller] of controllers) {
+    if (id !== api.stores?.network?.authId) {
+      controller.setSkin(null);
+      controller.setTrail(null);
+    }
+  }
+}
+
+// plugins/CharacterCustomization/src/sync.ts
+var comms = null;
+function setSyncEnabled(enabled) {
+  if (enabled) {
+    setupSync();
+  } else {
+    comms?.destroy();
+    comms = null;
+    disableNonMainCosmetics();
+  }
+}
+function setupSync() {
+  const Communication = api.lib("Communication");
+  comms = new Communication(api.headers.name);
+  comms.onEnabledChanged((enabled, afterReady) => {
+    if (!enabled) return;
+    if (mainSkin?.type === "official") dispatchSkinChange(mainSkin);
+    if (mainTrail) dispatchTrailChange(mainTrail);
+    if (afterReady) comms?.send(0 /* Greet */);
+  });
+  comms.onMessage((message, character) => {
+    if (typeof message !== "string") {
+      if (message === 1 /* ClearSkin */) updateSkin(character.id, null);
+      else if (message === 2 /* ClearTrail */) updateTrail(character.id, null);
+      else if (message === 0 /* Greet */) {
+        if (mainSkin?.type === "official") dispatchSkinChange(mainSkin);
+        if (mainTrail) dispatchTrailChange(mainTrail);
+      }
+      return;
+    }
+    if (message.startsWith("c")) {
+      const content = message.substring(1);
+      const parts = content.split("|");
+      const skinId = parts.shift();
+      const editStyles = Object.fromEntries(parts.map((p) => p.split(":")));
+      updateSkin(character.id, {
+        type: "official",
+        id: skinId,
+        editStyles
+      });
+    } else if (message.startsWith("t")) {
+      const trail = message.substring(1);
+      updateTrail(character.id, trail);
+    }
+  });
+}
+function dispatchSkinChange(skin) {
+  if (skin === null) {
+    comms?.send(1 /* ClearSkin */);
+  } else if (skin.type === "official") {
+    let message = `c${skin.id}`;
+    if (skin.editStyles) {
+      for (const key in skin.editStyles) {
+        message += `|${key}:${skin.editStyles[key]}`;
+      }
+    }
+    comms?.send(message);
+  }
+}
+function dispatchTrailChange(trail) {
+  if (trail === null) comms?.send(2 /* ClearTrail */);
+  else comms?.send(`t${trail}`);
+}
 
 // external-svelte:svelte/internal/client
 var append = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.append)();
@@ -883,6 +954,22 @@ var template_effect = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.template_e
 var text = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.text)();
 var await_export = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.await)();
 var if_export = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.if)();
+
+// plugins/CharacterCustomization/src/ui/OpenButton.svelte
+function OpenButton($$anchor, $$props) {
+  const Button = api.Components.Button;
+  Button($$anchor, {
+    get onclick() {
+      return $$props.onclick;
+    },
+    children: ($$anchor2, $$slotProps) => {
+      next();
+      var text2 = text("Open Customization Menu");
+      append($$anchor2, text2);
+    },
+    $$slots: { default: true }
+  });
+}
 
 // external-svelte:svelte
 var mount = /* @__PURE__ */ (() => api.svelte_5_43_0.Index.mount)();
@@ -1186,11 +1273,13 @@ var selection_svelte_default = new class CosmeticSelection {
   updateSkin(skin) {
     this.skin = skin;
     updateMainSkin(this.skin);
+    dispatchSkinChange(this.skin);
     api.storage.setValue("skin", snapshot(this.skin));
   }
   updateTrail(trail) {
     this.trail = trail;
     updateMainTrail(this.trail);
+    dispatchTrailChange(this.trail);
     api.storage.setValue("trail", snapshot(this.trail));
   }
   unselectSkin() {
@@ -1556,4 +1645,25 @@ api.hotkeys.addHotkey({
   key: "KeyC",
   alt: true
 }, showUI);
-api.openSettingsMenu(() => showUI());
+var settings = api.settings.create([
+  {
+    type: "toggle",
+    id: "syncCosmetics",
+    title: "Sync Cosmetics",
+    description: "Synchronize cosmetics with other players who have this setting enabled. Does not sync custom gims.",
+    default: true
+  },
+  {
+    type: "customsection",
+    id: "cosmeticSelection",
+    render: (element) => {
+      mount(OpenButton, {
+        target: element,
+        props: {
+          onclick: showUI
+        }
+      });
+    }
+  }
+]);
+settings.listen("syncCosmetics", (enabled) => setSyncEnabled(enabled), true);
