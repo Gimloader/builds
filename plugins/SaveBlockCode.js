@@ -2,12 +2,13 @@
  * @name SaveBlockCode
  * @description Allows you to save and load block code in creative via the command palette.
  * @author Gimloader Official
- * @version 1.0.1
- * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/SaveBlockCode.js
+ * @version 1.0.2
+ * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CreativeTools.js
  * @webpage https://gimloader.github.io/plugins/SaveBlockCode
  * @gamemode creative
- * @changelog Bump version to force update
- * @signature Tkk9Av9YjCFWsuRqr/rzRjTYeJHSaTT0ManFqeMua9w179eaP2s5QkcA3FbSiZX818AKgbgzh4BL3LdX+NwDDQ==
+ * @changelog Deprecated in favor of CreativeTools
+ * @deprecated SaveBlockCode has been superceded by CreativeTools
+ * @signature YXnU6xhkCVgQl6HF0xIRX7xySYYdAE/u0pGSQmPpZGsP15T0H1GBiXIwTHtrJVbd0fEI+4E2OkGy4IJRfleyBQ==
  */
 
 // shared/files.ts
