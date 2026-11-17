@@ -2,13 +2,13 @@
  * @name CreativeTools
  * @description Adds various quality of life improvements to the Creative editor
  * @author Gimloader Official
- * @version 0.3.3
+ * @version 0.4.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CreativeTools.js
  * @webpage https://gimloader.github.io/plugins/CreativeTools
  * @reloadRequired ingame
  * @gamemode creative
  * @changelog Fixed undo/redo still happening in menus
- * @signature pcEyJn5Thki4VsVY5CD4piXS0i8+5qvtCkphA/rW1BrGEAcibH01OmAA63UfzSBU/3tGJoVAoQHRKjA3L32CAQ==
+ * @signature YOjrpoMRKdIRSqKP6XQ/sj0TVhRG2dkfhBbj/Hn8Y1vwZM8j6n8EeepcPH6p+hKev4PJtjT1kTlIxHB/b6G7Dg==
  */
 
 // shared/files.ts
@@ -64,9 +64,13 @@ function dataFromDeviceInfo(device) {
   };
 }
 function prepareOptions(options) {
-  if (options.grantItemWhenDamaged || options.itemToGrant === void 0) return options;
-  const { itemToGrant, ...rest } = options;
-  return rest;
+  const newOptions = { ...options };
+  for (const key in newOptions) {
+    if (newOptions[key] === null) {
+      delete newOptions[key];
+    }
+  }
+  return newOptions;
 }
 function safeParse(json, defaultVal) {
   try {
@@ -76,160 +80,15 @@ function safeParse(json, defaultVal) {
   }
 }
 
-// plugins/CreativeTools/src/tools/export.ts
-function exportWholeMap() {
-  const data = getWholeMapData();
-  downloadFile(JSON.stringify(data), "map.json", "application/json");
-}
-function getWholeMapData() {
-  const terrain = [];
-  const layerManager = api.stores.phaser.scene.tileManager.layerManager;
-  for (let i = 1; i <= 5; i++) {
-    const layer = layerManager.layers.get(`terrain-${i}`);
-    for (const tile of layer.tiles.values()) {
-      terrain.push({
-        x: tile.x,
-        y: tile.y,
-        terrain: tile.terrainOption.id,
-        collides: tile.collides,
-        depth: i
-      });
-    }
+// plugins/CreativeTools/src/settings.ts
+var settings = api.settings.create([
+  {
+    id: "copyWires",
+    title: "Copy wires alongside devices",
+    type: "toggle",
+    default: true
   }
-  const devices = [];
-  const deviceManager = api.stores.phaser.scene.worldManager.devices;
-  for (const device of deviceManager.allDevices) {
-    devices.push({
-      x: device.x,
-      y: device.y,
-      depth: device.layers.depth,
-      layerId: device.layers.layer,
-      deviceId: device.deviceOption.id,
-      id: device.id,
-      options: device.options
-    });
-  }
-  const wires = [];
-  for (const wire of api.stores.world.wires.wires.values()) {
-    wires.push({
-      endConnection: wire.endConnection,
-      endDevice: wire.endDevice,
-      startConnection: wire.startConnection,
-      startDevice: wire.startDevice
-    });
-  }
-  const gridsStore = api.stores.world.devices.codeGrids;
-  const codeGrids = {};
-  for (const deviceId of gridsStore.keys()) {
-    const items = gridsStore.get(deviceId)?.items;
-    if (!items) continue;
-    for (const gridId of items.keys()) {
-      const grid = items.get(gridId);
-      if (!grid) continue;
-      codeGrids[deviceId] ??= {};
-      codeGrids[deviceId][gridId] = {
-        triggerType: grid.triggerType,
-        triggerValue: grid.triggerValue,
-        json: safeParse(grid.json, {})
-      };
-    }
-  }
-  const mobxCustomAssets = api.stores.world.customAssets.customAssets;
-  const customAssets = Object.fromEntries(JSON.parse(JSON.stringify(mobxCustomAssets)));
-  return {
-    terrain,
-    devices,
-    wires,
-    codeGrids,
-    customAssets
-  };
-}
-
-// plugins/CreativeTools/src/tools/import.ts
-async function importWholeMap() {
-  try {
-    const data = await readJsonFile();
-    api.UI.toast.promise(importWholeMapData(data), {
-      loading: "Importing map data...",
-      success: "Imported map data",
-      error: "Something went wrong"
-    });
-  } catch {
-  }
-}
-async function importWholeMapData(data) {
-  for (const id in data.customAssets) {
-    const asset = data.customAssets[id];
-    api.net.colyseus.send("ADD_CUSTOM_ASSET", {
-      data: JSON.stringify(asset.data),
-      icon: asset.icon,
-      id: asset.id,
-      name: asset.name,
-      optionId: asset.optionId
-    });
-  }
-  for (const tile of data.terrain) {
-    api.net.colyseus.send("PLACE_TERRAIN", tile);
-  }
-  for (const device of data.devices) {
-    api.net.colyseus.send("PLACE_DEVICE", {
-      x: device.x,
-      y: device.y,
-      id: device.id,
-      deviceTypeId: device.deviceId,
-      layerId: device.layerId,
-      depth: device.depth,
-      options: JSON.stringify(prepareOptions(device.options))
-    });
-  }
-  for (const wire of data.wires) {
-    api.net.colyseus.send("PLACE_WIRE", wire);
-  }
-  await Promise.all(
-    Object.keys(data.codeGrids).map(async (deviceId) => {
-      for (const key in data.codeGrids[deviceId]) {
-        const grid = data.codeGrids[deviceId][key];
-        const json = JSON.stringify(grid.json);
-        await createCodeGrid(deviceId, json, grid.triggerType, grid.triggerValue);
-      }
-    })
-  );
-}
-async function createCodeGrid(deviceId, json, triggerType, triggerValue) {
-  api.net.colyseus.send("CREATE_CODE_GRID", {
-    deviceId,
-    triggerType,
-    triggerValue
-  });
-  const gridId = await awaitGridCreation(deviceId);
-  api.net.colyseus.send("JOIN_CODE_GRID", { deviceId, gridId });
-  api.net.colyseus.send("SET_CODE_GRID_JSON", {
-    json,
-    deviceId,
-    gridId
-  });
-  api.net.colyseus.send("LEAVE_CODE_GRID", { deviceId, gridId });
-}
-function awaitGridCreation(deviceId) {
-  return new Promise((res) => {
-    const existingDevice = api.net.colyseus.state.world.devices.codeGrids.get(deviceId);
-    if (existingDevice) {
-      const unsubGrids = existingDevice.items.onAdd((_, gridKey) => {
-        unsubGrids();
-        res(gridKey);
-      }, false);
-      return;
-    }
-    const unsubDevices = api.net.colyseus.state.world.devices.codeGrids.onAdd((device, deviceKey) => {
-      if (deviceKey !== deviceId) return;
-      unsubDevices();
-      const unsubGrids = device.items.onAdd((_, gridKey) => {
-        unsubGrids();
-        res(gridKey);
-      }, false);
-    });
-  });
-}
+]);
 
 // plugins/CreativeTools/src/tools/undo.ts
 var maxUndoStackSize = 100;
@@ -391,44 +250,6 @@ function redo() {
   undoStack.push(actions);
   api.UI.toast.success(`Redid ${actions.length} action${actions.length > 1 ? "s" : ""}`);
 }
-
-// plugins/CreativeTools/src/tools/nuke.ts
-async function nukeMap() {
-  const warning = "Are you sure you want to remove everything from the map? This cannot be undone.";
-  if (!await api.UI.confirm("Remove Everything Confirmation", warning)) return;
-  removeTilesAndDevices();
-  api.UI.toast.success("Removed everything from the map");
-}
-function removeTilesAndDevices() {
-  const layerManager = api.stores.phaser.scene.tileManager.layerManager;
-  clearUndoStacks();
-  for (let i = 1; i <= 5; i++) {
-    const layer = layerManager.layers.get(`terrain-${i}`);
-    for (const tile of layer.tiles.values()) {
-      api.net.colyseus.sendDirect("REMOVE_TERRAIN", {
-        x: tile.x,
-        y: tile.y,
-        depth: i
-      });
-    }
-  }
-  const deviceManager = api.stores.phaser.scene.worldManager.devices;
-  for (const device of deviceManager.allDevices) {
-    if (device.deviceOption.id === "mapOptions") continue;
-    api.net.colyseus.sendDirect("REMOVE_DEVICE", { id: device.id });
-  }
-  clearUndoStacks();
-}
-
-// plugins/CreativeTools/src/settings.ts
-var settings = api.settings.create([
-  {
-    id: "copyWires",
-    title: "Copy wires alongside devices",
-    type: "toggle",
-    default: true
-  }
-]);
 
 // plugins/CreativeTools/src/tools/selection.ts
 var selectedTileIds = /* @__PURE__ */ new Set();
@@ -838,6 +659,239 @@ function removeTile(tile) {
   });
 }
 
+// plugins/CreativeTools/src/tools/export.ts
+function exportWholeMap() {
+  const data = getMapData(false);
+  downloadFile(JSON.stringify(data), "map.json", "application/json");
+}
+function exportSelection() {
+  const data = getMapData(true);
+  downloadFile(JSON.stringify(data), "selection.json", "application/json");
+}
+function getMapData(selectionOnly) {
+  const terrain = [];
+  const layerManager = api.stores.phaser.scene.tileManager.layerManager;
+  for (let i = 1; i <= 5; i++) {
+    const layer = layerManager.layers.get(`terrain-${i}`);
+    for (const tile of layer.tiles.values()) {
+      if (selectionOnly && !selectedTileIds.has(`${i}_${tile.x}_${tile.y}`)) continue;
+      terrain.push({
+        x: tile.x,
+        y: tile.y,
+        terrain: tile.terrainOption.id,
+        collides: tile.collides,
+        depth: i
+      });
+    }
+  }
+  const devices = [];
+  const deviceManager = api.stores.phaser.scene.worldManager.devices;
+  const multiselect = api.stores.phaser.scene.actionManager.multiselect;
+  const deviceSelected = (id) => multiselect.selectedDevicesIds.includes(id);
+  for (const device of deviceManager.allDevices) {
+    if (selectionOnly && !deviceSelected(device.id)) continue;
+    devices.push({
+      x: device.x,
+      y: device.y,
+      depth: device.layers.depth,
+      layerId: device.layers.layer,
+      deviceId: device.deviceOption.id,
+      id: device.id,
+      options: device.options
+    });
+  }
+  const wires = [];
+  for (const wire of api.stores.world.wires.wires.values()) {
+    if (selectionOnly && (!deviceSelected(wire.startDevice) || !deviceSelected(wire.endDevice))) continue;
+    wires.push({
+      endConnection: wire.endConnection,
+      endDevice: wire.endDevice,
+      startConnection: wire.startConnection,
+      startDevice: wire.startDevice
+    });
+  }
+  const gridsStore = api.stores.world.devices.codeGrids;
+  const codeGrids = {};
+  for (const deviceId of gridsStore.keys()) {
+    if (selectionOnly && !deviceSelected(deviceId)) continue;
+    const items = gridsStore.get(deviceId)?.items;
+    if (!items) continue;
+    for (const gridId of items.keys()) {
+      const grid = items.get(gridId);
+      if (!grid) continue;
+      codeGrids[deviceId] ??= {};
+      codeGrids[deviceId][gridId] = {
+        triggerType: grid.triggerType,
+        triggerValue: grid.triggerValue,
+        json: safeParse(grid.json, {})
+      };
+    }
+  }
+  const mobxCustomAssets = api.stores.world.customAssets.customAssets;
+  const customAssets = Object.fromEntries(JSON.parse(JSON.stringify(mobxCustomAssets)));
+  if (selectionOnly) {
+    const includeShapes = /* @__PURE__ */ new Set();
+    for (const device of multiselect.selectedDevices) {
+      if (device.deviceOption.id !== "scalableShape") continue;
+      const shapeId = device.options.customAssetId;
+      if (shapeId) includeShapes.add(shapeId);
+    }
+    for (const shapeId in customAssets) {
+      if (!includeShapes.has(shapeId)) {
+        delete customAssets[shapeId];
+      }
+    }
+  }
+  return {
+    isRegion: selectionOnly,
+    terrain,
+    devices,
+    wires,
+    codeGrids,
+    customAssets
+  };
+}
+
+// plugins/CreativeTools/src/tools/import.ts
+async function importMap() {
+  try {
+    const data = await readJsonFile();
+    api.UI.toast.promise(importMapData(data), {
+      loading: "Importing map data...",
+      success: "Imported map data",
+      error: "Something went wrong"
+    });
+  } catch {
+  }
+}
+async function importMapData(data) {
+  let tileShiftX = 0;
+  let tileShiftY = 0;
+  let shiftX = 0;
+  let shiftY = 0;
+  if (data.isRegion && (data.terrain.length > 0 || data.devices.length > 0)) {
+    let topLeftX = Infinity;
+    let topLeftY = Infinity;
+    for (const tile of data.terrain) {
+      if (tile.x * 64 < topLeftX) topLeftX = tile.x * 64;
+      if (tile.y * 64 < topLeftY) topLeftY = tile.y * 64;
+    }
+    for (const device of data.devices) {
+      if (device.x < topLeftX) topLeftX = device.x;
+      if (device.y < topLeftY) topLeftY = device.y;
+    }
+    tileShiftX = Math.floor((api.stores.phaser.mainCharacter.body.x - topLeftX) / 64);
+    tileShiftY = Math.floor((api.stores.phaser.mainCharacter.body.y - topLeftY) / 64);
+    shiftX = tileShiftX * 64;
+    shiftY = tileShiftY * 64;
+  }
+  for (const id in data.customAssets) {
+    const asset = data.customAssets[id];
+    api.net.colyseus.send("ADD_CUSTOM_ASSET", {
+      data: JSON.stringify(asset.data),
+      icon: asset.icon,
+      id: asset.id,
+      name: asset.name,
+      optionId: asset.optionId
+    });
+  }
+  for (const tile of data.terrain) {
+    api.net.colyseus.send("PLACE_TERRAIN", {
+      x: tile.x + tileShiftX,
+      y: tile.y + tileShiftY,
+      terrain: tile.terrain,
+      collides: tile.collides,
+      depth: tile.depth
+    });
+  }
+  for (const device of data.devices) {
+    api.net.colyseus.send("PLACE_DEVICE", {
+      x: device.x + shiftX,
+      y: device.y + shiftY,
+      id: device.id,
+      deviceTypeId: device.deviceId,
+      layerId: device.layerId,
+      depth: device.depth,
+      options: JSON.stringify(prepareOptions(device.options))
+    });
+  }
+  for (const wire of data.wires) {
+    api.net.colyseus.send("PLACE_WIRE", wire);
+  }
+  await Promise.all(
+    Object.keys(data.codeGrids).map(async (deviceId) => {
+      for (const key in data.codeGrids[deviceId]) {
+        const grid = data.codeGrids[deviceId][key];
+        const json = JSON.stringify(grid.json);
+        await createCodeGrid(deviceId, json, grid.triggerType, grid.triggerValue);
+      }
+    })
+  );
+}
+async function createCodeGrid(deviceId, json, triggerType, triggerValue) {
+  api.net.colyseus.send("CREATE_CODE_GRID", {
+    deviceId,
+    triggerType,
+    triggerValue
+  });
+  const gridId = await awaitGridCreation(deviceId);
+  api.net.colyseus.send("JOIN_CODE_GRID", { deviceId, gridId });
+  api.net.colyseus.send("SET_CODE_GRID_JSON", {
+    json,
+    deviceId,
+    gridId
+  });
+  api.net.colyseus.send("LEAVE_CODE_GRID", { deviceId, gridId });
+}
+function awaitGridCreation(deviceId) {
+  return new Promise((res) => {
+    const existingDevice = api.net.colyseus.state.world.devices.codeGrids.get(deviceId);
+    if (existingDevice) {
+      const unsubGrids = existingDevice.items.onAdd((_, gridKey) => {
+        unsubGrids();
+        res(gridKey);
+      }, false);
+      return;
+    }
+    const unsubDevices = api.net.colyseus.state.world.devices.codeGrids.onAdd((device, deviceKey) => {
+      if (deviceKey !== deviceId) return;
+      unsubDevices();
+      const unsubGrids = device.items.onAdd((_, gridKey) => {
+        unsubGrids();
+        res(gridKey);
+      }, false);
+    });
+  });
+}
+
+// plugins/CreativeTools/src/tools/nuke.ts
+async function nukeMap() {
+  const warning = "Are you sure you want to remove everything from the map? This cannot be undone.";
+  if (!await api.UI.confirm("Remove Everything Confirmation", warning)) return;
+  removeTilesAndDevices();
+  api.UI.toast.success("Removed everything from the map");
+}
+function removeTilesAndDevices() {
+  const layerManager = api.stores.phaser.scene.tileManager.layerManager;
+  clearUndoStacks();
+  for (let i = 1; i <= 5; i++) {
+    const layer = layerManager.layers.get(`terrain-${i}`);
+    for (const tile of layer.tiles.values()) {
+      api.net.colyseus.sendDirect("REMOVE_TERRAIN", {
+        x: tile.x,
+        y: tile.y,
+        depth: i
+      });
+    }
+  }
+  const deviceManager = api.stores.phaser.scene.worldManager.devices;
+  for (const device of deviceManager.allDevices) {
+    if (device.deviceOption.id === "mapOptions") continue;
+    api.net.colyseus.sendDirect("REMOVE_DEVICE", { id: device.id });
+  }
+  clearUndoStacks();
+}
+
 // plugins/CreativeTools/src/tools/eraserSize.ts
 api.rewriter.addParseHook("App", (code) => {
   const index = code.indexOf("Eraser Size:");
@@ -885,13 +939,21 @@ async function renameBlock(deviceId, gridId, grid) {
 // plugins/CreativeTools/src/index.ts
 var isNotInGame = () => api.net.type !== "Colyseus";
 api.commands.addCommand({
-  text: "CreativeTools: Export World",
+  text: "CreativeTools: Export Whole Map",
   hidden: isNotInGame
 }, exportWholeMap);
 api.commands.addCommand({
-  text: "CreativeTools: Import World",
+  text: "CreativeTools: Export Selection",
   hidden: isNotInGame
-}, importWholeMap);
+}, exportSelection);
+api.commands.addCommand({
+  text: "CreativeTools: Import Whole Map",
+  hidden: isNotInGame
+}, importMap);
+api.commands.addCommand({
+  text: "CreativeTools: Import Selection",
+  hidden: isNotInGame
+}, importMap);
 api.commands.addCommand({
   text: "CreativeTools: Remove Everything From Map",
   hidden: isNotInGame
