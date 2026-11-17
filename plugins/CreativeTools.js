@@ -2,13 +2,13 @@
  * @name CreativeTools
  * @description Adds various quality of life improvements to the Creative editor
  * @author Gimloader Official
- * @version 0.4.0
+ * @version 0.5.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CreativeTools.js
  * @webpage https://gimloader.github.io/plugins/CreativeTools
  * @reloadRequired ingame
  * @gamemode creative
  * @changelog Fixed undo/redo still happening in menus
- * @signature YOjrpoMRKdIRSqKP6XQ/sj0TVhRG2dkfhBbj/Hn8Y1vwZM8j6n8EeepcPH6p+hKev4PJtjT1kTlIxHB/b6G7Dg==
+ * @signature odB+bLPHfeGu+MZ6yl8jbotok/8oC86ktDi46Z93EkcDrkdXJOSQ/Jo0VMJBOH3Xi3CcI/P+zzUUtVS9Hh+wAg==
  */
 
 // shared/files.ts
@@ -20,6 +20,9 @@ function downloadFile(contents, name, type) {
   a.download = name;
   a.click();
   URL.revokeObjectURL(url);
+}
+function downloadJsonFile(obj, name) {
+  downloadFile(JSON.stringify(obj, null, 4), name, "application/json");
 }
 function readFile(accept) {
   return new Promise((res, rej) => {
@@ -899,9 +902,10 @@ api.rewriter.addParseHook("App", (code) => {
   return code.replace("Array.from([,,,]", "Array.from([,,,,,,]");
 });
 
-// plugins/CreativeTools/src/tools/renameBlocks.ts
+// plugins/CreativeTools/src/tools/blocks.ts
 api.rewriter.exposeVar("App-", {
   find: /\.gridId}\)},\w{1,3}=\w{1,3}\(\),(\w{1,3})=/,
+  check: "`Cannot create more",
   callback: (display) => {
     api.UI.forceReactUpdate();
     api.patcher.afterReact(display.type, (_, args, returnVal) => {
@@ -921,7 +925,29 @@ api.rewriter.exposeVar("App-", {
             renameBlock(deviceId, gridIds[i], grid);
           }
         });
+        items.push({
+          key: "download-grid",
+          icon: "\u2B07\uFE0F",
+          label: "Download block",
+          onClick: (e) => {
+            e.domEvent.stopPropagation();
+            downloadBlock(gridIds[i], grid);
+          }
+        });
       }
+    });
+  }
+});
+api.rewriter.exposeVar("App-", {
+  find: /}.`:``},(.{1,3})=/,
+  check: "`Cannot create more",
+  callback: (blockOptions) => {
+    api.patcher.afterReact(blockOptions, (_, args, returnVal) => {
+      const buttons = returnVal.props.children[1].props.children;
+      const newButton = api.React.cloneElement(buttons[0]);
+      newButton.props.label = "Import block (CreativeTools)";
+      newButton.props.onClick = () => importBlock(args[0].deviceId);
+      buttons.push(newButton);
     });
   }
 });
@@ -934,6 +960,22 @@ async function renameBlock(deviceId, gridId, grid) {
   const triggerType = grid.triggerType;
   api.net.colyseus.send("DELETE_CODE_GRID", { deviceId, gridId });
   await createCodeGrid(deviceId, grid.json, triggerType, newValue);
+}
+function downloadBlock(gridId, grid) {
+  downloadJsonFile({
+    triggerType: grid.triggerType,
+    triggerValue: grid.triggerValue,
+    json: grid.json
+  }, `block-${gridId}.json`);
+}
+async function importBlock(deviceId) {
+  try {
+    const block = await readJsonFile();
+    createCodeGrid(deviceId, block.json, block.triggerType, block.triggerValue);
+  } catch (e) {
+    api.logger.error("Failed to read block json", e);
+    api.UI.toast.error("Could not read block data");
+  }
 }
 
 // plugins/CreativeTools/src/index.ts
