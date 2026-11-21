@@ -2,13 +2,13 @@
  * @name CreativeTools
  * @description Adds various quality of life improvements to the Creative editor
  * @author Gimloader Official
- * @version 0.5.0
+ * @version 0.6.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CreativeTools.js
  * @webpage https://gimloader.github.io/plugins/CreativeTools
  * @reloadRequired ingame
  * @gamemode creative
- * @changelog Fixed undo/redo still happening in menus
- * @signature odB+bLPHfeGu+MZ6yl8jbotok/8oC86ktDi46Z93EkcDrkdXJOSQ/Jo0VMJBOH3Xi3CcI/P+zzUUtVS9Hh+wAg==
+ * @changelog Added commands to create various shapes
+ * @signature xYMfrgd3YRObe2K1dtaArgL8kYV2YmKzkfOkhKvWm33EMMzolUqZpJy5FCAvRKTSaq5otu1zqsqmqlgYcBOZDA==
  */
 
 // shared/files.ts
@@ -44,6 +44,13 @@ async function readJsonFile() {
 }
 
 // plugins/CreativeTools/src/util.ts
+function getTerrainOptions() {
+  const terrainOptions = api.stores.worldOptions.terrainOptions;
+  return terrainOptions.map((t) => ({
+    label: t.name,
+    value: t.id
+  }));
+}
 function dataFromDevice(device) {
   return {
     x: device.x,
@@ -258,6 +265,7 @@ function redo() {
 var selectedTileIds = /* @__PURE__ */ new Set();
 var selectedTiles = [];
 var currentlySelectedTiles = [];
+var previewTiles = [];
 var movingTiles = [];
 var isMovingTiles = false;
 var updateAction;
@@ -271,19 +279,15 @@ async function replaceSelection(ctx) {
     api.UI.toast.error("No tiles selected");
     return;
   }
-  const terrainOptions = api.stores.worldOptions.terrainOptions;
-  const terrainTypes = terrainOptions.map((t) => ({
-    label: t.name,
-    value: t.id
-  }));
-  const possibleTerrainTypes = terrainTypes.filter((t) => selectedTiles.some((tile) => tile.terrainOption.id === t.value));
+  const terrainOptions = getTerrainOptions();
+  const possibleTerrainOptions = terrainOptions.filter((t) => selectedTiles.some((tile) => tile.terrainOption.id === t.value));
   const fromId = await ctx.select({
     title: "Terrain type to replace",
-    options: possibleTerrainTypes
+    options: possibleTerrainOptions
   });
   const toId = await ctx.select({
     title: "Replace with",
-    options: terrainTypes
+    options: terrainOptions
   });
   const matchingTiles = selectedTiles.filter((tile) => tile.terrainOption.id === fromId);
   for (const tile of matchingTiles) {
@@ -391,6 +395,15 @@ api.net.onLoad(() => {
     })
   );
   api.patcher.after(terrainAdditionPreview, "update", () => {
+    for (const tile of previewTiles) {
+      terrainAdditionPreview.createPreviewTile({
+        x: tile.x,
+        y: tile.y,
+        depth: 999,
+        tileIndex: 0,
+        terrainOption: tile.terrainOption
+      });
+    }
     if (multiselectMode === "devices" || !multiselect.mouseStartPos) return;
     const offsetX = inputManager.mouse.worldX - multiselect.mouseStartPos.x >> 6;
     const offsetY = inputManager.mouse.worldY - multiselect.mouseStartPos.y >> 6;
@@ -978,33 +991,219 @@ async function importBlock(deviceId) {
   }
 }
 
+// plugins/CreativeTools/src/tools/shapes.ts
+async function createShape(context, name, getTiles) {
+  const terrainOptions = getTerrainOptions();
+  const tileType = await context.select({
+    title: `Terrain type to make ${name} out of`,
+    options: terrainOptions
+  });
+  const terrainOption = api.stores.worldOptions.terrainOptions.find((option) => option.id === tileType);
+  if (!terrainOption) return;
+  const toastId = api.UI.toast(`Click and drag to create a ${name} of terrain`, { duration: Infinity });
+  const inputManager = api.stores.phaser.scene.inputManager;
+  Object.defineProperty(inputManager.mouse, "isHoldingDown", { get: () => false, set: () => {
+  } });
+  Object.defineProperty(inputManager.mouse, "stopRunningClickHandlers", { get: () => true, set: () => {
+  } });
+  await new Promise((res) => api.stores.phaser.scene.input.once("pointerdown", res));
+  api.UI.toast.dismiss(toastId);
+  const startPos = api.stores.phaser.scene.inputManager.getMouseWorldXY();
+  const startX = startPos.x >> 6;
+  const startY = startPos.y >> 6;
+  const onPointerMove = (e) => {
+    previewTiles.length = 0;
+    const endX = Math.ceil(e.worldX / 64);
+    const endY = Math.ceil(e.worldY / 64);
+    const topLeftX = Math.min(startX, endX);
+    const topLeftY = Math.min(startY, endY);
+    const bottomRightX = Math.max(startX, endX);
+    const bottomRightY = Math.max(startY, endY);
+    getTiles(
+      (x, y) => {
+        previewTiles.push({
+          x,
+          y,
+          terrainOption
+        });
+      },
+      topLeftX,
+      topLeftY,
+      bottomRightX,
+      bottomRightY
+    );
+  };
+  api.stores.phaser.scene.input.on("pointermove", onPointerMove);
+  api.stores.phaser.scene.input.once("pointerup", async (e) => {
+    api.stores.phaser.scene.input.off("pointermove", onPointerMove);
+    try {
+      const shouldCollide = await context.select({
+        title: "Should this terrain collide with players?",
+        options: [
+          { label: "Yes", value: "yes" },
+          { label: "No", value: "no" }
+        ]
+      });
+      const depthChoice = await context.select({
+        title: "What layer should this terrain be?",
+        options: [
+          { label: "1 - Bottom", value: "1" },
+          { label: "2 - Lower", value: "2" },
+          { label: "3 - Middle", value: "3" },
+          { label: "4 - Upper", value: "4" },
+          { label: "5 - Top", value: "5" }
+        ]
+      });
+      previewTiles.length = 0;
+      const endX = Math.ceil(e.worldX / 64);
+      const endY = Math.ceil(e.worldY / 64);
+      const topLeftX = Math.min(startX, endX);
+      const topLeftY = Math.min(startY, endY);
+      const bottomRightX = Math.max(startX, endX);
+      const bottomRightY = Math.max(startY, endY);
+      const collides = shouldCollide === "yes";
+      const depth = parseInt(depthChoice, 10);
+      getTiles(
+        (x, y) => {
+          api.net.colyseus.send("PLACE_TERRAIN", {
+            x,
+            y,
+            collides,
+            depth,
+            terrain: terrainOption.id
+          });
+        },
+        topLeftX,
+        topLeftY,
+        bottomRightX,
+        bottomRightY
+      );
+    } catch {
+    }
+    Object.defineProperty(inputManager.mouse, "isHoldingDown", { value: true, writable: true, enumerable: true });
+    Object.defineProperty(inputManager.mouse, "stopRunningClickHandlers", { value: true, writable: true, enumerable: true });
+  });
+}
+var getRectangleTiles = (callback, startX, startY, endX, endY) => {
+  for (let x = startX; x < endX; x++) {
+    for (let y = startY; y < endY; y++) {
+      callback(x, y);
+    }
+  }
+};
+var getSquareTiles = (callback, startX, startY, endX, endY) => {
+  const size = Math.max(endX - startX, endY - startY);
+  for (let x = startX; x < startX + size; x++) {
+    for (let y = startY; y < startY + size; y++) {
+      callback(x, y);
+    }
+  }
+};
+var getCircleTiles = (callback, startX, startY, endX, endY) => {
+  const radius = Math.floor(Math.max(endX - startX, endY - startY) / 2);
+  const centerX = startX + radius;
+  const centerY = startY + radius;
+  let x = 0;
+  let y = radius;
+  let error = 1 - radius;
+  while (x <= y) {
+    callback(centerX + x, centerY + y);
+    callback(centerX - x, centerY + y);
+    callback(centerX + x, centerY - y);
+    callback(centerX - x, centerY - y);
+    callback(centerX + y, centerY + x);
+    callback(centerX - y, centerY + x);
+    callback(centerX + y, centerY - x);
+    callback(centerX - y, centerY - x);
+    if (error < 0) {
+      error += 2 * x + 3;
+    } else {
+      error += 2 * (x - y) + 5;
+      y--;
+    }
+    x++;
+  }
+};
+var getEllipseTiles = (callback, startX, startY, endX, endY) => {
+  const xc = Math.round((startX + endX) / 2);
+  const yc = Math.round((startY + endY) / 2);
+  const rx = Math.round((endX - startX) / 2);
+  const ry = Math.round((endY - startY) / 2);
+  const plotQuadrants = (x2, y2) => {
+    callback(xc + x2, yc + y2);
+    callback(xc - x2, yc + y2);
+    callback(xc + x2, yc - y2);
+    callback(xc - x2, yc - y2);
+  };
+  let x = 0;
+  let y = ry;
+  const rx2 = rx * rx;
+  const ry2 = ry * ry;
+  const twoRx2 = 2 * rx2;
+  const twoRy2 = 2 * ry2;
+  let px = 0;
+  let py = twoRx2 * y;
+  let d1 = ry2 - rx2 * ry + 0.25 * rx2;
+  while (px < py) {
+    plotQuadrants(x, y);
+    x++;
+    px += twoRy2;
+    if (d1 < 0) {
+      d1 += ry2 + px;
+    } else {
+      y--;
+      py -= twoRx2;
+      d1 += ry2 + px - py;
+    }
+  }
+  let d2 = ry2 * (x + 0.5) * (x + 0.5) + rx2 * (y - 1) * (y - 1) - rx2 * ry2;
+  while (y >= 0) {
+    plotQuadrants(x, y);
+    y--;
+    py -= twoRx2;
+    if (d2 > 0) {
+      d2 += rx2 - py;
+    } else {
+      x++;
+      px += twoRy2;
+      d2 += rx2 - py + px;
+    }
+  }
+};
+
 // plugins/CreativeTools/src/index.ts
-var isNotInGame = () => api.net.type !== "Colyseus";
-api.commands.addCommand({
-  text: "CreativeTools: Export Whole Map",
-  hidden: isNotInGame
-}, exportWholeMap);
-api.commands.addCommand({
-  text: "CreativeTools: Export Selection",
-  hidden: isNotInGame
-}, exportSelection);
-api.commands.addCommand({
-  text: "CreativeTools: Import Whole Map",
-  hidden: isNotInGame
-}, importMap);
-api.commands.addCommand({
-  text: "CreativeTools: Import Selection",
-  hidden: isNotInGame
-}, importMap);
-api.commands.addCommand({
-  text: "CreativeTools: Remove Everything From Map",
-  hidden: isNotInGame
-}, nukeMap);
-api.commands.addCommand({
-  text: "CreativeTools: Find/Replace Selected Terrain",
-  hidden: isNotInGame
-}, replaceSelection);
 api.net.onLoad(() => {
+  api.commands.addCommand({
+    text: "CreativeTools: Export Whole Map"
+  }, exportWholeMap);
+  api.commands.addCommand({
+    text: "CreativeTools: Export Selection"
+  }, exportSelection);
+  api.commands.addCommand({
+    text: "CreativeTools: Import Whole Map"
+  }, importMap);
+  api.commands.addCommand({
+    text: "CreativeTools: Import Selection"
+  }, importMap);
+  api.commands.addCommand({
+    text: "CreativeTools: Remove Everything From Map"
+  }, nukeMap);
+  api.commands.addCommand({
+    text: "CreativeTools: Find/Replace Selected Terrain"
+  }, replaceSelection);
+  api.commands.addCommand({
+    text: "CreativeTools: Create Square"
+  }, (ctx) => createShape(ctx, "square", getSquareTiles));
+  api.commands.addCommand({
+    text: "CreativeTools: Create Rectangle"
+  }, (ctx) => createShape(ctx, "rectangle", getRectangleTiles));
+  api.commands.addCommand({
+    text: "CreativeTools: Create Circle"
+  }, (ctx) => createShape(ctx, "circle", getCircleTiles));
+  api.commands.addCommand({
+    text: "CreativeTools: Create Ellipse",
+    keywords: ["oval"]
+  }, (ctx) => createShape(ctx, "ellipse", getEllipseTiles));
   api.hotkeys.addHotkey({
     ctrl: true,
     shift: false,
