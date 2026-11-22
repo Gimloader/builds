@@ -2,13 +2,13 @@
  * @name CreativeTools
  * @description Adds various quality of life improvements to the Creative editor
  * @author Gimloader Official
- * @version 0.6.0
+ * @version 0.6.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CreativeTools.js
  * @webpage https://gimloader.github.io/plugins/CreativeTools
  * @reloadRequired ingame
  * @gamemode creative
  * @changelog Added commands to create various shapes
- * @signature xYMfrgd3YRObe2K1dtaArgL8kYV2YmKzkfOkhKvWm33EMMzolUqZpJy5FCAvRKTSaq5otu1zqsqmqlgYcBOZDA==
+ * @signature jQITHumvdvAfG8J5A3kqNo7iLsRQ66A12ye6Y5QLAlsRIuiEUBjaq5XiCrR76SF2L63aFNMwOuHaTDfuLbOmAw==
  */
 
 // shared/files.ts
@@ -1079,6 +1079,7 @@ async function createShape(context, name, getTiles) {
         bottomRightY
       );
     } catch {
+      previewTiles.length = 0;
     }
     Object.defineProperty(inputManager.mouse, "isHoldingDown", { value: true, writable: true, enumerable: true });
     Object.defineProperty(inputManager.mouse, "stopRunningClickHandlers", { value: true, writable: true, enumerable: true });
@@ -1091,15 +1092,51 @@ var getRectangleTiles = (callback, startX, startY, endX, endY) => {
     }
   }
 };
-var getSquareTiles = (callback, startX, startY, endX, endY) => {
-  const size = Math.max(endX - startX, endY - startY);
-  for (let x = startX; x < startX + size; x++) {
-    for (let y = startY; y < startY + size; y++) {
-      callback(x, y);
-    }
+var getHollowRectangleTiles = (callback, startX, startY, endX, endY) => {
+  for (let x = startX; x < endX; x++) {
+    callback(x, startY);
+    callback(x, endY - 1);
+  }
+  for (let y = startY + 1; y < endY - 1; y++) {
+    callback(startX, y);
+    callback(endX - 1, y);
   }
 };
+var getSquareTiles = (callback, startX, startY, endX, endY) => {
+  const size = Math.max(endX - startX, endY - startY);
+  getRectangleTiles(callback, startX, startY, startX + size, startY + size);
+};
+var getHollowSquareTiles = (callback, startX, startY, endX, endY) => {
+  const size = Math.max(endX - startX, endY - startY);
+  getHollowRectangleTiles(callback, startX, startY, startX + size, startY + size);
+};
 var getCircleTiles = (callback, startX, startY, endX, endY) => {
+  const radius = Math.floor(Math.max(endX - startX, endY - startY) / 2);
+  const centerX = startX + radius;
+  const centerY = startY + radius;
+  const addRow = (x1, x2, y2) => {
+    for (let x3 = x1; x3 <= x2; x3++) {
+      callback(x3, y2);
+    }
+  };
+  let x = 0;
+  let y = radius;
+  let error = 1 - radius;
+  while (x <= y) {
+    addRow(centerX - x, centerX + x, centerY + y);
+    addRow(centerX - x, centerX + x, centerY - y);
+    addRow(centerX - y, centerX + y, centerY + x);
+    addRow(centerX - y, centerX + y, centerY - x);
+    if (error < 0) {
+      error += 2 * x + 3;
+    } else {
+      error += 2 * (x - y) + 5;
+      y--;
+    }
+    x++;
+  }
+};
+var getHollowCircleTiles = (callback, startX, startY, endX, endY) => {
   const radius = Math.floor(Math.max(endX - startX, endY - startY) / 2);
   const centerX = startX + radius;
   const centerY = startY + radius;
@@ -1125,6 +1162,22 @@ var getCircleTiles = (callback, startX, startY, endX, endY) => {
   }
 };
 var getEllipseTiles = (callback, startX, startY, endX, endY) => {
+  const xc = Math.round((startX + endX) / 2);
+  const yc = Math.round((startY + endY) / 2);
+  const rx = Math.round((endX - startX) / 2);
+  const ry = Math.round((endY - startY) / 2);
+  const rxSquared = rx * rx;
+  for (let x = 0; x <= rx; x++) {
+    const maxY = Math.round(ry * Math.sqrt(1 - x * x / rxSquared));
+    for (let y = 0; y <= maxY; y++) {
+      callback(xc + x, yc + y);
+      callback(xc - x, yc + y);
+      callback(xc + x, yc - y);
+      callback(xc - x, yc - y);
+    }
+  }
+};
+var getHollowEllipseTiles = (callback, startX, startY, endX, endY) => {
   const xc = Math.round((startX + endX) / 2);
   const yc = Math.round((startY + endY) / 2);
   const rx = Math.round((endX - startX) / 2);
@@ -1195,15 +1248,28 @@ api.net.onLoad(() => {
     text: "CreativeTools: Create Square"
   }, (ctx) => createShape(ctx, "square", getSquareTiles));
   api.commands.addCommand({
+    text: "CreativeTools: Create Hollow Square"
+  }, (ctx) => createShape(ctx, "hollow square", getHollowSquareTiles));
+  api.commands.addCommand({
     text: "CreativeTools: Create Rectangle"
   }, (ctx) => createShape(ctx, "rectangle", getRectangleTiles));
+  api.commands.addCommand({
+    text: "CreativeTools: Create Hollow Rectangle"
+  }, (ctx) => createShape(ctx, "hollow rectangle", getHollowRectangleTiles));
   api.commands.addCommand({
     text: "CreativeTools: Create Circle"
   }, (ctx) => createShape(ctx, "circle", getCircleTiles));
   api.commands.addCommand({
+    text: "CreativeTools: Create Hollow Circle"
+  }, (ctx) => createShape(ctx, "hollow circle", getHollowCircleTiles));
+  api.commands.addCommand({
     text: "CreativeTools: Create Ellipse",
     keywords: ["oval"]
   }, (ctx) => createShape(ctx, "ellipse", getEllipseTiles));
+  api.commands.addCommand({
+    text: "CreativeTools: Create Hollow Ellipse",
+    keywords: ["oval"]
+  }, (ctx) => createShape(ctx, "hollow ellipse", getHollowEllipseTiles));
   api.hotkeys.addHotkey({
     ctrl: true,
     shift: false,
