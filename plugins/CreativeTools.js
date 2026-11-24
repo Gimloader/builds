@@ -2,14 +2,27 @@
  * @name CreativeTools
  * @description Adds various quality of life improvements to the Creative editor
  * @author Gimloader Official
- * @version 0.6.1
+ * @version 0.7.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CreativeTools.js
  * @webpage https://gimloader.github.io/plugins/CreativeTools
  * @reloadRequired ingame
  * @gamemode creative
- * @changelog Added commands to create various shapes
- * @signature jQITHumvdvAfG8J5A3kqNo7iLsRQ66A12ye6Y5QLAlsRIuiEUBjaq5XiCrR76SF2L63aFNMwOuHaTDfuLbOmAw==
+ * @changelog Added drag and drop for layer reordering
+ * @signature JG/dN3cKUeDjbHogIQbLER8W9aViIjKgLKhVkJibPElaiCUeG9cRzTAUFnGbBumBYAYiICAaNjZhJ/hKi4UVBA==
  */
+
+// inject-css:plugins/CreativeTools/src/styles.css
+api.UI.addStyles(`.border-inside-white > * {
+    border-color: white !important;
+}
+`);
+
+// plugins/CreativeTools/src/tools/eraserSize.ts
+api.rewriter.addParseHook("App", (code) => {
+  const index = code.indexOf("Eraser Size:");
+  if (index === -1) return code;
+  return code.replace("Array.from([,,,]", "Array.from([,,,,,,]");
+});
 
 // shared/files.ts
 function downloadFile(contents, name, type) {
@@ -87,6 +100,333 @@ function safeParse(json, defaultVal) {
     return JSON.parse(json);
   } catch {
     return defaultVal;
+  }
+}
+
+// plugins/CreativeTools/src/tools/import.ts
+async function importMap() {
+  try {
+    const data = await readJsonFile();
+    api.UI.toast.promise(importMapData(data), {
+      loading: "Importing map data...",
+      success: "Imported map data",
+      error: "Something went wrong"
+    });
+  } catch {
+  }
+}
+async function importMapData(data) {
+  let tileShiftX = 0;
+  let tileShiftY = 0;
+  let shiftX = 0;
+  let shiftY = 0;
+  if (data.isRegion && (data.terrain.length > 0 || data.devices.length > 0)) {
+    let topLeftX = Infinity;
+    let topLeftY = Infinity;
+    for (const tile of data.terrain) {
+      if (tile.x * 64 < topLeftX) topLeftX = tile.x * 64;
+      if (tile.y * 64 < topLeftY) topLeftY = tile.y * 64;
+    }
+    for (const device of data.devices) {
+      if (device.x < topLeftX) topLeftX = device.x;
+      if (device.y < topLeftY) topLeftY = device.y;
+    }
+    tileShiftX = Math.floor((api.stores.phaser.mainCharacter.body.x - topLeftX) / 64);
+    tileShiftY = Math.floor((api.stores.phaser.mainCharacter.body.y - topLeftY) / 64);
+    shiftX = tileShiftX * 64;
+    shiftY = tileShiftY * 64;
+  }
+  for (const id in data.customAssets) {
+    const asset = data.customAssets[id];
+    api.net.colyseus.send("ADD_CUSTOM_ASSET", {
+      data: JSON.stringify(asset.data),
+      icon: asset.icon,
+      id: asset.id,
+      name: asset.name,
+      optionId: asset.optionId
+    });
+  }
+  for (const tile of data.terrain) {
+    api.net.colyseus.send("PLACE_TERRAIN", {
+      x: tile.x + tileShiftX,
+      y: tile.y + tileShiftY,
+      terrain: tile.terrain,
+      collides: tile.collides,
+      depth: tile.depth
+    });
+  }
+  for (const device of data.devices) {
+    api.net.colyseus.send("PLACE_DEVICE", {
+      x: device.x + shiftX,
+      y: device.y + shiftY,
+      id: device.id,
+      deviceTypeId: device.deviceId,
+      layerId: device.layerId,
+      depth: device.depth,
+      options: JSON.stringify(prepareOptions(device.options))
+    });
+  }
+  for (const wire of data.wires) {
+    api.net.colyseus.send("PLACE_WIRE", wire);
+  }
+  await Promise.all(
+    Object.keys(data.codeGrids).map(async (deviceId) => {
+      for (const key in data.codeGrids[deviceId]) {
+        const grid = data.codeGrids[deviceId][key];
+        const json = JSON.stringify(grid.json);
+        await createCodeGrid(deviceId, json, grid.triggerType, grid.triggerValue);
+      }
+    })
+  );
+}
+async function createCodeGrid(deviceId, json, triggerType, triggerValue) {
+  api.net.colyseus.send("CREATE_CODE_GRID", {
+    deviceId,
+    triggerType,
+    triggerValue
+  });
+  const gridId = await awaitGridCreation(deviceId);
+  api.net.colyseus.send("JOIN_CODE_GRID", { deviceId, gridId });
+  api.net.colyseus.send("SET_CODE_GRID_JSON", {
+    json,
+    deviceId,
+    gridId
+  });
+  api.net.colyseus.send("LEAVE_CODE_GRID", { deviceId, gridId });
+}
+function awaitGridCreation(deviceId) {
+  return new Promise((res) => {
+    const existingDevice = api.net.colyseus.state.world.devices.codeGrids.get(deviceId);
+    if (existingDevice) {
+      const unsubGrids = existingDevice.items.onAdd((_, gridKey) => {
+        unsubGrids();
+        res(gridKey);
+      }, false);
+      return;
+    }
+    const unsubDevices = api.net.colyseus.state.world.devices.codeGrids.onAdd((device, deviceKey) => {
+      if (deviceKey !== deviceId) return;
+      unsubDevices();
+      const unsubGrids = device.items.onAdd((_, gridKey) => {
+        unsubGrids();
+        res(gridKey);
+      }, false);
+    });
+  });
+}
+
+// plugins/CreativeTools/src/tools/blocks.ts
+api.rewriter.exposeVar("App-", {
+  find: /\.gridId}\)},\w{1,3}=\w{1,3}\(\),(\w{1,3})=/,
+  check: "`Cannot create more",
+  callback: (display) => {
+    api.UI.forceReactUpdate();
+    api.patcher.afterReact(display.type, (_, args, returnVal) => {
+      const gridIds = Array.from(args[0].codeGrids.keys());
+      const deviceId = args[0].deviceId;
+      const blocks = returnVal.props.children[1].props.children;
+      for (let i = 0; i < blocks.length; i++) {
+        const grid = api.stores.world.devices.codeGrids.get(deviceId)?.items.get(gridIds[i]);
+        if (!grid || !grid.triggerValue) continue;
+        const items = blocks[i].props.children.props.children.props.menu.items;
+        items.push({
+          key: "edit-grid",
+          icon: "\u270F\uFE0F",
+          label: "Edit block",
+          onClick: (e) => {
+            e.domEvent.stopPropagation();
+            renameBlock(deviceId, gridIds[i], grid);
+          }
+        });
+        items.push({
+          key: "download-grid",
+          icon: "\u2B07\uFE0F",
+          label: "Download block",
+          onClick: (e) => {
+            e.domEvent.stopPropagation();
+            downloadBlock(gridIds[i], grid);
+          }
+        });
+      }
+    });
+  }
+});
+api.rewriter.exposeVar("App-", {
+  find: /}.`:``},(.{1,3})=/,
+  check: "`Cannot create more",
+  callback: (blockOptions) => {
+    api.patcher.afterReact(blockOptions, (_, args, returnVal) => {
+      const buttons = returnVal.props.children[1].props.children;
+      const newButton = api.React.cloneElement(buttons[0]);
+      newButton.props.label = "Import block (CreativeTools)";
+      newButton.props.onClick = () => importBlock(args[0].deviceId);
+      buttons.push(newButton);
+    });
+  }
+});
+async function renameBlock(deviceId, gridId, grid) {
+  const newValue = await api.UI.prompt("Edit block channel", {
+    text: "Enter a new channel for this block",
+    defaultVal: grid.triggerValue
+  });
+  if (!newValue) return;
+  const triggerType = grid.triggerType;
+  api.net.colyseus.send("DELETE_CODE_GRID", { deviceId, gridId });
+  await createCodeGrid(deviceId, grid.json, triggerType, newValue);
+}
+function downloadBlock(gridId, grid) {
+  downloadJsonFile({
+    triggerType: grid.triggerType,
+    triggerValue: grid.triggerValue,
+    json: grid.json
+  }, `block-${gridId}.json`);
+}
+async function importBlock(deviceId) {
+  try {
+    const block = await readJsonFile();
+    createCodeGrid(deviceId, block.json, block.triggerType, block.triggerValue);
+  } catch (e) {
+    api.logger.error("Failed to read block json", e);
+    api.UI.toast.error("Could not read block data");
+  }
+}
+
+// plugins/CreativeTools/src/tools/layers.ts
+var dragChangeCallbacks = /* @__PURE__ */ new Set();
+var draggingDevice = null;
+api.rewriter.exposeVar("App-", {
+  check: "Move To Primary Layer",
+  find: /DevicesUnderCharacters\)\)}\),\w{1,3}},(\w{1,3})=/,
+  callback: (component) => {
+    api.patcher.afterReact(component.type, (_, args, returnVal) => {
+      const buttons = returnVal.props.children[1].props.children;
+      const newButton = api.React.cloneElement(buttons[0]);
+      const newIcon = api.React.cloneElement(newButton.props.icon);
+      newIcon.props.name = "fas fa-grip-vertical";
+      newButton.props.icon = newIcon;
+      newButton.props.onClick = (e) => e.stopPropagation();
+      newButton.props.onMouseDown = () => {
+        draggingDevice = args[0].deviceId;
+        document.body.style.cursor = "ns-resize";
+        for (const callback of dragChangeCallbacks) callback();
+      };
+      newButton.props.style = { cursor: "ns-resize" };
+      newButton.props.disabled = false;
+      buttons.push(newButton);
+      returnVal.props.children = api.React.createElement(layerWrapper, {
+        deviceId: args[0].deviceId,
+        children: returnVal.props.children
+      });
+    });
+  }
+});
+api.rewriter.exposeVar("App-", {
+  check: "Move To Primary Layer",
+  find: /},(\w{1,3})=\w{1,3}=>{let{token:{/,
+  callback: (component) => {
+    api.patcher.afterReact(component, (_, args, returnVal) => {
+      const children = returnVal.props.children;
+      if (children?.[2]?.props?.style?.borderRadius !== 6) return;
+      let layer = "DevicesAboveCharacters";
+      if (args[0].layerName === "Below") layer = "DevicesUnderCharacters";
+      else if (args[0].layerName === "Primary") layer = "DepthSortedCharactersAndDevices";
+      children[2] = api.React.createElement(emptyLayerWrapper, {
+        layer,
+        children: children[2]
+      });
+    });
+  }
+});
+var moveDeviceLayer;
+var moveDeviceUp;
+var moveDeviceDown;
+api.rewriter.exposeVar("App-", {
+  check: "Move To Primary Layer",
+  find: /\(\)=>(\w{1,3})\(\w{1,3}\.deviceId,/,
+  callback: (func) => moveDeviceLayer = func
+});
+api.rewriter.exposeVar("App-", {
+  check: "Move To Primary Layer",
+  find: /DepthSortedCharactersAndDevices:null,(\w{1,3})=\(/,
+  callback: (func) => moveDeviceUp = func
+});
+api.rewriter.exposeVar("App-", {
+  check: "Move To Primary Layer",
+  find: /\.y}\),.{1,7}\)},(\w{1,3})=\(/,
+  callback: (func) => moveDeviceDown = func
+});
+var onMouseUp = () => {
+  if (!draggingDevice) return;
+  draggingDevice = null;
+  document.body.style.cursor = "";
+  for (const callback of dragChangeCallbacks) callback();
+};
+window.addEventListener("pointerup", onMouseUp);
+api.onStop(() => window.removeEventListener("pointerup", onMouseUp));
+function emptyLayerWrapper({ layer, children }) {
+  const [_, forceUpdate] = api.React.useReducer((x) => x + 1, 0);
+  const [hovered, setHovered] = api.React.useState(false);
+  api.React.useEffect(() => {
+    dragChangeCallbacks.add(forceUpdate);
+    return () => void dragChangeCallbacks.delete(forceUpdate);
+  }, []);
+  return api.React.createElement("div", {
+    className: draggingDevice && hovered ? "border-inside-white" : "",
+    onMouseEnter: () => setHovered(true),
+    onMouseLeave: () => setHovered(false),
+    onPointerUp: () => {
+      if (!draggingDevice || !hovered) return;
+      moveDeviceLayer(draggingDevice, layer);
+    }
+  }, children);
+}
+function layerWrapper({ deviceId, children }) {
+  const [_, forceUpdate] = api.React.useReducer((x) => x + 1, 0);
+  const [hoverSide, setHoverSide] = api.React.useState(null);
+  const isBeingDragged = draggingDevice === deviceId;
+  api.React.useEffect(() => {
+    dragChangeCallbacks.add(forceUpdate);
+    return () => void dragChangeCallbacks.delete(forceUpdate);
+  }, []);
+  return api.React.createElement("div", {
+    style: {
+      display: "flex",
+      width: "100%",
+      alignItems: "center",
+      opacity: isBeingDragged ? 0.5 : 1,
+      borderTop: hoverSide === "top" && !isBeingDragged && draggingDevice !== null ? "2px solid white" : "",
+      borderBottom: hoverSide === "bottom" && !isBeingDragged && draggingDevice !== null ? "2px solid white" : ""
+    },
+    onMouseMove: (e) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const mouseY = e.clientY - rect.top;
+      const side = mouseY < rect.height / 2 ? "top" : "bottom";
+      setHoverSide(side);
+    },
+    onMouseLeave: () => setHoverSide(null),
+    onPointerUp: () => {
+      if (!draggingDevice || isBeingDragged || !hoverSide) return;
+      moveDevice(draggingDevice, deviceId, hoverSide);
+    }
+  }, children);
+}
+async function moveDevice(movingId, deviceId, side) {
+  const sortingState = api.stores.me.editing.device.sortingState;
+  const dragged = sortingState.find((d) => d.deviceId === movingId);
+  const device = sortingState.find((d) => d.deviceId === deviceId);
+  if (!dragged || !device) return;
+  if (dragged.layer !== device.layer) {
+    moveDeviceLayer(movingId, device.layer);
+    api.stores.phaser.scene.worldManager.devices.cullDevices();
+  }
+  for (let i = 0; i < 5e3; i++) {
+    const layerDevices = sortingState.filter((d) => d.layer === device.layer);
+    const deviceIndex = layerDevices.findIndex((d) => d.deviceId === deviceId);
+    const desiredIndex = side === "top" ? deviceIndex - 1 : deviceIndex + 1;
+    const draggedIndex = layerDevices.findIndex((d) => d.deviceId === movingId);
+    if (draggedIndex === desiredIndex) break;
+    if (draggedIndex < desiredIndex) moveDeviceDown(movingId, sortingState);
+    else moveDeviceUp(movingId, sortingState);
   }
 }
 
@@ -768,118 +1108,6 @@ function getMapData(selectionOnly) {
   };
 }
 
-// plugins/CreativeTools/src/tools/import.ts
-async function importMap() {
-  try {
-    const data = await readJsonFile();
-    api.UI.toast.promise(importMapData(data), {
-      loading: "Importing map data...",
-      success: "Imported map data",
-      error: "Something went wrong"
-    });
-  } catch {
-  }
-}
-async function importMapData(data) {
-  let tileShiftX = 0;
-  let tileShiftY = 0;
-  let shiftX = 0;
-  let shiftY = 0;
-  if (data.isRegion && (data.terrain.length > 0 || data.devices.length > 0)) {
-    let topLeftX = Infinity;
-    let topLeftY = Infinity;
-    for (const tile of data.terrain) {
-      if (tile.x * 64 < topLeftX) topLeftX = tile.x * 64;
-      if (tile.y * 64 < topLeftY) topLeftY = tile.y * 64;
-    }
-    for (const device of data.devices) {
-      if (device.x < topLeftX) topLeftX = device.x;
-      if (device.y < topLeftY) topLeftY = device.y;
-    }
-    tileShiftX = Math.floor((api.stores.phaser.mainCharacter.body.x - topLeftX) / 64);
-    tileShiftY = Math.floor((api.stores.phaser.mainCharacter.body.y - topLeftY) / 64);
-    shiftX = tileShiftX * 64;
-    shiftY = tileShiftY * 64;
-  }
-  for (const id in data.customAssets) {
-    const asset = data.customAssets[id];
-    api.net.colyseus.send("ADD_CUSTOM_ASSET", {
-      data: JSON.stringify(asset.data),
-      icon: asset.icon,
-      id: asset.id,
-      name: asset.name,
-      optionId: asset.optionId
-    });
-  }
-  for (const tile of data.terrain) {
-    api.net.colyseus.send("PLACE_TERRAIN", {
-      x: tile.x + tileShiftX,
-      y: tile.y + tileShiftY,
-      terrain: tile.terrain,
-      collides: tile.collides,
-      depth: tile.depth
-    });
-  }
-  for (const device of data.devices) {
-    api.net.colyseus.send("PLACE_DEVICE", {
-      x: device.x + shiftX,
-      y: device.y + shiftY,
-      id: device.id,
-      deviceTypeId: device.deviceId,
-      layerId: device.layerId,
-      depth: device.depth,
-      options: JSON.stringify(prepareOptions(device.options))
-    });
-  }
-  for (const wire of data.wires) {
-    api.net.colyseus.send("PLACE_WIRE", wire);
-  }
-  await Promise.all(
-    Object.keys(data.codeGrids).map(async (deviceId) => {
-      for (const key in data.codeGrids[deviceId]) {
-        const grid = data.codeGrids[deviceId][key];
-        const json = JSON.stringify(grid.json);
-        await createCodeGrid(deviceId, json, grid.triggerType, grid.triggerValue);
-      }
-    })
-  );
-}
-async function createCodeGrid(deviceId, json, triggerType, triggerValue) {
-  api.net.colyseus.send("CREATE_CODE_GRID", {
-    deviceId,
-    triggerType,
-    triggerValue
-  });
-  const gridId = await awaitGridCreation(deviceId);
-  api.net.colyseus.send("JOIN_CODE_GRID", { deviceId, gridId });
-  api.net.colyseus.send("SET_CODE_GRID_JSON", {
-    json,
-    deviceId,
-    gridId
-  });
-  api.net.colyseus.send("LEAVE_CODE_GRID", { deviceId, gridId });
-}
-function awaitGridCreation(deviceId) {
-  return new Promise((res) => {
-    const existingDevice = api.net.colyseus.state.world.devices.codeGrids.get(deviceId);
-    if (existingDevice) {
-      const unsubGrids = existingDevice.items.onAdd((_, gridKey) => {
-        unsubGrids();
-        res(gridKey);
-      }, false);
-      return;
-    }
-    const unsubDevices = api.net.colyseus.state.world.devices.codeGrids.onAdd((device, deviceKey) => {
-      if (deviceKey !== deviceId) return;
-      unsubDevices();
-      const unsubGrids = device.items.onAdd((_, gridKey) => {
-        unsubGrids();
-        res(gridKey);
-      }, false);
-    });
-  });
-}
-
 // plugins/CreativeTools/src/tools/nuke.ts
 async function nukeMap() {
   const warning = "Are you sure you want to remove everything from the map? This cannot be undone.";
@@ -906,89 +1134,6 @@ function removeTilesAndDevices() {
     api.net.colyseus.sendDirect("REMOVE_DEVICE", { id: device.id });
   }
   clearUndoStacks();
-}
-
-// plugins/CreativeTools/src/tools/eraserSize.ts
-api.rewriter.addParseHook("App", (code) => {
-  const index = code.indexOf("Eraser Size:");
-  if (index === -1) return code;
-  return code.replace("Array.from([,,,]", "Array.from([,,,,,,]");
-});
-
-// plugins/CreativeTools/src/tools/blocks.ts
-api.rewriter.exposeVar("App-", {
-  find: /\.gridId}\)},\w{1,3}=\w{1,3}\(\),(\w{1,3})=/,
-  check: "`Cannot create more",
-  callback: (display) => {
-    api.UI.forceReactUpdate();
-    api.patcher.afterReact(display.type, (_, args, returnVal) => {
-      const gridIds = Array.from(args[0].codeGrids.keys());
-      const deviceId = args[0].deviceId;
-      const blocks = returnVal.props.children[1].props.children;
-      for (let i = 0; i < blocks.length; i++) {
-        const grid = api.stores.world.devices.codeGrids.get(deviceId)?.items.get(gridIds[i]);
-        if (!grid || !grid.triggerValue) continue;
-        const items = blocks[i].props.children.props.children.props.menu.items;
-        items.push({
-          key: "edit-grid",
-          icon: "\u270F\uFE0F",
-          label: "Edit block",
-          onClick: (e) => {
-            e.domEvent.stopPropagation();
-            renameBlock(deviceId, gridIds[i], grid);
-          }
-        });
-        items.push({
-          key: "download-grid",
-          icon: "\u2B07\uFE0F",
-          label: "Download block",
-          onClick: (e) => {
-            e.domEvent.stopPropagation();
-            downloadBlock(gridIds[i], grid);
-          }
-        });
-      }
-    });
-  }
-});
-api.rewriter.exposeVar("App-", {
-  find: /}.`:``},(.{1,3})=/,
-  check: "`Cannot create more",
-  callback: (blockOptions) => {
-    api.patcher.afterReact(blockOptions, (_, args, returnVal) => {
-      const buttons = returnVal.props.children[1].props.children;
-      const newButton = api.React.cloneElement(buttons[0]);
-      newButton.props.label = "Import block (CreativeTools)";
-      newButton.props.onClick = () => importBlock(args[0].deviceId);
-      buttons.push(newButton);
-    });
-  }
-});
-async function renameBlock(deviceId, gridId, grid) {
-  const newValue = await api.UI.prompt("Edit block channel", {
-    text: "Enter a new channel for this block",
-    defaultVal: grid.triggerValue
-  });
-  if (!newValue) return;
-  const triggerType = grid.triggerType;
-  api.net.colyseus.send("DELETE_CODE_GRID", { deviceId, gridId });
-  await createCodeGrid(deviceId, grid.json, triggerType, newValue);
-}
-function downloadBlock(gridId, grid) {
-  downloadJsonFile({
-    triggerType: grid.triggerType,
-    triggerValue: grid.triggerValue,
-    json: grid.json
-  }, `block-${gridId}.json`);
-}
-async function importBlock(deviceId) {
-  try {
-    const block = await readJsonFile();
-    createCodeGrid(deviceId, block.json, block.triggerType, block.triggerValue);
-  } catch (e) {
-    api.logger.error("Failed to read block json", e);
-    api.UI.toast.error("Could not read block data");
-  }
 }
 
 // plugins/CreativeTools/src/tools/shapes.ts
