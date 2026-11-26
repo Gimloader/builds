@@ -2,13 +2,13 @@
  * @name CreativeTools
  * @description Adds various quality of life improvements to the Creative editor
  * @author Gimloader Official
- * @version 0.7.0
+ * @version 0.8.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CreativeTools.js
  * @webpage https://gimloader.github.io/plugins/CreativeTools
  * @reloadRequired ingame
  * @gamemode creative
- * @changelog Added drag and drop for layer reordering
- * @signature JG/dN3cKUeDjbHogIQbLER8W9aViIjKgLKhVkJibPElaiCUeG9cRzTAUFnGbBumBYAYiICAaNjZhJ/hKi4UVBA==
+ * @changelog Added a menu to hide devices based on layer
+ * @signature WGsvrV7eIujAFvcKuUTDKvpRP59Mt80Vzvi08C6GxyNvcouqaqjGUh6YIE8XAC+8joYVQ0XfA634FdpkxIMsBA==
  */
 
 // inject-css:plugins/CreativeTools/src/styles.css
@@ -428,6 +428,169 @@ async function moveDevice(movingId, deviceId, side) {
     if (draggedIndex < desiredIndex) moveDeviceDown(movingId, sortingState);
     else moveDeviceUp(movingId, sortingState);
   }
+}
+
+// external-svelte:svelte
+var mount = /* @__PURE__ */ (() => api.svelte_5_43_0.Index.mount)();
+var unmount = /* @__PURE__ */ (() => api.svelte_5_43_0.Index.unmount)();
+
+// external-svelte:svelte/internal/client
+var append = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.append)();
+var append_styles = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.append_styles)();
+var child = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.child)();
+var first_child = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.first_child)();
+var from_html = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.from_html)();
+var next = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.next)();
+var pop = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.pop)();
+var proxy = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.proxy)();
+var push = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.push)();
+var reset = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.reset)();
+var sibling = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.sibling)();
+var snapshot = /* @__PURE__ */ (() => api.svelte_5_43_0.Client.snapshot)();
+
+// plugins/CreativeTools/src/ui/HideOptions.svelte
+var root = from_html(`<div class="svelte-1m5dm4o"><!> Hide Above Layer</div> <div class="svelte-1m5dm4o"><!> Hide Primary Layer</div> <div class="svelte-1m5dm4o"><!> Hide Below Layer</div>`, 1);
+var $$css = {
+  hash: "svelte-1m5dm4o",
+  code: "div.svelte-1m5dm4o {display:flex;align-items:center;gap:10px;}"
+};
+function HideOptions($$anchor, $$props) {
+  push($$props, true);
+  append_styles($$anchor, $$css);
+  const Switch = api.Components.Switch;
+  let itemState = proxy($$props.hideState);
+  const onSwitchChange = () => {
+    $$props.onChange(snapshot(itemState));
+  };
+  var fragment = root();
+  var div = first_child(fragment);
+  var node = child(div);
+  Switch(node, {
+    onCheckedChange: onSwitchChange,
+    get checked() {
+      return itemState.aboveHidden;
+    },
+    set checked($$value) {
+      itemState.aboveHidden = $$value;
+    }
+  });
+  next();
+  reset(div);
+  var div_1 = sibling(div, 2);
+  var node_1 = child(div_1);
+  Switch(node_1, {
+    onCheckedChange: onSwitchChange,
+    get checked() {
+      return itemState.primaryHidden;
+    },
+    set checked($$value) {
+      itemState.primaryHidden = $$value;
+    }
+  });
+  next();
+  reset(div_1);
+  var div_2 = sibling(div_1, 2);
+  var node_2 = child(div_2);
+  Switch(node_2, {
+    onCheckedChange: onSwitchChange,
+    get checked() {
+      return itemState.belowHidden;
+    },
+    set checked($$value) {
+      itemState.belowHidden = $$value;
+    }
+  });
+  next();
+  reset(div_2);
+  append($$anchor, fragment);
+  pop();
+}
+
+// plugins/CreativeTools/src/tools/hider.ts
+var hideState = Object.assign({
+  aboveHidden: false,
+  primaryHidden: false,
+  belowHidden: false
+}, api.storage.getValue("hideState", {}));
+api.rewriter.exposeVar("App-", {
+  check: "Eraser (Q)",
+  find: /: flex-start;\n`,(\w{1,3})=/,
+  callback: (component) => {
+    api.patcher.afterReact(component.type, (_, __, returnVal) => {
+      try {
+        const buttons = returnVal.props.children[0].props.children[0].props.children.props.children;
+        const newButton = api.React.cloneElement(buttons[1]);
+        const newIcon = api.React.cloneElement(newButton.props.children);
+        const newIconChild = api.React.cloneElement(newIcon.props.children);
+        newButton.props.children = newIcon;
+        newIcon.props.children = newIconChild;
+        newIcon.props.tooltip = "Device Visibility";
+        newIcon.props.onClick = showHidingOptions;
+        newIconChild.props.name = "fas fa-eye";
+        buttons.push(newButton);
+      } catch (e) {
+        api.logger.error(e);
+      }
+    });
+  }
+});
+function showHidingOptions() {
+  const element = document.createElement("div");
+  const options = mount(HideOptions, {
+    target: element,
+    props: {
+      hideState,
+      onChange: (newState) => {
+        hideState = newState;
+        api.storage.setValue("hideState", hideState);
+        applyHideState();
+      }
+    }
+  });
+  api.UI.showModal(element, {
+    id: "HideOptions",
+    title: "Device Visibility Options",
+    className: "preflight",
+    style: "width: min(90%, 450px); height: min(90%, 325px);",
+    onClosed: () => unmount(options),
+    buttons: [
+      {
+        text: "Apply",
+        style: "primary"
+      }
+    ]
+  });
+}
+api.net.onLoad(() => {
+  const devices = api.stores.phaser.scene.worldManager.devices;
+  api.patcher.after(devices, "addDevice", (_, args) => {
+    const device = args[0];
+    updateDeviceHidden(device);
+  });
+  applyHideState();
+});
+function applyHideState() {
+  for (const device of api.stores.phaser.scene.worldManager.devices.allDevices) {
+    updateDeviceHidden(device);
+  }
+}
+function updateDeviceHidden(device) {
+  let shouldHide = false;
+  if (device.layers.layer === "DevicesAboveCharacters" && hideState.aboveHidden) shouldHide = true;
+  else if (device.layers.layer === "DepthSortedCharactersAndDevices" && hideState.primaryHidden) shouldHide = true;
+  else if (device.layers.layer === "DevicesUnderCharacters" && hideState.belowHidden) shouldHide = true;
+  if (shouldHide) hideDevice(device);
+  else showDevice(device);
+}
+function hideDevice(device) {
+  device.shadows.hide();
+  device.parts.forceHide();
+  device.colliders.hideDebug();
+}
+function showDevice(device) {
+  device.shadows.show();
+  device.parts.forceShow();
+  device.colliders.showDebug();
 }
 
 // plugins/CreativeTools/src/settings.ts
