@@ -5,8 +5,7 @@
  * @version 0.2.6
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/InstantUse.js
  * @webpage https://gimloader.github.io/plugins/InstantUse
- * @changelog Updated webpage url
- * @signature 8BFqesNB6J7E3q7KytxQs/53FxAzSCp+zn5tCVEJd1p73ClPupgypizSge7Tsvz+hyAyB9phZN4D2LEboQBQCQ==
+ * @signature NUo5808H0X3/4JHITUU97hcrZ/qVi6NS7OOR5xb5AcONIHiLWT1Sv0SbHcSXlU5VlS36W8O2f3tn34zh3yN3AQ==
  */
 
 // plugins/InstantUse/src/index.ts

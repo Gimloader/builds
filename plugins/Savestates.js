@@ -8,8 +8,7 @@
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
- * @changelog Fixed for new physics
- * @signature JQFw0WFfJzxZmdni/B/Yi2Ktqp3UmjmQ5Jnjkz/rOzHVGYKLFF58T5kEphPOHp5J3Dx1zA0I/jwrysG9hPOgDA==
+ * @signature jImx82tYJQcrWlUv7cVIb+5E+PKQqwNw9SPCqRUXygA8oBjWDoqOGDPf0SOGgi543CmdVxKzxIlRft8qKS+ABA==
  */
 
 // shared/consts.ts

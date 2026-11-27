@@ -7,8 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/Healthbars
  * @needsLib CharacterLabels | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/CharacterLabels.js
  * @gamemode 2d
- * @changelog Bump version to force update
- * @signature MilmPXBawfOyIr59tft/NO+V/5hwkki0faref5MnhOEJZ+I6XwlCkkxzk2/A06LBFkXysZHvrIGaUkfh1dppCQ==
+ * @signature 1aGvdvOA1Ob5dfeO27RItoxM0KmVwknJ9wFTXXzniAgYqf53THGmSy9Fm/0rpc7WzQ1LVLMIVRgZHJPFnDZlBw==
  */
 
 // plugins/Healthbars/src/index.ts

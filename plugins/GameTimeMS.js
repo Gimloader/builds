@@ -7,8 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/GameTimeMS
  * @reloadRequired ingame
  * @hasSettings true
- * @changelog Updated webpage url
- * @signature 15dxvU7M6HDBhoafoAzu0Mm2nsdIhH2JsML78Bs9Rn+exgfAV0dlrxw0hZa5jYrQeH0lnl4TdPrhwLa2z8Y7BQ==
+ * @signature sKCtuLmHQ1uwFIxUE2jEE9OwSdKNx2yQIP7W9YDEaUV9UirLvOUsj6lEMZh4eArT/qadgWViSsl2YQimLuCJAw==
  */
 
 // shared/rewritingUtils.ts

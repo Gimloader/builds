@@ -8,8 +8,7 @@
  * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @hasSettings true
  * @gamemode 2d
- * @changelog Added option to synchronize cosmetic selection
- * @signature 14Pc3RuPTLkRDvwUxo6swxEVUeeaZAGbid5nSp/J8q5jdxvudjBrQw/OWV5ef8xrH+Q7d1JaMucRRulT7FDkDg==
+ * @signature IsuoIySP69exQ6TGBRQ23weUY9rCw0UIBnGX8LYFXZBxubha3mYFi9l934ooigfexaapgNtBDMtvra4o56JOCQ==
  */
 var __create = Object.create;
 var __defProp = Object.defineProperty;

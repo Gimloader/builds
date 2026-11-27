@@ -5,8 +5,7 @@
  * @version 0.3.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/AutoKicker.js
  * @webpage https://gimloader.github.io/plugins/AutoKicker
- * @changelog Bump version to force update
- * @signature fCSx6hoGT7UMvvfsZzCNsn9T8VnLv2pQPncUgOCNHnnJdJpo4sRB8c7lilmOeEgNwNs/H5Me8TbQl7lhPoIEBg==
+ * @signature +1+tgunc0CmP9v3XpR1R3RgGXjon9erLhxwolVVJ9ASPJJZoBxoL7pZhNxBG11GD3O8cyBKFdpRUejtc/kd+Dg==
  */
 
 // inject-css:plugins/AutoKicker/src/styles.css

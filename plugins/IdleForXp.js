@@ -7,8 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/IdleForXp
  * @reloadRequired ingame
  * @gamemode 2d
- * @changelog Bump version to force update
- * @signature n+JKBTQ/6REzCXas55EeYVdskZrchwhqj1HG3mPMEQINDD3kw6B/Gmmu48Bygmt8SUpI7Z84Z2zG0UWRtpprCg==
+ * @signature FmNnRAjCHSKE0HALF6mu2TZL7jK6C1bOo+NdSCk2yDvX8IpN5PG9ErO2OtUDAIFycpl/KdWnSwVXsuwr6hInBg==
  */
 
 // plugins/IdleForXp/src/index.ts

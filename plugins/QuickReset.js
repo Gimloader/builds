@@ -6,8 +6,7 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/QuickReset.js
  * @webpage https://gimloader.github.io/plugins/QuickReset
  * @gamemode 2d
- * @changelog Allowed completely restarting the game when using GuestControls
- * @signature l0omcDtsfHRLppdo2qnaEBXqxXzRDi9tyQA4qqVPx9KDL/75uaHIHaveBUJe4f6sFio6dA4c8yl4eqzZxFtTCA==
+ * @signature Zwt6FBWCdCi5+5DxycRKbvYPAh4WTKlUaezt0ZwclSD4JqTbsw0U6feJAMPfjS0aiGEAqQhPjptu4TjAGplfAw==
  */
 
 // plugins/QuickReset/src/index.ts

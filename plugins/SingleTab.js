@@ -5,8 +5,7 @@
  * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/SingleTab.js
  * @webpage https://gimloader.github.io/plugins/SingleTab
- * @changelog Updated webpage url
- * @signature vmNp9kcTkEybi80WJs/WxfSFVhPWPbUkZ4VoHI/LF25xMyrsySjEG6KwITNNuMPuNf3htngKqI9457UxTawbBQ==
+ * @signature LmxyeZoQBsKYmQGbSvXQw5VWF5+HIIWbYw2A++tVqTHdf7qE3HBB/HGn1A1DgdBVljY1F6DTT35AHpmeuOsbCQ==
  */
 
 // plugins/SingleTab/src/index.ts

@@ -6,8 +6,7 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/FixCrashes.js
  * @webpage https://gimloader.github.io/plugins/FixCrashes
  * @reloadRequired ingame
- * @changelog Fixed an issue by a recent Gimloader update
- * @signature qdnsZLO9uuZPFpW8QL6Qj6T+8N/nVxRc5QgeAyOyFFm9RTnT3xEr6Z80BK+oKh/FZEDLPcBlTSYQTGNqBdwVBQ==
+ * @signature rFOoHvWp9ZZMBluOZGGp+7i+oiDliEkaWuy+17Nzn+Z7RozpPziq1oQFrJ5WVX9ueXhW4PPmNiOTXqSJf1c2AA==
  */
 
 // shared/rewritingUtils.ts

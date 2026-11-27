@@ -5,9 +5,8 @@
  * @version 0.1.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/libraries/CharacterLabels.js
  * @webpage https://gimloader.github.io/libraries/CharacterLabels
- * @changelog Bump version to force update
  * @isLibrary true
- * @signature tDVNJvNFg0rReelzBxFGb4aGaVpQXZjYYv9aGzay+BXFahSNaZT4rwNcZDw6DyRoJ4bwcflGSmmhHpv9icxvDg==
+ * @signature 5wUsLlqOYIy1SfLiiw6NDrbSZVrvaqzPeFKKN/8lxHipAiaWYINCIRsVnn+TaibVwp6Ahx7JAqz9bdG47yM7BQ==
  */
 
 // libraries/CharacterLabels/src/index.ts

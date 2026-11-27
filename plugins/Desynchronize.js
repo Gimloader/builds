@@ -7,8 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/Desynchronize
  * @optionalLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
- * @changelog Bump version to force update
- * @signature Unz1slJAK/gRo20946DoshtCSOjExEf1keAfRTRKurZDLGjVyk1lJWN7Tw/nXV6Y7z+MMlSOD1eTUvh6pOcQCQ==
+ * @signature E/EY3PItoy14hhZ51DsewijdI72t4d3k7isvT9hCii5CNkb6TqYRpppf+fRiyTH4RDkEe2tE0CZyklpzO/1/Cg==
  */
 var __defProp = Object.defineProperty;
 var __export = (target, all) => {

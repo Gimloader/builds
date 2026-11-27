@@ -8,8 +8,7 @@
  * @reloadRequired ingame
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
- * @changelog Fixed crashing
- * @signature bGEAserxzWUOmOY8fwlKKIuXVnoorJp7O0tXS55QuMJREPOmzorDIurMtT11yz3dEOulww88IlLOt2vxAVZGCg==
+ * @signature N79pp4/Cck8cDKFhuYeB/7utsrimWv/4ug7+yJ2FMAQ3Lee9x/CPT0phwr45oZNjqWFbqOVidZa7zQsJ7m62Cw==
  */
 
 // shared/files.ts

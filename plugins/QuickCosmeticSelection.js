@@ -5,8 +5,7 @@
  * @version 0.2.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/QuickCosmeticSelection.js
  * @webpage https://gimloader.github.io/plugins/QuickCosmeticSelection
- * @changelog Updated to not require a reload
- * @signature 3OpVRn8u5TmWXlK3WylWiAeRpcRDCtViV724C/41SGpyHulz5oCe9PvLnAboewk3JgToB8kwAy6mfUwkD/XKAQ==
+ * @signature o3FxCnMdY9BysqU2ru9T2cDDeubw959MUUolJgfXTXqUKTIEXvLj8euoFpFAZoVk/GCZeNHh9zTgU0xsohfRAg==
  */
 
 // plugins/QuickCosmeticSelection/src/index.ts

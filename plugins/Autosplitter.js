@@ -9,8 +9,7 @@
  * @gamemode dontLookDown
  * @gamemode fishtopia
  * @gamemode oneWayOut
- * @changelog Bump version to force update
- * @signature obKwttqKNplasDinpojT5jdeWuYHTvT3iLhRZliwlPMR/SSuZKWpxHHiWTmQAbFRHNwuUOgKZqdKxBTUxs1YCQ==
+ * @signature ajDysVObei564C6Crv2QfSYKUNM0pDqsgMiFn13aveTuz2fcEnFbuO3TyEw0iArnb4/cXfNGV8nAOrmOMTNjDA==
  */
 
 // external-svelte:svelte/internal/client

@@ -7,8 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/InfoLines
  * @hasSettings true
  * @gamemode 2d
- * @changelog Fixed for new Gimkit update
- * @signature de948aLl17aHz1J2ThuyVP25OynJ+xVGViwo2hXwG0BundfAwA1/3c22+lwN9JBN8Ri2TRB9xkHMmND/pu+cBQ==
+ * @signature z2rY6lTW1Ems3LUdDhL1mFsz+6CyqsuA2vdQlbsiocOLnFd7SlsqjGOI5uaYpzT+nk0QbqaLGrYdYlpYY5XcCw==
  */
 
 // inject-css:plugins/InfoLines/src/styles.css

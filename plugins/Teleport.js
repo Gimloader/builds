@@ -7,8 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/Teleport
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode 2d
- * @changelog Updated webpage url
- * @signature NSXQ0QHLL8CEDbw2e1RKBj7EysWllKmDgd1y1taA5Lm+PX3hrzINjr4NWIA+nF2i++Jr8P9cw7qGs+Cob+oaAg==
+ * @signature VDeCbvizAJI9YUsla2W7H2aEQ6z8bFlG6p/rUOwowN2O/6z0S5RNtqAJbraNgZ+Tba8aIKIkwoQh1YUIQ8r2Bw==
  */
 
 // plugins/Teleport/src/index.ts

@@ -7,8 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/PlayerCollision
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode 2d
- * @changelog Fix for new Gimkit update
- * @signature XSgvgY/bLZTDgdTElkKRMiB1k1P1zey7VBDKnPJEb++ERj/ROsSSav5ksC8koz9xVSphmYgwuSC9BW93/7KWAg==
+ * @signature zr23yD7mc98HWe5ZV6Mxs8Mu/sEJxuZSTWIo8ji94G4myotTrMDtEOaLsOLT4aqR224Vc+6aUO/oYCn6vDzCDw==
  */
 
 // plugins/PlayerCollision/src/index.ts

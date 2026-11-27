@@ -6,8 +6,7 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CustomUI.js
  * @webpage https://gimloader.github.io/plugins/CustomUI
  * @hasSettings true
- * @changelog Added option to edit custom themes
- * @signature w5LeVAUqeuOA3Yo2A/ZfuCA7sJh4k0Gq6LIs99McXo+dpqoicoGt3njLN9iSkJipFk/5+lMO44SbUWcB31JgAQ==
+ * @signature M3EyyjlSyMp0DrNIiPGwDpZcm2iV6IdA9AnH7D4hazAyuFSzY4shw0RNcpHWm8mPEEWo480TYHw25nEjcYkIDg==
  */
 
 // inject-css:plugins/CustomUI/src/styles.css

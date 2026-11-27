@@ -6,8 +6,7 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/GamemodeLinks.js
  * @webpage https://gimloader.github.io/plugins/GamemodeLinks
  * @hasSettings true
- * @changelog Added custom page when loading a gamemode link
- * @signature crvN2mOI+4P4bw8/+iFfPMT6wYYBYJhLMr92rcub/aWWR/bDjob02/hJOFjZftKp9deiZ58GoAzbEMVnizzxCg==
+ * @signature SrttcOWx/0smciOIgnhuTUT7/TMlZEfAfKD3TDzss1XhY1mqaM+GuDHtQxc7f56PkvGfoTJFv/8MlL9xn3zkCA==
  */
 
 // plugins/GamemodeLinks/src/makeGame.ts

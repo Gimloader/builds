@@ -5,8 +5,7 @@
  * @version 0.2.0
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/KitTimesPlayed.js
  * @webpage https://gimloader.github.io/plugins/KitTimesPlayed
- * @changelog Removed need to reload when installing
- * @signature XiBgByslJdPbVaaavq2IRlVGOQt/FD35Ux9xNTIevI+warLess6LcknGvhrGUcpd4vU057iT/jeoEz1H53R1CQ==
+ * @signature pANMoNzAopOfRxPmTempM8FVoifiOZqDWGOKpxSE1U5ET7lNswYXsBE8aPuFlAAehV543pdyQAi4l5ugM4QGDw==
  */
 
 // plugins/KitTimesPlayed/src/index.ts

@@ -7,8 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/CreativeTools
  * @reloadRequired ingame
  * @gamemode creative
- * @changelog Added a menu to hide devices based on layer
- * @signature WGsvrV7eIujAFvcKuUTDKvpRP59Mt80Vzvi08C6GxyNvcouqaqjGUh6YIE8XAC+8joYVQ0XfA634FdpkxIMsBA==
+ * @signature xuZQVpEPlZeS3RLG1TQEjbw7w2YkYmx4KZqQ/A7hQDZhMGUpZaTeT4imC6DWDU7Dep5cDifOQvzOLjjUMtvmDg==
  */
 
 // inject-css:plugins/CreativeTools/src/styles.css

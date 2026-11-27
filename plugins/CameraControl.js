@@ -8,8 +8,7 @@
  * @optionalLib CommandLine | https://raw.githubusercontent.com/Blackhole927/gimkitmods/main/libraries/CommandLine/CommandLine.js
  * @hasSettings true
  * @gamemode 2d
- * @changelog Bumped version to force update
- * @signature bO1M43wt8yWU/J+uta3zqAelzcie4M/38xhs1v/Ux+0tY6I9GW9Or6ZpLFdLlrywiTG44yu2cg2hSbxm8zBBBQ==
+ * @signature Nn0j+nAraPu/dPS3Gso8+ZRHZNBSReCMaKYcWCJ2J1ELBXjj5HSfMLspKAgLvSCBepRuYqnUttO9XmrWrZi9Dw==
  */
 
 // plugins/CameraControl/src/settings.ts

@@ -7,8 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/Chat
  * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
- * @changelog Fixed for new Gimkit update
- * @signature b4fel4mkcR57+Cr8md8AAIKMomzeLRNvrcT8EmgaLIOc0nujKF4y4HYEbE9EHrSuK13OD+VKwCOqW1tPlr2zBA==
+ * @signature vmFxRqgjFQ5sObXdp09EHE76kZGM6ncSEFTHxVQBFFxVB6f8igPVTpPTxC8GOdh8anZlunZenhCPST+S77RnBw==
  */
 
 // external-svelte:svelte

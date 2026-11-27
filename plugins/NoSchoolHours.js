@@ -5,8 +5,7 @@
  * @version 0.2.1
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/NoSchoolHours.js
  * @webpage https://gimloader.github.io/plugins/NoSchoolHours
- * @changelog Added cleanup on stop
- * @signature wXgd+4hoBaS4EFZ7MMpavyeG80HWXnBEZrYa0PLajFNLjT2Da0zY2lOBmLskCbZhzVr4Apngk0sEiDPscPERDA==
+ * @signature EHBrd52jdQR35B8U7xF0FLlFv712oRpIYB+h4ofjaNj8Uy370e4hOX2Dabp66iQ+VaktrOlDBM2g52jDqweKCg==
  */
 
 // plugins/NoSchoolHours/src/index.ts

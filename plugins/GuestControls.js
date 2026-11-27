@@ -7,8 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/GuestControls
  * @needsLib Communication | https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @gamemode 2d
- * @changelog Allowed guests to start the game
- * @signature e0b/EbOfJysJaGU+SpqRoL03SWELaSKp7Q/Y0uUMkAITxJNnNoMfoycy7pcHYWJZr2FrOjavOnS7KFobuRH3AQ==
+ * @signature mgqq3dpLmNTb/Yru0CPKCORE5QuZh3rtWTRSWXwxH/WCTd7k/I1LN3mphG4VoVdDPmjnqN50rAargmJpC24wDw==
  */
 
 // plugins/GuestControls/src/index.ts

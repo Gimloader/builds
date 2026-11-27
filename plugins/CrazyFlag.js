@@ -6,8 +6,7 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/CrazyFlag.js
  * @webpage https://gimloader.github.io/plugins/CrazyFlag
  * @hasSettings true
- * @changelog Updated webpage url
- * @signature Z+XCUWErAFlThuDwnt9r9zoMGFfGKEikinYfg6gnqsO26eJ3imdog0JMcrhkIdbUQILI+97bjYCVjiUwS9bKCQ==
+ * @signature 1/CpMvaaqJmsmbRgM5/p3VrSOk6B7fcoVyZoZixfjdpdavZuyh5KYwaXiQaxOmS/RTZ1G2uQpN0Tm4wyemJDAA==
  */
 
 // plugins/CrazyFlag/src/index.ts

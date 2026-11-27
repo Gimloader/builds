@@ -6,9 +6,8 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/libraries/Communication.js
  * @webpage https://gimloader.github.io/libraries/Communication
  * @gamemode 2d
- * @changelog Allowed sending messages when in the lobby (by using stickers)
  * @isLibrary true
- * @signature 6gPzSWRPuYlmwADD98PPSvPPJVZSYmeFocp+pyhz4H36AxQeku53K0XHrb+CqkeF9AZcew/WvkFmlat57HNfDw==
+ * @signature HUxnMKeKld+6gw6DS4zeL3npgp+oepzF/x6jB9KfA07+U3AS2Z6RLRJWgFBFfF0GPVmOjsHcnYYV43i/ehm0AQ==
  */
 
 // libraries/Communication/src/consts.ts

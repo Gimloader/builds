@@ -5,8 +5,7 @@
  * @version 0.1.3
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/GameCodeHider.js
  * @webpage https://gimloader.github.io/plugins/GameCodeHider
- * @changelog Bumped version to force update
- * @signature bec8MMDH9QOMKlLAvySb+7IsZX1rHivBXh5bpt6/ll57jPw0K7SPqdd+dSx/alJp5nm+0+5TOYwMl/AjmS0dBw==
+ * @signature wxGbzsjq0qkO1QJq1MZwiq6P+GEYAxCT2DrJZ4VZsJlbJb8FzKQ4CrqXquLfbZApCwTMnt79DCnvrlJa2mVEBw==
  */
 
 // inject-css:plugins/GameCodeHider/src/styles.css

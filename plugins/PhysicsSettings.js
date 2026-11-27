@@ -8,8 +8,7 @@
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @hasSettings true
  * @gamemode 2d
- * @changelog Fixed for new Gimkit update
- * @signature Eb+xpVHpzIjR0Q5SfSZf6LrT0QIYeLuhrtlTCTPmE0L2KGac+1QKiCHclnVwFlExfNN83opDB27X9uXcy3JxCw==
+ * @signature 7hUx6oxtczHLoz+6dI4jGEkxxob2GHvTc8hGjLTMLlHbreAUwcFUwmz6Em6l1uDkSab15bmCTGQXpd+G89bLBA==
  */
 
 // plugins/PhysicsSettings/src/index.ts

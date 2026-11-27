@@ -6,8 +6,7 @@
  * @downloadUrl https://raw.githubusercontent.com/Gimloader/builds/main/plugins/FixTileDupe.js
  * @webpage https://gimloader.github.io/plugins/FixTileDupe
  * @gamemode 2d
- * @changelog Updated webpage url
- * @signature 9nNceRAnPDQy4WE6m1D7YjZ3OcNXW4dapZPQ/kNMCZyhZcd68z+teZZmbWyzQTth14h7Tkg8l2lOr4HNdaZ3DA==
+ * @signature V+RRh/d8VFEXnNeWQNSkACU4k9/ghDpCRfi47e27BOsZUBGSzQRX4acYb0kKg1lAh2u/fkpGGsqxgdGNWS2HBA==
  */
 
 // plugins/FixTileDupe/src/index.ts

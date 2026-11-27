@@ -7,8 +7,7 @@
  * @webpage https://gimloader.github.io/plugins/DLDTAS
  * @needsPlugin Desynchronize | https://raw.githubusercontent.com/Gimloader/builds/main/plugins/Desynchronize.js
  * @gamemode dontLookDown
- * @changelog Fixed for new physics
- * @signature BIejw60jTGCMmwHT+5lwy0/yS1zVezMIIPqmBPi7il+KBM9X+3d1sY1+BtQYlOPbZEpavC1AYX8a9K9TqI/yBg==
+ * @signature aJlWfNQu/IUnygbwAt+c3AwGa6JSV7uyEcnoB9N9RKJfhp5t0mgr+9UXFie2ALUzF9rACRlFRCqL7FNlUGxnBQ==
  */
 
 // inject-css:plugins/DLDTAS/src/styles.css
